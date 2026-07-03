@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "linear-server": {
+      "type": "http",
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "agentskills": {
+      "type": "http",
+      "url": "https://agentskills.io/mcp"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+### Devcontainer ###
+devcontainer-lock.json
+
+### Skills ###
+skills-lock.json
+
+### Python ###
+.venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/

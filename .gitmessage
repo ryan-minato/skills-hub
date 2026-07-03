@@ -1,0 +1,20 @@
+
+# <type>(<scope>): <subject>
+#
+# [optional body: explain what and why, wrapped at 72 columns]
+#
+# ---- Commit conventions for this repository ----
+# Format: Conventional Commits 1.0.0, written in English.
+#
+# type:  feat | fix | docs | refactor | chore | test | ci
+#
+# scope: the name(s) of the modified skill(s).
+#   - one skill        -> feat(skill-authoring): add scaffold checklist
+#   - several skills   -> fix(knowledge-sync, skill-authoring): align paths
+#   - no specific skill, or a sweeping change across many skills
+#                      -> omit the scope: chore: update catalog layout
+#
+# subject: imperative mood, no trailing period.
+#
+# Use a body when the change needs context (why, trade-offs, follow-ups);
+# a subject line alone is fine for small, self-explanatory changes.

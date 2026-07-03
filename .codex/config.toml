@@ -1,0 +1,7 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+[mcp_servers.agentskills]
+url = "https://agentskills.io/mcp"
+
+[mcp_servers.linear-server]
+url = "https://mcp.linear.app/mcp"

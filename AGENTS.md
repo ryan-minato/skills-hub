@@ -69,6 +69,7 @@ Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,
 
 - `just check` — everything (validator, lint, pre-commit hooks).
 - `just validate` — skill layout and harness consistency only.
+- `just check-skill <dir>...` — lint specific skill directories while drafting.
 - `just lint` — ruff over `scripts/`.
 
 ## Keep In Sync

@@ -27,7 +27,8 @@ justfile                         Canonical check recipes
 usable skills (the cross-client convention from the Agent Skills spec). It
 contains two kinds of entries:
 
-- **Project-only workflow skills** (`knowledge-sync`, `skill-authoring`):
+- **Project-only workflow skills** (`issue-workflow`, `knowledge-sync`,
+  `skill-authoring`):
   real directories, created directly here. They serve this repo's own
   workflows, are never distributed, and may reference repo paths.
 - **Symlinks to public skills**: every `skills/<catalog>/<name>/` gets a

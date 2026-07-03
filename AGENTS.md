@@ -51,9 +51,15 @@ Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,
   changes. Template: `.gitmessage` (installed by `just setup`).
 - **Task management**: Linear, team "Aoi", project "Skills" (via the Linear
   MCP server configured in `.mcp.json`).
+- **Workflow**: every change to tracked files is issue-driven — proactive
+  work starts by creating the Linear issue(s) (parent + sub-issues for
+  related groups), work happens on the issue's branch, and one PR covers
+  one parent issue. Full procedure: the `issue-workflow` project skill.
 
 ## When To Read What
 
+- Starting any proactive change, or preparing a branch, commit series, or
+  PR handoff → use the `issue-workflow` project skill.
 - Creating or modifying any skill → `.agents/knowledge/skill-quality.md`
   first, then the catalog's `CONTEXT.md`, then use the `skill-authoring`
   project skill.

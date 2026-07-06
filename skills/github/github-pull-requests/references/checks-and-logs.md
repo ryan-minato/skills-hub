@@ -25,8 +25,11 @@ path"; `O/R` and `N` come from "Identify the repository".
 
 ## 3. Fetch failed logs only
 
-- MCP: `get_job_logs` (owner, repo, the run's job id `JOB_ID`,
-  `failed_only: true`, `tail_lines: 100`, `return_content: true`).
+- MCP: `get_job_logs`, one of two shapes — all failed jobs in the run:
+  (owner, repo, `run_id: RUN_ID`, `failed_only: true`, `tail_lines: 100`,
+  `return_content: true`); or a single job: (owner, repo,
+  `job_id: JOB_ID`, `tail_lines: 100`, `return_content: true`). Never
+  combine `job_id` with `failed_only`.
 - gh: `gh run view RUN_ID -R O/R --log-failed | tail -n 100` for all
   failed jobs in the run, or
   `gh run view -R O/R --job JOB_ID --log-failed | tail -n 100` for one

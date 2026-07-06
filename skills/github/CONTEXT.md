@@ -32,10 +32,16 @@ Rules, notes, and references that apply only to skills in this catalog.
   disambiguation line, duplicated verbatim where needed; deep content
   lives only in the owning skill. Sibling skills are named, never
   path-linked (self-containment).
-- Exact MCP tool and gh command names must be re-verified against the
-  references below before publishing a skill revision — GitHub MCP tool
-  names have churned across server versions (the 2025 consolidation
-  replaced `get_issue`-style names with `*_read`/`*_write` + `method`).
+- Exact MCP tool and gh command names — **and their parameter names,
+  method enums, and value forms** — must be re-verified before publishing
+  a skill revision. GitHub MCP tool names have churned across server
+  versions (the 2025 consolidation replaced `get_issue`-style names with
+  `*_read`/`*_write` + `method`), and README prose lags behind: the
+  authoritative source for parameter shapes is the machine-generated
+  schema snapshots at
+  <https://github.com/github/github-mcp-server/tree/main/pkg/github/__toolsnaps__>
+  (e.g. the README still said `submit` after the schema had moved to
+  `submit_pending`).
 
 ## Canonical blocks
 
@@ -131,7 +137,7 @@ or command reference, update this inventory in the same commit.
 | `update_pull_request_branch` | — | Update PR branch with base | github-pull-requests (references/pr-recipes.md) |
 | `merge_pull_request` | — | Merge a PR (`merge_method`) | github-pull-requests |
 | `pull_request_read` | `get`, `get_diff`, `get_status`, `get_check_runs`, `get_reviews`, `get_review_comments` | Read PR details, diff, checks, reviews | github-pull-requests |
-| `pull_request_review_write` | `create`, `submit` | Author a PR review | github-pull-requests (references/reviews-and-copilot.md) |
+| `pull_request_review_write` | `create`, `submit_pending` | Author a PR review | github-pull-requests (references/reviews-and-copilot.md) |
 | `add_comment_to_pending_review` | — | Inline comment on a pending review | github-pull-requests (references/reviews-and-copilot.md) |
 | `add_reply_to_pull_request_comment` | — | Reply in a review thread | github-pull-requests (references/reviews-and-copilot.md) |
 | `request_copilot_review` | — | Request a Copilot code review | github-pull-requests (references/reviews-and-copilot.md) |

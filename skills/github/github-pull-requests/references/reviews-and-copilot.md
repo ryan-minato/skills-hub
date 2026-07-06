@@ -34,8 +34,9 @@ append this to either `gh api` call above:
 
 Replies are publishing — run the Pre-publish gate first.
 
-- MCP: `add_reply_to_pull_request_comment` (owner, repo, pullNumber, the
-  `comment_id` of the inline comment being replied to, and `body`).
+- MCP: `add_reply_to_pull_request_comment` (owner, repo, pullNumber,
+  `commentId` — camelCase, the numeric id of the inline comment being
+  replied to — and `body`).
 - gh: `gh api -X POST repos/O/R/pulls/N/comments/COMMENT_ID/replies -F body=@REPLY.md`
   (the `@` makes gh read the body from the file).
 
@@ -47,10 +48,20 @@ inline review comments" above.
 Review bodies and inline comments are publishing — run the Pre-publish
 gate first.
 
-- MCP: `pull_request_review_write` method=`create` (event `COMMENT`,
-  `APPROVE`, or `REQUEST_CHANGES`; `body`); add inline comments with
-  `add_comment_to_pending_review` (path, line, side); then
-  `pull_request_review_write` method=`submit`.
+- MCP, review without inline comments (one call):
+  `pull_request_review_write` method=`create` with `event` (`COMMENT`,
+  `APPROVE`, or `REQUEST_CHANGES`) and `body` — passing `event` submits
+  the review immediately.
+- MCP, review with inline comments (three steps, in order):
+  1. `pull_request_review_write` method=`create` with **no `event`** —
+     this creates a pending review; passing `event` here would submit at
+     once and step 2 would fail.
+  2. One `add_comment_to_pending_review` per inline comment: required
+     `owner`, `repo`, `pullNumber`, `path`, `body`, and `subjectType`
+     (`LINE` for a line comment, `FILE` for a whole-file comment);
+     `line` and `side` optional refinements for `LINE`.
+  3. `pull_request_review_write` method=`submit_pending` with `event` and
+     the summary `body`.
 - gh: `gh pr review N -R O/R --comment --body-file REVIEW.md` — replace
   `--comment` with `--approve` or `--request-changes` when that is the
   verdict the user asked for.

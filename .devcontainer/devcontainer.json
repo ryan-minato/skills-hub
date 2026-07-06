@@ -15,11 +15,7 @@
     }
   },
   "containerEnv": {
-    // Local devcontainers: borrow the host's GITHUB_TOKEN as GH_TOKEN, the
-    // variable .mcp.json and .codex/config.toml reference. In Codespaces
-    // localEnv resolves at creation time, so this stays empty and gh falls
-    // back to the runtime-injected GITHUB_TOKEN as before.
-    "GH_TOKEN": "${localEnv:GITHUB_TOKEN}"
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
   },
   "customizations": {
     "vscode": {

@@ -11,6 +11,7 @@ and other compatible clients) how to perform specific tasks well.
 | Catalog | Contents | Install scope |
 |---|---|---|
 | [`core`](skills/core/) | Skills recommended for every environment | Global (user-level) |
+| [`devcontainer`](skills/devcontainer/) | Dev Container authoring skills: Features, Templates, and prebuilt images | Per project, as needed |
 | [`engineering`](skills/engineering/) | General programming methodology skills, not tied to a language or framework | Per project, as needed |
 | [`ops`](skills/ops/) | General workflow operations, not invoked directly | Per project, as needed |
 

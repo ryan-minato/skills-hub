@@ -26,6 +26,8 @@ justfile                         Canonical check recipes
 Public skills are grouped into catalogs under `skills/`:
 
 - `core` — skills recommended for global (user-level) installation.
+- `devcontainer` — Dev Container authoring skills: developing Features,
+  creating Templates, and prebuilding images.
 - `engineering` — general programming methodology skills; not tied to a
   specific language or framework.
 - `ops` — general workflow operations, not invoked directly by users.

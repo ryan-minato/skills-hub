@@ -11,6 +11,7 @@
 | Catalog | 内容 | 安装范围 |
 |---|---|---|
 | [`core`](skills/core/) | 推荐在所有环境安装的 skill | 全局（用户级） |
+| [`devcontainer`](skills/devcontainer/) | Dev Container 创作类 skill：Feature、Template 与预构建镜像 | 按需安装到项目 |
 | [`engineering`](skills/engineering/) | 通用编程方法论类 skill，不绑定特定语言或框架 | 按需安装到项目 |
 | [`ops`](skills/ops/) | 不直接调用的通用工作流操作 | 按需安装到项目 |
 

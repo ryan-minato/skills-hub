@@ -1,0 +1,20 @@
+# Applies path-based labels from .github/labeler.yml to pull requests.
+name: PR labeler
+
+# pull_request_target runs from the base branch with repository write
+# permissions, which is what allows labeling PRs from forks. Because it
+# runs with write permissions, NEVER add a checkout step or execute any
+# code from the PR in this workflow.
+on: pull_request_target
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v6
+        with:
+          sync-labels: false

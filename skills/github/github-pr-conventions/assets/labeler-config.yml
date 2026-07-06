@@ -1,0 +1,32 @@
+# Path-based label rules for actions/labeler (config for .github/labeler.yml).
+# Every top-level key must be an EXISTING label in the repository — the
+# labeler does not create missing labels; it silently skips them.
+
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docs/**'
+          - '**/*.md'
+
+area/ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**'
+
+area/tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'test/**'
+          - 'tests/**'
+          - '**/*_test.*'
+          - '**/*.test.*'
+
+area/deps:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - '*.lock'
+          - 'requirements*.txt'
+          - 'pyproject.toml'
+          - 'go.mod'
+          - 'Cargo.toml'

@@ -14,6 +14,7 @@ npx skills add ryan-minato/skills --skill <skill-name> -g
 | Skill | Description |
 |---|---|
 | [conventional-commits](conventional-commits/) | Draft git commit messages that comply with Conventional Commits 1.0.0: rule precedence (docs > commitlint config > history > defaults), a first-match type decision list, scope and breaking-change policy, and a pre-handover validation checklist. |
+| [devcontainer-setup](devcontainer-setup/) | Create and edit dev container configurations under a trusted-sources policy (mcr.microsoft.com/devcontainers, NVIDIA NGC, ghcr.io/devcontainers, ghcr.io/stacit-ai), with a bundled source-enumeration script, baseline-feature rules for non-prebuilt images, and NVIDIA/AMD GPU guidance. |
 | [git-commit](git-commit/) | Execute the full git commit workflow as ordered gates: convention discovery with explicit rule precedence, atomicity check, secret/PII scan of the staged diff, committer identity check, hooks and local checks, and a bundled message validator before committing. |
 | [great-skill-writer](great-skill-writer/) | Write and improve Agent Skills that behave predictably: spec-compliant frontmatter, trigger-accurate descriptions, checkable completion criteria, progressive disclosure, and a bundled linter. |
 | [meta-harness](meta-harness/) | Design, audit, and improve agent harnesses: inspect project and team facts, choose a maturity level (L0–L4), calibrate nine harness layers, and make every rule discoverable to future agents from AGENTS.md. |

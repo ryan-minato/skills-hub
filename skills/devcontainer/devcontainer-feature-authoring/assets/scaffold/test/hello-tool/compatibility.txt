@@ -1,0 +1,6 @@
+# One base image per line; `#` starts a comment. CI tests exactly what is
+# declared here — only claim images install.sh actually supports.
+mcr.microsoft.com/devcontainers/base:ubuntu
+mcr.microsoft.com/devcontainers/base:debian
+debian:bookworm
+ubuntu:24.04

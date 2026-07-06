@@ -1,0 +1,46 @@
+name: "Build test matrix"
+description: >
+  Expand a JSON array of feature ids into a {feature, baseImage} matrix by
+  reading each feature's test/<id>/compatibility.txt (one image per line,
+  `#` comments allowed). Features without a compatibility file get the
+  default devcontainers ubuntu base. Each feature declares its own
+  supported images, so the workflow never hardcodes an image list — but
+  job count grows as features x images; keep compatibility lists honest.
+inputs:
+  features:
+    description: "JSON array of feature ids"
+    required: true
+outputs:
+  matrix:
+    description: "JSON matrix object: {include: [{feature, baseImage}]}"
+    value: ${{ steps.build.outputs.matrix }}
+runs:
+  using: composite
+  steps:
+    - name: Build matrix from compatibility.txt files
+      id: build
+      shell: bash
+      env:
+        FEATURES: ${{ inputs.features }}
+      run: |
+        set -euo pipefail
+        include='[]'
+        add_entry() {
+          include=$(jq -cn --argjson arr "$include" \
+            --arg f "$1" --arg i "$2" \
+            '$arr + [{feature: $f, baseImage: $i}]')
+        }
+        while IFS= read -r feature; do
+          compat_file="test/${feature}/compatibility.txt"
+          if [ -f "$compat_file" ]; then
+            while IFS= read -r image || [ -n "$image" ]; do
+              image="${image%$'\r'}"
+              [[ -z "$image" || "$image" =~ ^[[:space:]]*# ]] && continue
+              add_entry "$feature" "$image"
+            done < "$compat_file"
+          else
+            add_entry "$feature" "mcr.microsoft.com/devcontainers/base:ubuntu"
+          fi
+        done < <(echo "$FEATURES" | jq -r '.[]')
+        echo "matrix=$(jq -cn --argjson inc "$include" '{include: $inc}')" \
+          >> "$GITHUB_OUTPUT"

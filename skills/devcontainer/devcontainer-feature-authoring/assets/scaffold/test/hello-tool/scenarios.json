@@ -1,0 +1,18 @@
+{
+    "pinned_version": {
+        "image": "mcr.microsoft.com/devcontainers/base:debian",
+        "features": {
+            "hello-tool": {
+                "version": "1.0",
+                "greeting": "hi"
+            }
+        }
+    },
+    "as_root": {
+        "image": "debian:bookworm",
+        "remoteUser": "root",
+        "features": {
+            "hello-tool": {}
+        }
+    }
+}

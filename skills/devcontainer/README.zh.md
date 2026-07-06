@@ -14,3 +14,4 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | 说明 |
 |---|---|
+| [devcontainer-feature-authoring](devcontainer-feature-authoring/) | 开发、测试并发布 Dev Container Feature：manifest schema 与 install.sh 契约、质量标准（幂等性、基础镜像容忍度、非 root 正确性、确定性安装）、feature 独立性规则，以及带共享 action CI 的现代仓库脚手架。 |

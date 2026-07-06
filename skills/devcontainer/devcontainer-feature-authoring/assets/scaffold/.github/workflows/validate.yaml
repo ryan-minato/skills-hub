@@ -1,0 +1,32 @@
+# Static validation: manifest schema check + shell lint. Cheap enough to
+# run on every PR regardless of which files changed.
+name: validate
+
+on:
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate devcontainer-feature.json files
+        uses: devcontainers/action@v1
+        with:
+          validate-only: "true"
+          base-path-to-features: "./src"
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck install and test scripts
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          shellcheck -S error src/*/*.sh test/*/*.sh

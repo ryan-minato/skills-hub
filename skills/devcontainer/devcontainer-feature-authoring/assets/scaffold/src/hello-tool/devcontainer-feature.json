@@ -1,0 +1,24 @@
+{
+    "id": "hello-tool",
+    "version": "1.0.0",
+    "name": "Hello Tool (example)",
+    "description": "Minimal example feature: installs a tiny CLI that reports its configured version. Replace with a real tool install.",
+    "documentationURL": "https://github.com/OWNER/REPO/tree/main/src/hello-tool",
+    "options": {
+        "version": {
+            "type": "string",
+            "proposals": ["latest", "1.0"],
+            "default": "latest",
+            "description": "Version label the tool reports."
+        },
+        "greeting": {
+            "type": "string",
+            "enum": ["hello", "hi"],
+            "default": "hello",
+            "description": "Greeting style (enum example: only listed values are accepted)."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
+}

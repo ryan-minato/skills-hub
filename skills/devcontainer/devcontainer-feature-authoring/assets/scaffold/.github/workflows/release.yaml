@@ -1,0 +1,61 @@
+# Manual release from main. Split into two jobs so the publish step holds
+# only packages:write, and the docs step holds only the PR permissions.
+# Publishing is a no-op for features whose `version` did not change.
+name: release
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish features to GHCR
+        uses: devcontainers/action@v1
+        with:
+          publish-features: "true"
+          base-path-to-features: "./src"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docs:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      # Regenerates src/<id>/README.md from devcontainer-feature.json,
+      # appending NOTES.md when present.
+      - name: Regenerate feature READMEs
+        uses: devcontainers/action@v1
+        with:
+          generate-docs: "true"
+          base-path-to-features: "./src"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open documentation PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          branch="docs-update-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git add 'src/*/README.md'
+          if git commit -m "docs: regenerate feature READMEs"; then
+            git push origin "$branch"
+            gh pr create --title "docs: regenerate feature READMEs" \
+              --body "Automated README regeneration after publishing."
+          else
+            echo "No documentation changes."
+          fi

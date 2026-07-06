@@ -5,6 +5,9 @@
     },
     "linear-server": {
       "serverUrl": "https://mcp.linear.app/mcp"
+    },
+    "github": {
+      "serverUrl": "https://api.githubcopilot.com/mcp/"
     }
   }
 }

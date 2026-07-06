@@ -7,6 +7,10 @@
     "agentskills": {
       "type": "http",
       "url": "https://agentskills.io/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
     }
   }
 }

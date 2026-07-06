@@ -18,4 +18,5 @@ npx skills add ryan-minato/skills --skill <skill-name> -g
 | [great-skill-writer](great-skill-writer/) | 编写并改进行为可预测的 Agent Skill：符合规范的 frontmatter、触发准确的 description、可检验的完成标准、渐进式披露，并内置校验脚本。 |
 | [meta-harness](meta-harness/) | 设计、审计并改进 agent harness：调查项目与团队事实，选择成熟度等级（L0–L4），校准九个 harness 层的厚度，并让每条规则都能被未来的 agent 从 AGENTS.md 发现。 |
 | [programming-guidelines](programming-guidelines/) | 应用通用编程工作标准：编码前先思考，优先选择简单方案，保持改动精确，并用清晰的成功标准验证结果。 |
+| [ryan-minato-skills-installing](ryan-minato-skills-installing/) | 将 ryan-minato/skills 库中的 skill 安装到项目或全局：优先通过现代包运行器（pnpm/bun/yarn）或 npx 使用 vercel-labs skills CLI，在没有 Node 环境时回退到内置的纯标准库克隆复制脚本，并可发现列出可用的 skill。 |
 | [sensitivity-check](sensitivity-check/) | 检测文本或文件中的 PII 与泄露的机密信息，并生成结构化报告。首选引擎（经 uv 运行的 Presidio、detect-secrets）配合纯标准库回退脚本，覆盖通用及美/英/中/日实体。 |

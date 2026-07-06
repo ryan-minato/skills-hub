@@ -94,6 +94,6 @@ Write any review text to a scratch file `REVIEW.md` first.
 |---|---|---|
 | Read the diff | `pull_request_read` method=`get_diff` | `gh pr diff N -R {{OWNER_REPO}}` |
 | Check CI status | `pull_request_read` method=`get_status` | `gh pr checks N -R {{OWNER_REPO}}` |
-| Submit review | `pull_request_review_write` (COMMENT event, body from REVIEW.md) | `gh pr review N -R {{OWNER_REPO}} --comment --body-file REVIEW.md` |
+| Submit review | `pull_request_review_write` method=`create` (`event: COMMENT`, body from REVIEW.md — create with event submits in one call) | `gh pr review N -R {{OWNER_REPO}} --comment --body-file REVIEW.md` |
 
 Done when: the review is visible on the PR and its URL is reported.

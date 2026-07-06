@@ -30,6 +30,9 @@ Public skills are grouped into catalogs under `skills/`:
   creating Templates, and prebuilding images.
 - `engineering` — general programming methodology skills; not tied to a
   specific language or framework.
+- `github` — GitHub collaboration workflow skills: MCP-first issue/PR/
+  Discussions/Actions operations and conventions authoring, with embedded
+  pre-publish review.
 - `ops` — general workflow operations, not invoked directly by users.
 
 Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,

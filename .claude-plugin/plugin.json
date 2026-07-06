@@ -1,6 +1,6 @@
 {
   "name": "skills",
-  "description": "Curated Agent Skills library: core (recommended global install), devcontainer (Dev Container authoring), engineering (methodology), and ops (workflow operations) catalogs.",
+  "description": "Curated Agent Skills library: core (recommended global install), devcontainer (Dev Container authoring), engineering (methodology), github (GitHub collaboration workflows), and ops (workflow operations) catalogs.",
   "author": {
     "name": "ryan-minato"
   },
@@ -8,6 +8,7 @@
     "./skills/core",
     "./skills/devcontainer",
     "./skills/engineering",
+    "./skills/github",
     "./skills/ops"
   ]
 }

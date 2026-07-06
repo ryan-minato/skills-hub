@@ -1,0 +1,56 @@
+# Issue form: bug report. Copy to .github/ISSUE_TEMPLATE/bug.yml.
+# Every label listed below must already exist in the repository, or
+# GitHub drops it silently on submission.
+name: Bug report
+description: Report something that is broken or behaves incorrectly.
+labels:
+  - type/bug
+  - status/needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug in {{PROJECT}}.
+        Complete reports get triaged faster — fill in every required
+        field.
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      description: The release version or commit SHA where the bug occurs.
+      placeholder: v1.2.3 or 0abc123
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal, ordered steps that trigger the bug.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior + logs
+      description: >
+        What happens instead. Paste relevant logs or command output;
+        it is rendered as a code block automatically.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true

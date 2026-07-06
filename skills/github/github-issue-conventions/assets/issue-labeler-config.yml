@@ -1,0 +1,11 @@
+# Configuration for github/issue-labeler (enable-versioned-regex: 0).
+# Copy to .github/issue-labeler.yml — NOT .github/labeler.yml, which
+# belongs to the PR labeler (actions/labeler).
+#
+# Each top-level key must be an EXISTING repository label; the values are
+# regular expressions matched against the issue title and body. Keep the
+# keys aligned with the synced label taxonomy.
+type/bug:
+  - '(crash|error|exception|regression)'
+priority/high:
+  - '(data loss|security|production down)'

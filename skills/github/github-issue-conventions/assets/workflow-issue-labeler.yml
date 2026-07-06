@@ -1,0 +1,22 @@
+# Labels new and edited issues from regex rules in .github/issue-labeler.yml.
+# Copy to .github/workflows/issue-labeler.yml. First-party action only.
+name: Issue labeler
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: github/issue-labeler@v3
+        with:
+          configuration-path: .github/issue-labeler.yml
+          enable-versioned-regex: 0
+          include-title: 1
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

@@ -13,6 +13,7 @@ and other compatible clients) how to perform specific tasks well.
 | [`core`](skills/core/) | Skills recommended for every environment | Global (user-level) |
 | [`devcontainer`](skills/devcontainer/) | Dev Container authoring skills: Features, Templates, and prebuilt images | Per project, as needed |
 | [`engineering`](skills/engineering/) | General programming methodology skills, not tied to a language or framework | Per project, as needed |
+| [`github`](skills/github/) | GitHub collaboration workflows: MCP-first issue/PR/Discussions/Actions operations and conventions authoring | Per project, as needed |
 | [`ops`](skills/ops/) | General workflow operations, not invoked directly | Per project, as needed |
 
 Each catalog's README lists its skills.

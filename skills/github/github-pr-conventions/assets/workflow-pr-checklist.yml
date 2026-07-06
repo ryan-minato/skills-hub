@@ -1,0 +1,50 @@
+# Validates the PR body against the PR template: every required heading
+# must be present and the security checkbox must be present AND ticked —
+# deleting the checkbox line is treated as a failure, not a pass. The
+# heading list below must stay in sync with .github/pull_request_template.md.
+name: PR checklist
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+
+            // Keep in sync with the headings in .github/pull_request_template.md.
+            const required = ['## Summary', '## Changes', '## Testing', '## Checklist'];
+            const missing = required.filter((heading) => !body.includes(heading));
+            if (missing.length > 0) {
+              core.setFailed('PR body is missing required sections: ' + missing.join(', '));
+              return;
+            }
+
+            // The security checkbox must be present AND ticked; a deleted
+            // line is a failure, not a pass.
+            const lines = body.split('\n').map((line) => line.trim());
+            const isSecurityItem = (line) => line.toLowerCase().includes('secrets');
+            const uncheckedSecurity = lines.some(
+              (line) => line.startsWith('- [ ]') && isSecurityItem(line)
+            );
+            const checkedSecurity = lines.some(
+              (line) => /^- \[[xX]\]/.test(line) && isSecurityItem(line)
+            );
+            if (uncheckedSecurity) {
+              core.setFailed('The security checklist item (no secrets, credentials, or personal data) is unchecked.');
+              return;
+            }
+            if (!checkedSecurity) {
+              core.setFailed('The security checklist item (no secrets, credentials, or personal data) is missing from the PR body; restore it from the template and tick it.');
+              return;
+            }
+
+            core.info('PR body contains all required sections and the security checkbox is ticked.');

@@ -24,7 +24,13 @@ accepted.
 |---|---|
 | gh CLI | `GH_TOKEN` (or `GITHUB_TOKEN`) |
 | Local github-mcp-server (docker or binary) | `GITHUB_PERSONAL_ACCESS_TOKEN` |
-| Remote server `Authorization` header | whichever variable the host config references — this catalog's convention is `GITHUB_PAT` |
+| Remote server `Authorization` header | whichever variable the host config references — this catalog's convention is `GH_TOKEN`, the same variable gh reads |
+
+`GH_TOKEN` is the convention because it also works as a user-level
+Codespaces secret: secret names must not start with `GITHUB_`, so
+`GITHUB_PAT`-style names cannot be injected that way, and `GITHUB_TOKEN`
+collides with the narrower token Codespaces and Actions inject
+automatically.
 
 ## Storage rules
 

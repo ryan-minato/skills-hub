@@ -62,7 +62,8 @@ claude mcp list
 ```
 
 Replace `YOUR_GITHUB_PAT` with an environment-variable reference if the
-host supports it; never paste the token value into a committed file.
+host supports it (this catalog's convention: `GH_TOKEN`); never paste the
+token value into a committed file.
 
 ### Local server (stdio) via docker
 

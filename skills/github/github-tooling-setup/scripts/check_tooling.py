@@ -9,9 +9,9 @@ Probes (all read-only; nothing is installed or changed):
              `gh --version`), and whether `gh auth status` exits 0
              (authenticated true/false).
 - docker:    whether docker is on PATH and its version.
-- token_env: which of GITHUB_PAT, GH_TOKEN, GITHUB_TOKEN, and
-             GITHUB_PERSONAL_ACCESS_TOKEN are set. Only names and set/unset
-             booleans are reported; token values are never printed.
+- token_env: which of GH_TOKEN, GITHUB_TOKEN, GITHUB_PERSONAL_ACCESS_TOKEN,
+             and GITHUB_PAT are set. Only names and set/unset booleans are
+             reported; token values are never printed.
 - network:   HTTPS reachability of https://api.github.com and
              https://api.githubcopilot.com/ (any HTTP response, including
              401, counts as reachable). Disabled by --skip-network.
@@ -38,10 +38,10 @@ import urllib.error
 import urllib.request
 
 TOKEN_ENV_VARS = (
-    "GITHUB_PAT",
     "GH_TOKEN",
     "GITHUB_TOKEN",
     "GITHUB_PERSONAL_ACCESS_TOKEN",
+    "GITHUB_PAT",
 )
 
 NETWORK_ENDPOINTS = (

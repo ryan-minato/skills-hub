@@ -1,0 +1,36 @@
+# Issue form: feature request. Copy to .github/ISSUE_TEMPLATE/feature.yml.
+# Every label listed below must already exist in the repository, or
+# GitHub drops it silently on submission.
+name: Feature request
+description: Propose a new capability or an enhancement.
+labels:
+  - type/feature
+  - status/needs-triage
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: >
+        What problem would this solve? Who hits it, and how often?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you want to happen, as concretely as possible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches or workarounds you have considered.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-submission checks
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true

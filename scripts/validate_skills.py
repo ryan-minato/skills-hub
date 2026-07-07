@@ -246,10 +246,12 @@ def check_marketplace_manifest() -> None:
                 f"not kebab-case; claude.ai marketplace sync rejects "
                 f"non-kebab names. Fix: rename to lowercase-hyphen."
             )
-        if not entry.get("source"):
+        if entry.get("source") != "./":
             fail(
-                f".claude-plugin/marketplace.json: plugin `{name}` has no "
-                f'`source`. Fix: add `"source": "./"`.'
+                f".claude-plugin/marketplace.json: plugin `{name}` source must "
+                f'be `"./"` (the marketplace root); that is what makes the '
+                f"`skills` filter replace the default scan so the plugin loads "
+                f'only its own catalog. Fix: set `"source": "./"`.'
             )
         skills = entry.get("skills", [])
         if isinstance(skills, str):
@@ -262,7 +264,15 @@ def check_marketplace_manifest() -> None:
                 f'`"skills": ["./skills/{name}"]`.'
             )
         for path in skills:
-            catalog = REPO_ROOT / path.lstrip("./")
+            if not path.startswith("./"):
+                fail(
+                    f".claude-plugin/marketplace.json: plugin `{name}` skills "
+                    f"path `{path}` must be a relative path starting with "
+                    f"`./` (no `..` traversal). Fix: point it at "
+                    f"`./skills/{name}`."
+                )
+                continue
+            catalog = REPO_ROOT / path[2:]
             if catalog.parent != SKILLS_DIR or not catalog.is_dir():
                 fail(
                     f".claude-plugin/marketplace.json: plugin `{name}` skills "

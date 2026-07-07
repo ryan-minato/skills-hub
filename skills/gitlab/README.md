@@ -19,3 +19,4 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | Description |
 |---|---|
+| [gitlab-tooling-setup](gitlab-tooling-setup/) | Install and authenticate the glab CLI per OS against gitlab.com or any self-managed host, optionally configure the GitLab Duo MCP server (Premium/Ultimate, 18.6+), with a probe script reporting what is available and authenticated. |

@@ -16,3 +16,4 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | 说明 |
 |---|---|
+| [gitlab-tooling-setup](gitlab-tooling-setup/) | 按操作系统安装 glab CLI 并对 gitlab.com 或任意自建实例完成认证，可选配置 GitLab Duo MCP server（Premium/Ultimate，18.6+），附带报告可用性与认证状态的探测脚本。 |

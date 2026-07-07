@@ -47,14 +47,11 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/github/github-issue-conventions",
         "./skills/github/github-issues",
-        "./skills/github/github-pr-conventions",
         "./skills/github/github-pull-requests",
-        "./skills/github/github-repo-research",
-        "./skills/github/github-tooling-setup"
+        "./skills/github/github-repo-research"
       ],
-      "description": "GitHub collaboration workflows: issues, PRs, repo research, and conventions authoring."
+      "description": "GitHub collaboration workflows: issues, PRs, and repo research."
     },
     {
       "name": "gitlab",
@@ -71,6 +68,17 @@
         "./skills/gitlab/gitlab-wiki"
       ],
       "description": "GitLab collaboration workflows: issues, MRs, pipelines, planning, wiki, and conventions authoring."
+    },
+    {
+      "name": "meta-github",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/meta-github/github-issue-conventions",
+        "./skills/meta-github/github-pr-conventions",
+        "./skills/meta-github/github-tooling-setup"
+      ],
+      "description": "GitHub harness authoring: agent tooling setup and repository conventions (issue forms, labels, PR rules, automation)."
     }
   ]
 }

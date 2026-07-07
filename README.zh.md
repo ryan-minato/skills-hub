@@ -15,6 +15,7 @@
 | [`engineering`](skills/engineering/) | 通用编程方法论类 skill，不绑定特定语言或框架 | 按需安装到项目 |
 | [`github`](skills/github/) | GitHub 协作工作流：MCP 优先的 issue/PR/Discussions/Actions 操作与规范创作 | 按需安装到项目 |
 | [`gitlab`](skills/gitlab/) | GitLab 协作工作流：glab 优先的 issue/MR/流水线操作、规划、wiki 与规范创作 | 按需安装到项目 |
+| [`meta-github`](skills/meta-github/) | GitHub harness 创作：agent 工具链配置与仓库规范（issue 表单、标签、PR 规则、自动化） | 按需安装到项目 |
 | [`ops`](skills/ops/) | 不直接调用的通用工作流操作 | 按需安装到项目 |
 
 每个 catalog 的 README 列出了其包含的 skill。

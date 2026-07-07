@@ -160,12 +160,8 @@ assignment (enforcement is Premium, the naming works everywhere).
 
 ## Iterations (Premium; read-only)
 
-```bash
-glab iteration list -R G/P -F json        # project's iterations
-glab iteration list -g GROUP -F json      # group's iterations
-glab api "groups/GROUP/iterations?state=current"   # state filter
-```
-
+List with `glab iteration list -R G/P -F json` (`-g GROUP` for the
+group's; state filter via `glab api "groups/GROUP/iterations?state=current"`).
 Iterations cannot be created or edited through REST or glab — cadences
 manage them. Read
 [references/iterations-and-cadences.md](references/iterations-and-cadences.md)
@@ -173,69 +169,33 @@ when asked to create, edit, or schedule an iteration or cadence.
 
 ## Issue boards (Free; scoping and non-label lists Premium)
 
-No glab command group exists for boards — every row is `glab api`.
-Multiple boards per **project** are Free.
-
-| Task | Command |
-|---|---|
-| List boards | `glab api projects/:fullpath/boards` |
-| View a board's lists | `glab api projects/:fullpath/boards/BID/lists` |
-| Create board | `glab api --method POST projects/:fullpath/boards -f name="NAME"` |
-| Rename board | `glab api --method PUT projects/:fullpath/boards/BID -f name="NAME"` |
-| Delete board | `glab api --method DELETE projects/:fullpath/boards/BID` |
-| Add a label list | `glab api --method POST projects/:fullpath/boards/BID/lists -F label_id=LABEL_ID` |
-| Reorder a list | `glab api --method PUT projects/:fullpath/boards/BID/lists/LID -F position=N` |
-| Delete a list | `glab api --method DELETE projects/:fullpath/boards/BID/lists/LID` |
-
-A label list takes the numeric `label_id` from the Labels section's list
-row. Moving an issue between label-backed lists is relabeling the issue —
-that belongs to `gitlab-issues`. Read
-[references/boards-premium.md](references/boards-premium.md) when
-scoping a board (milestone/assignee/weight/labels), creating an
-assignee, milestone, or iteration list, creating or deleting a **group**
-board, or reading epic boards.
+Board and list management lives entirely in
+[references/boards.md](references/boards.md) — read it for any board
+task: the Free operations table (create/rename/delete boards, label
+lists, reordering), Premium scoping and non-label lists, group boards,
+and epic boards. Moving an issue between label-backed lists is
+relabeling the issue — that belongs to `gitlab-issues`.
 
 ## Epics (Premium/Ultimate; group-level)
 
-The Epics REST API is deprecated since GitLab 17.0 (removal planned for
-the unreleased API v5) but remains the stable, complete path on every
-currently supported version; the successor work-items surface is still
-experimental. Epic descriptions go through files (`-F description=@FILE`).
-
-| Task | Command |
-|---|---|
-| List | `glab api "groups/GROUP/epics?state=opened"` |
-| View | `glab api groups/GROUP/epics/IID` |
-| Create | `glab api --method POST groups/GROUP/epics -f title="TITLE" -F description=@EPIC.md` |
-| Edit | `glab api --method PUT groups/GROUP/epics/IID [-f title="T"] [-F description=@EPIC.md]` |
-| Close / reopen | `glab api --method PUT groups/GROUP/epics/IID -f state_event=close` (or `reopen`) |
-| Add / remove labels | `-f add_labels=a,b` / `-f remove_labels=c` on the PUT |
-| Set parent epic | `glab api --method PUT groups/GROUP/epics/IID -F parent_id=EPIC_ID` |
-| Delete | `glab api --method DELETE groups/GROUP/epics/IID` |
-
-`parent_id` takes the parent's global epic `id`, not its `iid` (the view
-row shows both). Read
-[references/epics-work-items.md](references/epics-work-items.md) when
-the epics endpoints return 404 on a licensed instance (a newer GitLab
-with legacy epics removed) or when the user asks for work items, tasks,
-objectives, or key results.
+Epic lifecycle lives entirely in
+[references/epics-work-items.md](references/epics-work-items.md) — read
+it for any epic task: the deprecated-but-stable REST operations table
+(list, view, create, edit, close, labels, parent/child, delete) and the
+experimental work-items successor path for instances where the legacy
+endpoints return 404 or the user asks for work items, tasks, objectives,
+or key results.
 
 ## Gotchas
 
 - Deleting a milestone silently detaches every issue, MR, and epic that
   referenced it — closing (`edit --state close`) is almost always what
   the user actually wants; confirm before deleting.
-- Only the fields you pass to `glab milestone edit` change; omitted
-  fields keep their values.
 - Group-inherited labels cannot be edited through the project endpoints —
   a 404 on `projects/.../labels/ID` for a label you can see usually means
   it lives at group level.
-- On a board update, the scope parameters (`labels`, `assignee_id`,
-  `milestone_id`, `weight`) are mutually exclusive — one per request.
 - 404 ≠ wrong path: for iterations, epics, and board scoping it usually
   means the tier gate (Free instance) — say so instead of retrying.
-- Iterations auto-created by a cadence have `null` titles — identify
-  them by date range.
 - `glab milestone` and `glab work-items` are recent command groups; if a
   subcommand is missing, update glab (`glab check-update`) instead of
   hunting for alternate spellings.

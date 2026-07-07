@@ -1,4 +1,28 @@
-# Epics as work items (Premium/Ultimate)
+# Epics: lifecycle and the work-items successor (Premium/Ultimate)
+
+## Epic lifecycle (deprecated-but-stable REST)
+
+The Epics REST API is deprecated since GitLab 17.0 (removal planned for
+the unreleased API v5) but remains the stable, complete path on every
+currently supported version. Epic descriptions go through files
+(`-F description=@FILE`).
+
+| Task | Command |
+|---|---|
+| List | `glab api "groups/GROUP/epics?state=opened"` |
+| View | `glab api groups/GROUP/epics/IID` |
+| Create | `glab api --method POST groups/GROUP/epics -f title="TITLE" -F description=@EPIC.md` |
+| Edit | `glab api --method PUT groups/GROUP/epics/IID [-f title="T"] [-F description=@EPIC.md]` |
+| Close / reopen | `glab api --method PUT groups/GROUP/epics/IID -f state_event=close` (or `reopen`) |
+| Add / remove labels | `-f add_labels=a,b` / `-f remove_labels=c` on the PUT |
+| Set parent epic | `glab api --method PUT groups/GROUP/epics/IID -F parent_id=EPIC_ID` |
+| Delete | `glab api --method DELETE groups/GROUP/epics/IID` |
+
+`parent_id` takes the parent's global epic `id`, not its `iid` (the view
+row shows both). The pre-publish gate in SKILL.md applies to create and
+edit.
+
+## Epics as work items
 
 GitLab is migrating epics onto the work-items model (epics became work
 items in 17.2; the legacy epic surfaces are being retired gradually).

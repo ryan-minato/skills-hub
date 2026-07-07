@@ -1,4 +1,24 @@
-# Boards beyond the Free rows (Premium) and group boards
+# Issue boards: operations, scoping, and group boards
+
+No glab command group exists for boards — every row is `glab api`.
+Multiple boards per **project** are Free; scoping, non-label lists, and
+group boards are Premium.
+
+## Board and list operations (Free)
+
+| Task | Command |
+|---|---|
+| List boards | `glab api projects/:fullpath/boards` |
+| View a board's lists | `glab api projects/:fullpath/boards/BID/lists` |
+| Create board | `glab api --method POST projects/:fullpath/boards -f name="NAME"` |
+| Rename board | `glab api --method PUT projects/:fullpath/boards/BID -f name="NAME"` |
+| Delete board | `glab api --method DELETE projects/:fullpath/boards/BID` |
+| Add a label list | `glab api --method POST projects/:fullpath/boards/BID/lists -F label_id=LABEL_ID` |
+| Reorder a list | `glab api --method PUT projects/:fullpath/boards/BID/lists/LID -F position=N` |
+| Delete a list | `glab api --method DELETE projects/:fullpath/boards/BID/lists/LID` |
+
+A label list takes the numeric `label_id` from `glab label list -F json`.
+The pre-publish gate in SKILL.md applies to board/list create and rename.
 
 ## Board scoping (Premium)
 

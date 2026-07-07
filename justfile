@@ -19,6 +19,10 @@ validate:
 check-skill +PATHS:
     python3 scripts/check_skill.py {{PATHS}}
 
+# Regenerate marketplace.json skills[] from the catalogs on disk
+gen-marketplace:
+    python3 scripts/gen_marketplace.py
+
 # Lint and check formatting of repository scripts
 lint:
     ruff check scripts/

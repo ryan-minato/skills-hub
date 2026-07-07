@@ -184,8 +184,11 @@ def nonempty_catalog_names() -> set[str]:
 
 def check_marketplace_manifest() -> None:
     """The repo publishes as a pure marketplace: one plugin per non-empty
-    catalog, each entry using a marketplace-root `source` plus a `skills`
-    filter (`./skills/<catalog>`) that replaces the default scan."""
+    catalog, each entry using a marketplace-root `source` and a `skills`
+    array that enumerates the catalog's skill directories
+    (`./skills/<catalog>/<skill>`). Those exact paths are what the vercel
+    `skills` CLI groups on and what Claude Code loads; the list must match
+    the catalog on disk (kept in sync by scripts/gen_marketplace.py)."""
     if LEGACY_PLUGIN_MANIFEST.is_file():
         fail(
             ".claude-plugin/plugin.json: the repo now publishes as a "
@@ -256,39 +259,44 @@ def check_marketplace_manifest() -> None:
         skills = entry.get("skills", [])
         if isinstance(skills, str):
             skills = [skills]
-        if not skills:
-            fail(
-                f".claude-plugin/marketplace.json: plugin `{name}` lists no "
-                f"`skills` path. With a marketplace-root source each entry "
-                f"must name its catalog container. Fix: add "
-                f'`"skills": ["./skills/{name}"]`.'
-            )
         for path in skills:
             if not path.startswith("./"):
                 fail(
                     f".claude-plugin/marketplace.json: plugin `{name}` skills "
                     f"path `{path}` must be a relative path starting with "
-                    f"`./` (no `..` traversal). Fix: point it at "
-                    f"`./skills/{name}`."
+                    f"`./` (no `..` traversal). Fix: run `just gen-marketplace`."
                 )
-                continue
-            catalog = REPO_ROOT / path[2:]
-            if catalog.parent != SKILLS_DIR or not catalog.is_dir():
-                fail(
-                    f".claude-plugin/marketplace.json: plugin `{name}` skills "
-                    f"path `{path}` is not a catalog directory under skills/. "
-                    f"Fix: point it at `./skills/<catalog>`."
+
+        # Each plugin must enumerate exactly its catalog's skill directories,
+        # so the vercel picker groups them and Claude Code loads them. The
+        # generator (scripts/gen_marketplace.py) keeps this list in sync.
+        expected = [
+            f"./skills/{name}/{d.name}"
+            for d in catalog_skill_subdirs(SKILLS_DIR / name)
+        ]
+        if not expected:
+            fail(
+                f".claude-plugin/marketplace.json: plugin `{name}` has no "
+                f"catalog skills/{name}/ with skills. An empty or missing "
+                f"catalog must not be published. Fix: remove the entry."
+            )
+        elif sorted(skills) != sorted(expected):
+            missing = sorted(set(expected) - set(skills))
+            stale = sorted(set(skills) - set(expected))
+            detail = ", ".join(
+                part
+                for part in (
+                    f"missing {missing}" if missing else "",
+                    f"stale {stale}" if stale else "",
                 )
-                continue
-            if not catalog_skill_subdirs(catalog):
-                fail(
-                    f".claude-plugin/marketplace.json: plugin `{name}` skills "
-                    f"path `{path}` has no `<skill>/SKILL.md` subdir. An empty "
-                    f"catalog must not be published. Fix: remove the entry "
-                    f"until the catalog has a skill."
-                )
-                continue
-            listed_catalogs.add(catalog.name)
+                if part
+            )
+            fail(
+                f".claude-plugin/marketplace.json: plugin `{name}` skills[] is "
+                f"out of sync with skills/{name}/ ({detail}). Fix: run "
+                f"`just gen-marketplace`."
+            )
+        listed_catalogs.add(name)
 
     for missing in sorted(nonempty_catalog_names() - listed_catalogs):
         fail(

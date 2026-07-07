@@ -9,31 +9,67 @@
     {
       "name": "core",
       "source": "./",
-      "skills": ["./skills/core"],
+      "strict": false,
+      "skills": [
+        "./skills/core/conventional-commits",
+        "./skills/core/devcontainer-setup",
+        "./skills/core/git-commit",
+        "./skills/core/great-skill-writer",
+        "./skills/core/meta-harness",
+        "./skills/core/programming-guidelines",
+        "./skills/core/ryan-minato-skills-installing",
+        "./skills/core/sensitivity-check"
+      ],
       "description": "Skills recommended for global (user-level) installation: commits, sensitivity, skill authoring, methodology."
     },
     {
       "name": "devcontainer",
       "source": "./",
-      "skills": ["./skills/devcontainer"],
+      "strict": false,
+      "skills": [
+        "./skills/devcontainer/devcontainer-feature-authoring",
+        "./skills/devcontainer/devcontainer-image-prebuild",
+        "./skills/devcontainer/devcontainer-template-authoring"
+      ],
       "description": "Dev Container authoring skills: Features, Templates, and prebuilt images."
     },
     {
       "name": "engineering",
       "source": "./",
-      "skills": ["./skills/engineering"],
+      "strict": false,
+      "skills": [
+        "./skills/engineering/gitmoji"
+      ],
       "description": "General programming methodology skills, not tied to a language or framework."
     },
     {
       "name": "github",
       "source": "./",
-      "skills": ["./skills/github"],
+      "strict": false,
+      "skills": [
+        "./skills/github/github-issue-conventions",
+        "./skills/github/github-issues",
+        "./skills/github/github-pr-conventions",
+        "./skills/github/github-pull-requests",
+        "./skills/github/github-repo-research",
+        "./skills/github/github-tooling-setup"
+      ],
       "description": "GitHub collaboration workflows: issues, PRs, repo research, and conventions authoring."
     },
     {
       "name": "gitlab",
       "source": "./",
-      "skills": ["./skills/gitlab"],
+      "strict": false,
+      "skills": [
+        "./skills/gitlab/gitlab-issue-conventions",
+        "./skills/gitlab/gitlab-issues",
+        "./skills/gitlab/gitlab-merge-requests",
+        "./skills/gitlab/gitlab-mr-conventions",
+        "./skills/gitlab/gitlab-planning",
+        "./skills/gitlab/gitlab-repo-research",
+        "./skills/gitlab/gitlab-tooling-setup",
+        "./skills/gitlab/gitlab-wiki"
+      ],
       "description": "GitLab collaboration workflows: issues, MRs, pipelines, planning, wiki, and conventions authoring."
     }
   ]

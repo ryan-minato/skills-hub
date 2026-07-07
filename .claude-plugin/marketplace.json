@@ -80,7 +80,7 @@
         "./skills/meta-github/github-release-conventions",
         "./skills/meta-github/github-tooling-setup"
       ],
-      "description": "GitHub harness authoring: agent tooling setup and repository conventions (issue forms, labels, PR rules, automation)."
+      "description": "GitHub harness authoring: agent tooling setup and repository conventions (issue forms, labels, PR, commit, and release rules, automation)."
     },
     {
       "name": "meta-gitlab",
@@ -90,9 +90,10 @@
         "./skills/meta-gitlab/gitlab-commit-conventions",
         "./skills/meta-gitlab/gitlab-issue-conventions",
         "./skills/meta-gitlab/gitlab-mr-conventions",
+        "./skills/meta-gitlab/gitlab-release-conventions",
         "./skills/meta-gitlab/gitlab-tooling-setup"
       ],
-      "description": "GitLab harness authoring: agent tooling setup and project conventions (description templates, scoped labels, MR rules, CI validation)."
+      "description": "GitLab harness authoring: agent tooling setup and project conventions (description templates, scoped labels, MR, commit, and release rules, CI validation)."
     }
   ]
 }

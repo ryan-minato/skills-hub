@@ -132,10 +132,16 @@ watch on the next MR, settings to enable).
 
 ### Condensed pre-publish gate
 
-Embedded verbatim in every generated project skill that publishes content
-(issues, MRs, comments). The full-procedure gate stays in the `gitlab`
-catalog's operational skills; this condensed form exists because generated
-skills must be self-contained.
+Embedded in every generated project skill that publishes content
+(issues, MRs, releases, comments). The five numbered checks and the
+closing paragraph are fixed; two slots are tailorable per template — the
+opening sentence(s) before "review the exact final text" (the MR
+template adds the commit-log/diff exposure, the release template the
+no-drafts-on-GitLab framing) and a parenthetical after it naming the
+artifacts under review. The AGENTS.md fallback sections carry the same
+checks as prose, not verbatim. The full-procedure gate stays in the
+`gitlab` catalog's operational skills; this condensed form exists
+because generated skills must be self-contained.
 
 ```markdown
 ## Pre-publish gate (mandatory)
@@ -163,13 +169,22 @@ your summary.
 Set up glab/MCP for an agent → `gitlab-tooling-setup` · description
 templates, scoped-label taxonomy, issue automation →
 `gitlab-issue-conventions` · MR template, CONTRIBUTING MR rules, checklist
-CI → `gitlab-mr-conventions` · **using** the conventions day to day (filing
-issues, opening MRs, applying labels) → the `gitlab` catalog's operational
-skills or the generated project skill.
+CI → `gitlab-mr-conventions` · commit-message rules, the committed
+validator, the `Changelog:` trailer definition, commit CI →
+`gitlab-commit-conventions` · versioning and tag policy,
+`changelog_config.yml` (consumes the trailer), milestone-per-release
+policy, tag CI → `gitlab-release-conventions` · **using** the
+conventions day to day (filing issues, opening MRs, committing, cutting
+releases) → the `gitlab` catalog's operational skills or the generated
+project skill.
 
 Boundary rule: this catalog authors *policy and structure* (what labels
-exist, what the template says); the `gitlab` catalog *operates within* that
-structure (applies labels, files issues against templates).
+exist, what the template says); the `gitlab` catalog *operates within*
+that structure (applies labels, files issues against templates).
+Ordering: when several conventions skills run,
+`gitlab-commit-conventions` goes before `gitlab-release-conventions`
+(the changelog config consumes the trailer habit it establishes), and
+`gitlab-issue-conventions` before anything keyed to its labels.
 
 ## Tool inventory
 
@@ -185,7 +200,13 @@ renames a command reference, update this inventory in the same commit.
 | MCP: connection/version check capability | Verify the Duo MCP server answers | gitlab-tooling-setup |
 | `glab label list` | Inventory existing labels | gitlab-issue-conventions |
 | `GET/POST/PUT/DELETE /projects/:id/labels[/:label_id]`, `GET /groups/:id/labels` | Label taxonomy sync (group-inheritance aware) | gitlab-issue-conventions (scripts/sync_labels.py) |
-| `GET /projects/:fullpath` | Merge settings (merge_method, squash_option) | gitlab-mr-conventions |
+| `GET /projects/:fullpath` | Merge settings (merge_method, squash_option) | gitlab-mr-conventions, gitlab-commit-conventions (assess) |
+| `glab release list` / `glab release view` | Inventory existing releases and notes style | gitlab-release-conventions (assess) |
+| `glab milestone list` | Inventory milestone usage | gitlab-release-conventions (assess) |
+| `glab changelog generate` / `GET /projects/:fullpath/repository/changelog` | Test changelog generation as data | gitlab-release-conventions (references) |
+| `PUT /projects/:fullpath/push_rule` | Commit-message push rule (Premium) | gitlab-commit-conventions (references) |
+| `git tag --sort=-v:refname` | Inventory the existing tag scheme | gitlab-release-conventions (assess) |
+| `git log` (via scripts) | History analysis and range validation | gitlab-commit-conventions (scripts/analyze_history.py, assets/check_commits.py) |
 | `glab ci lint` | Validate shipped CI snippets | gitlab-mr-conventions |
 
 ## References

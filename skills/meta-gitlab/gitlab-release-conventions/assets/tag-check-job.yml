@@ -1,0 +1,30 @@
+# Validates pushed release tags against the versioning policy: the name
+# must match the release tag format, and the tagged commit must be
+# reachable from the default branch. Tokenless; runs in tag pipelines
+# only. Copy this job into .gitlab-ci.yml.
+tag-check:
+  # The full (Debian-based) python image ships git; slim/alpine do not.
+  image: python:3.12
+  variables:
+    # Full history so the reachability check can walk to the merge base.
+    GIT_DEPTH: "0"
+    # Keep in sync with docs/versioning-policy.md.
+    TAG_REGEX: '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+\.[0-9]+)?$'
+  rules:
+    # Police release tags only — align this pattern with the policy's
+    # tag prefix so convenience tags (latest, nightly) are not failed.
+    - if: $CI_COMMIT_TAG =~ /^v/
+  script:
+    - |
+      if ! printf '%s\n' "$CI_COMMIT_TAG" | grep -Eq "$TAG_REGEX"; then
+        echo "Tag '$CI_COMMIT_TAG' does not match the policy regex $TAG_REGEX (see docs/versioning-policy.md)." >&2
+        exit 1
+      fi
+    # Use FETCH_HEAD, not origin/<branch>: a tag pipeline's clone may not
+    # populate the remote-tracking ref depending on the runner's refspec.
+    - git fetch origin "$CI_DEFAULT_BRANCH" --quiet
+    - |
+      if ! git merge-base --is-ancestor "$CI_COMMIT_SHA" FETCH_HEAD; then
+        echo "Tag '$CI_COMMIT_TAG' points at a commit not reachable from $CI_DEFAULT_BRANCH — release tags are cut from the default branch." >&2
+        exit 1
+      fi

@@ -1,0 +1,14 @@
+# .gitlab/changelog_config.yml — categories for glab changelog generate
+# and the repository changelog REST endpoint. Keys under categories are
+# Changelog trailer VALUES (matched case-sensitively); the mapped text
+# is the rendered section heading. Commits without the trailer are
+# excluded from generated changelogs entirely.
+categories:
+  added: Features
+  fixed: Bug fixes
+  changed: Changes
+  deprecated: Deprecations
+  removed: Removals
+  security: Security
+  performance: Performance
+  other: Other changes

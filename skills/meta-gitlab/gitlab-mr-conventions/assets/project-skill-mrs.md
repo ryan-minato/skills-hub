@@ -37,41 +37,26 @@ Open and review merge requests in `{{PROJECT_PATH}}` (host:
 
 ## Pre-publish gate (mandatory)
 
-Everything you send becomes visible the moment the call succeeds — to
-the whole internet on a public project, to every member on a private
-one: title, description, every comment, labels, commit messages, the
-full diff. Creating an MR publishes every commit message and the
-complete diff of `{{DEFAULT_BRANCH}}...BRANCH`, not just the
-description. A line starting with `/` executes as a GitLab quick action.
-Before ANY call that creates or edits such content:
+Everything you send becomes visible the moment the call succeeds — to the
+whole internet on public projects, and to every member just as instantly on
+private or internal ones — and creating an MR publishes every commit
+message and the complete diff of `{{DEFAULT_BRANCH}}...BRANCH`, not just
+the description. Before any call that creates or edits such content,
+review the exact final text (for an MR: title, description,
+`git log {{DEFAULT_BRANCH}}..BRANCH --format=full`, and
+`git diff {{DEFAULT_BRANCH}}...BRANCH`):
 
-1. Write the exact outgoing content to files in a scratch directory
-   (title, description, each comment; also `git log
-   {{DEFAULT_BRANCH}}..BRANCH --format=full > commits.txt` and `git diff
-   {{DEFAULT_BRANCH}}...BRANCH > diff.patch`).
-2. Run the review procedure below over that directory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
-   `NO`, fix every finding, rebuild the files, review again. Never
-   edit-and-publish without re-review.
+1. No secrets: tokens, keys, passwords, connection strings, internal URLs.
+2. No personal data beyond what the task needs.
+3. No internal-only context: codenames, private hostnames, unreleased plans.
+4. No unintended quick actions: a body line starting with `/` can execute
+   as one (for example `/close`).
+5. Professional, concise wording; English unless the project's conventions
+   say otherwise.
 
-Never publish unreviewed content. Only the user may skip this gate,
-explicitly; record the skip in your summary.
-
-### Review procedure
-
-1. If you can dispatch a subagent with its own clean context, send it
-   exactly this, with `<DIR>` replaced: "Review the files in <DIR> before
-   they are published on GitLab. Check for secrets/tokens/keys, PII
-   (placeholders like name@example.com are fine), internal hostnames,
-   URLs, or codenames, unintended files in the diff, lines starting with
-   / that would execute as quick actions, and wording a maintainer would
-   regret. Report each finding as file, masked excerpt, required fix.
-   Your last output line must be exactly SAFE TO PUBLISH: YES or SAFE TO
-   PUBLISH: NO."
-2. Otherwise, re-read every file in the directory from disk and apply the
-   same checklist yourself, judging only what the files contain, and note
-   that the review was not clean-context.
-3. Treat any last line other than `SAFE TO PUBLISH: YES` as NO.
+If any check fails, fix the draft — or the branch, when the finding is in
+the diff — and re-check. Publish only after the full text passes. Only the
+user may skip this gate, explicitly; note the skip in your summary.
 
 ## Create a merge request
 

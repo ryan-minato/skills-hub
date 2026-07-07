@@ -37,13 +37,13 @@ Public skills are grouped into catalogs under `skills/`:
   pipeline operations, planning, releases, and wiki — on gitlab.com or
   self-managed hosts, with embedded pre-publish review.
 - `meta-github` — GitHub harness-authoring skills: agent tooling setup and
-  repository conventions authoring (issue forms, labels, PR rules,
-  automation) whose outputs — not the skills themselves — land in the
-  target project.
+  repository conventions authoring (issue forms, labels, PR, commit, and
+  release rules, automation) whose outputs — not the skills themselves —
+  land in the target project.
 - `meta-gitlab` — GitLab harness-authoring skills: agent tooling setup and
-  project conventions authoring (description templates, scoped labels, MR
-  rules, CI validation) whose outputs — not the skills themselves — land
-  in the target project.
+  project conventions authoring (description templates, scoped labels,
+  MR, commit, and release rules, CI validation) whose outputs — not the
+  skills themselves — land in the target project.
 - `ops` — general workflow operations, not invoked directly by users.
 
 Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,

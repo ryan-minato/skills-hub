@@ -23,8 +23,9 @@ compatibility: >
 Install and configure what an agent needs to work with GitLab: the glab
 CLI with authentication (the primary path for every GitLab skill), and
 optionally the GitLab Duo MCP server for the framework hosting the
-session. Work through the sections in order; skip whatever the assessment
-shows is already in place.
+session. This skill sets up the harness; the day-to-day operations that
+use it live in the `gitlab` catalog's skills. Work through the sections
+in order; skip whatever the assessment shows is already in place.
 
 ## Determine the target host
 
@@ -37,10 +38,10 @@ when all three yield nothing. Everything below writes this value as
 
 ## Assess current state
 
-1. Inspect the tools available in this session. If any tool name contains
-   `create_issue`, `get_merge_request`, or a `gitlab` MCP server prefix
-   (for example `mcp__gitlab__...`), the GitLab Duo MCP server is already
-   connected.
+1. Inspect the tools available in this session. If a connected MCP server
+   provides GitLab tools (issue, merge-request, or pipeline capabilities —
+   each tool's description states its purpose; names vary across server
+   versions), the GitLab Duo MCP server is already connected.
 2. Run [scripts/check_tooling.py](scripts/check_tooling.py):
 
    ```bash
@@ -117,8 +118,8 @@ appear. Tell the user this explicitly. After the restart:
 
 1. Re-run the Assess step (tool list + script).
 2. Smoke test: on the glab path run `glab api user --hostname HOST` and
-   confirm it returns your user; on the MCP path call the
-   `get_mcp_server_version` tool.
+   confirm it returns your user; on the MCP path call the tool that
+   reports the server's version or connectivity.
 
 Done when: the probe reports authenticated AND one smoke call returns
 the user or server version.

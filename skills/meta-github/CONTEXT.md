@@ -114,12 +114,15 @@ run, branch protection to enable).
 ### Condensed pre-publish gate
 
 Embedded in every generated project skill that publishes content
-(issues, PRs, releases, comments). The four numbered checks and the
-closing paragraph are fixed; two slots are tailorable per template —
-the opening sentence(s) before "review the exact final text" (the PR
-template adds the commit-log/diff exposure, the release template the
-draft-first framing) and a parenthetical after it naming the artifacts
-under review. The AGENTS.md fallback sections carry the same checks as
+(issues, PRs, releases, comments). The four numbered checks are fixed;
+three slots are tailorable per template — the opening sentence(s) before
+"review the exact final text" (the PR template adds the commit-log/diff
+exposure, the release template the draft-first framing), a parenthetical
+after it naming the artifacts under review, and, in the PR template
+only, a "— or the branch, when the finding is in the diff —" clause in
+the closing "fix the draft" sentence (its findings can live in commits,
+not just the description). Everything else in the closing paragraph is
+fixed. The AGENTS.md fallback sections carry the same checks as
 prose, not verbatim. The full-procedure gate stays in the `github`
 catalog's operational skills; this condensed form exists because
 generated skills must be self-contained.

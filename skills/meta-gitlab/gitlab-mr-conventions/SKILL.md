@@ -5,7 +5,8 @@ description: >
   description template, a CONTRIBUTING merge-request rules section, a
   tokenless CI checklist-validation job that runs in merge request
   pipelines, and a generated project-level agent skill for opening and
-  reviewing MRs in that project. Defaults to Free-tier mechanisms and
+  reviewing MRs in that project — with an AGENTS.md section as the
+  fallback deliverable. Defaults to Free-tier mechanisms and
   works on gitlab.com and self-managed instances; Premium-only features
   (CODEOWNERS enforcement, required approvals) are marked as such. Use
   when standardizing how a GitLab project handles merge requests — "add
@@ -21,34 +22,42 @@ license: Apache-2.0
 Author the files that define how a GitLab project handles merge
 requests: an MR description template, contributing rules, CI checklist
 validation, and a project-level skill that teaches agents in that
-project to follow all of it. This skill writes local files; day-to-day
-MR operations belong to `gitlab-merge-requests`, issue templates and
-labels to `gitlab-issue-conventions`, and glab setup to
-`gitlab-tooling-setup`.
+project to follow all of it. This skill writes local files — only its
+outputs land in the project. Day-to-day MR operations belong to
+`gitlab-merge-requests`; issue templates and labels to
+`gitlab-issue-conventions`; commit and release policy to
+`gitlab-commit-conventions` / `gitlab-release-conventions`.
 
 ## Assess the project first
 
-Inventory what already exists before writing anything:
+Before authoring anything, inventory what the project already has:
+derive `HOST` and the full `PROJECT_PATH` from `git remote get-url
+origin` (host = the part right after `https://` or the `@`; path = the
+rest minus `.git`, kept whole — never assume gitlab.com);
+`.gitlab/merge_request_templates/` (existing templates, especially a
+`Default.md` in any casing — adapt rather than replace);
+`CONTRIBUTING.md` (root or `docs/`); `.gitlab-ci.yml`, specifically
+whether its jobs run as classic branch pipelines (no
+`rules:`/`workflow:` keys — this decides how the checklist job
+integrates); merge settings from inside the checkout (`glab api
+projects/:fullpath` → `default_branch`, `merge_method`,
+`squash_option`); `AGENTS.md` / `CLAUDE.md` for recorded conventions;
+and where project skills live — use `.claude/skills/` if it exists, else
+`.agents/skills/` if it exists, else plan to create `.agents/skills/`.
+Never invent structure parallel to what the project already defines:
+build on what exists, or get the user's explicit approval to replace it.
+Done when: the inventory is written down and each deliverable below is
+marked "new", "extends existing", or "replaces (approved)".
 
-1. Derive `HOST` and the full `PROJECT_PATH` from
-   `git remote get-url origin` (host = the part right after `https://`
-   or the `@`; path = the rest minus `.git`, kept whole — GitLab paths
-   nest). Never assume gitlab.com.
-2. `.gitlab/merge_request_templates/` — existing templates, especially
-   `Default.md` (any casing); adapt rather than replace.
-3. `CONTRIBUTING.md` (root or `docs/`).
-4. `.gitlab-ci.yml` — and specifically whether its jobs run as classic
-   branch pipelines (no `rules:`/`workflow:` keys). This decides how the
-   checklist job integrates (below).
-5. Merge settings, host-agnostically from inside the checkout:
-   `glab api projects/:fullpath` → `default_branch`, `merge_method`
-   (`merge`/`rebase_merge`/`ff`), `squash_option`
-   (`never`/`always`/`default_on`/`default_off`).
-6. The project's agent-skills directory: `.claude/skills/` if it exists,
-   else `.agents/skills/` if it exists, else create `.agents/skills/`.
+## Choose the deliverable
 
-Done when: existing templates, CONTRIBUTING state, pipeline mode, merge
-settings, and the chosen skills directory are written down.
+The default deliverable for workflow guidance is a **project-level agent
+skill** in the skills directory found during assessment. When the project's
+harness does not support skills, or the user prefers documentation, deliver
+an `AGENTS.md` section (create the file if missing) or a standalone doc
+instead. Ask the user once, before generating, and record the choice. All
+other artifacts (templates, configs, CI jobs, validators) ship regardless
+of this choice.
 
 ## MR description template
 
@@ -107,22 +116,31 @@ lint` passes), and the heading list matches the template.
 
 ## Generate the project-level skill
 
-Copy [assets/project-skill-mrs.md](assets/project-skill-mrs.md) to
+For the default deliverable, copy
+[assets/project-skill-mrs.md](assets/project-skill-mrs.md) to
 `<skills-dir>/<project-name>-mrs/SKILL.md` and fill every
-`{{PLACEHOLDER}}`: `{{PROJECT_NAME}}`, `{{PROJECT_PATH}}`,
-`{{GITLAB_HOST}}` from the origin remote; `{{DEFAULT_BRANCH}}`,
-`{{MERGE_METHOD}}`, `{{SQUASH_OPTION}}` from the assessment;
-`{{TEMPLATE_HEADINGS}}` with the template's headings. The template
-pre-wires the host-checked glab path, the project's conventions, the
-embedded pre-publish gate with inline review procedure, and
+`{{PLACEHOLDER}}`:
+
+| Placeholder | Fill with |
+|---|---|
+| `{{PROJECT_NAME}}` | Project name, lowercase, hyphens only |
+| `{{PROJECT_PATH}}` / `{{GITLAB_HOST}}` | From the origin remote |
+| `{{DEFAULT_BRANCH}}` / `{{MERGE_METHOD}}` / `{{SQUASH_OPTION}}` | From the assessment |
+| `{{TEMPLATE_HEADINGS}}` | The exact headings shipped in the MR template |
+
+For the AGENTS.md fallback, copy
+[assets/agents-md-mrs-section.md](assets/agents-md-mrs-section.md) into
+the project's `AGENTS.md` (create the file if missing) and fill the same
+placeholders. The skill template pre-wires the host-checked glab path,
+the project's conventions, the condensed pre-publish gate, and
 create/review tables. For refinement beyond the template this pairs with
 `great-skill-writer`. If it is not installed, install it from
 https://github.com/ryan-minato/skills.git:
 
     npx skills add ryan-minato/skills --skill great-skill-writer
 
-Done when: the generated SKILL.md contains no `{{...}}` placeholder and
-its frontmatter `name` matches its directory name.
+Done when: the generated deliverable contains no `{{...}}` placeholder
+and (for a skill) its frontmatter `name` matches its directory name.
 
 ## Automation beyond the checklist
 
@@ -133,12 +151,12 @@ inside), stale-MR sweeps, or the duplicate-pipeline switch-over.
 
 ## Deliver
 
-Everything stays local until committed and pushed through the project's
-normal git/MR flow — pushing is what publishes it, and that flow carries
-its own review gates. This skill publishes nothing itself.
-
-Done when: template + CONTRIBUTING section + checklist job merged into
-`.gitlab-ci.yml` + generated project skill all exist locally and parse.
+Everything this skill wrote is local files — nothing is published yet. Hand
+the changes to the project's normal git flow (branch, commit, review); that
+flow, not this skill, publishes them and carries its own review gates.
+Done when: the user has the list of every file created or changed, one line
+each on what it does, and any follow-up steps ("Pipelines must succeed" to
+enable, the first MR to watch the checklist job on).
 
 ## Gotchas
 

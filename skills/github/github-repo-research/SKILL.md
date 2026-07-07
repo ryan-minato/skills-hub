@@ -3,14 +3,15 @@ name: github-repo-research
 description: >
   Read-only research over any GitHub repository, including repositories
   you cannot write to: reads issues, pull requests, CI check results,
-  Actions runs and failed-job logs, and Discussions through one
-  recommended path — GitHub MCP tools, gh commands, or a bundled REST
-  script that works without authentication on public repositories. Use
-  when investigating a repository — "what issues are open on that repo",
-  "read the comments on that PR", "summarize issue #N of owner/repo",
-  "what was decided in that discussion", "show recent workflow runs",
-  "why did the nightly build fail", or "get the logs from that Actions
-  run".
+  Actions runs and failed-job logs, Discussions, releases, and tags
+  through one recommended path — the connected GitHub MCP server's tools,
+  gh commands, or a bundled REST script that works without authentication
+  on public repositories. Use when investigating a repository — "what
+  issues are open on that repo", "read the comments on that PR",
+  "summarize issue #N of owner/repo", "what was decided in that
+  discussion", "show recent workflow runs", "why did the nightly build
+  fail", "get the logs from that Actions run", or "what changed in the
+  latest release of owner/repo".
 license: Apache-2.0
 compatibility: >
   scripts/run_log_digest.py requires Python 3.9+ (stdlib only) and an
@@ -22,17 +23,19 @@ compatibility: >
 
 This skill is read-only: it never posts, edits, or changes anything, so it
 has no publish gate — which is also why it works on repositories you have
-no write access to. If the task turns into posting — commenting, filing an
-issue, reviewing or fixing CI via a PR — switch to `github-issues` or
-`github-pull-requests`. If GitHub tooling itself is missing or
-misconfigured, that is `github-tooling-setup` work.
+no write access to. If the task turns into a write — commenting, filing an
+issue, reviewing or fixing CI via a PR, cutting or editing a release —
+switch to `github-issues`, `github-pull-requests`, or `github-releases`:
+the skill that owns a write also owns the reads that immediately precede
+it.
 
 ## Choose your path (do this first, once per session)
 
-1. Look at the tools available in this session. If any tool name contains
-   `issue_read`, `pull_request_read`, or a `github` MCP server prefix (for
-   example `mcp__github__...`), the GitHub MCP server is connected: use the
-   **MCP** column of every table below.
+1. Look at the tools available in this session. If a connected MCP server
+   provides GitHub tools for the work this skill covers (each tool's
+   description states its purpose; names vary across server versions), use
+   the **MCP** column of every table below, picking the tool whose
+   description matches the row's capability.
 2. Otherwise run `gh auth status`. If it exits 0, use the **gh** column.
 3. Otherwise, if the target repository is public, or a token is set in
    `GH_TOKEN`/`GITHUB_TOKEN` even though gh is missing, use the REST
@@ -49,11 +52,11 @@ misconfigured, that is `github-tooling-setup` work.
 
 ## Identify the repository
 
-Run `git remote get-url origin`. Take the part after `github.com/` or
-`github.com:`, strip a trailing `.git`, and split on `/` to get `OWNER` and
-`REPO`. If there is no `origin` remote, ask the user for them. Substitute
-wherever the tables show `O/R` (gh: `-R O/R`; MCP: the `owner` and `repo`
-parameters).
+Run `git remote get-url origin`. The owner/repo pair is the path right
+after the host, with any trailing `.git` stripped. If there is no origin
+remote, or the user named a different repository, use that instead.
+Substitute the pair wherever the tables show `O/R` (gh: `-R O/R`; MCP: the
+owner and repo parameters).
 
 Research often targets a repository other than the current checkout: when
 the user names one, that name is `O/R` and the git remote is only the
@@ -61,34 +64,34 @@ default.
 
 ## Issues (read-only)
 
-| Task | MCP tool | gh |
+| Task | MCP capability | gh |
 |---|---|---|
-| Read issue + comments | `issue_read` method=`get`, then method=`get_comments` | `gh issue view N -R O/R --comments` |
-| List issues | `list_issues` (state open/closed) | `gh issue list -R O/R --state open --json number,title,labels,updatedAt` |
-| Search issues | `search_issues` (query `repo:O/R is:open TEXT`) | `gh issue list -R O/R --search "TEXT label:bug"` |
+| Read issue + comments | read an issue, then its comments | `gh issue view N -R O/R --comments` |
+| List issues | list issues (state open/closed) | `gh issue list -R O/R --state open --json number,title,labels,updatedAt` |
+| Search issues | search issues (query `repo:O/R is:open TEXT`) | `gh issue list -R O/R --search "TEXT label:bug"` |
 
 ## Pull requests (read-only)
 
-| Task | MCP tool | gh |
+| Task | MCP capability | gh |
 |---|---|---|
-| Read PR | `pull_request_read` method=`get` | `gh pr view N -R O/R --json number,title,state,isDraft,reviewDecision,url` |
-| Read diff | `pull_request_read` method=`get_diff` | `gh pr diff N -R O/R` |
-| Check results | `pull_request_read` method=`get_status` or `get_check_runs` | `gh pr checks N -R O/R` |
-| Reviews + review comments | `pull_request_read` method=`get_reviews` / `get_review_comments` | `gh api repos/O/R/pulls/N/reviews` and `gh api repos/O/R/pulls/N/comments` |
-| List PRs | `list_pull_requests` | `gh pr list -R O/R --state open --json number,title,headRefName,updatedAt` |
-| Search PRs | `search_pull_requests` (query `repo:O/R TEXT`) | `gh pr list -R O/R --search "TEXT"` |
+| Read PR | read PR details | `gh pr view N -R O/R --json number,title,state,isDraft,reviewDecision,url` |
+| Read diff | read a PR's diff | `gh pr diff N -R O/R` |
+| Check results | read a PR's status rollup or check runs | `gh pr checks N -R O/R` |
+| Reviews + review comments | read a PR's reviews / review comments | `gh api repos/O/R/pulls/N/reviews` and `gh api repos/O/R/pulls/N/comments` |
+| List PRs | list pull requests | `gh pr list -R O/R --state open --json number,title,headRefName,updatedAt` |
+| Search PRs | search pull requests (query `repo:O/R TEXT`) | `gh pr list -R O/R --search "TEXT"` |
 
 Reading reviews and threads is research; replying to them is publishing
 and belongs to `github-pull-requests`.
 
 ## Discussions
 
-| Task | MCP tool | gh |
+| Task | MCP capability | gh |
 |---|---|---|
-| List discussions | `list_discussions` (`orderBy: UPDATED_AT`, `direction: DESC` — direction is required whenever orderBy is given) | see [references/discussions-gh.md](references/discussions-gh.md) |
-| Read one discussion | `get_discussion` (`discussionNumber`) | see references/discussions-gh.md |
-| Read its comments | `get_discussion_comments` | see references/discussions-gh.md |
-| List categories | `list_discussion_categories` | see references/discussions-gh.md |
+| List discussions | list discussions (when ordering, the direction parameter is required too) | see [references/discussions-gh.md](references/discussions-gh.md) |
+| Read one discussion | read a discussion by number | see references/discussions-gh.md |
+| Read its comments | read a discussion's comments | see references/discussions-gh.md |
+| List categories | list discussion categories | see references/discussions-gh.md |
 
 gh has no first-class discussions command (the gh team declined to add
 one). On the gh path, read
@@ -98,12 +101,12 @@ queries for every row above, plus pagination and search.
 
 ## Actions
 
-| Task | MCP tool | gh |
+| Task | MCP capability | gh |
 |---|---|---|
-| List workflow runs | `actions_list` method=`list_workflow_runs` | `gh run list -R O/R --limit 20 --json databaseId,displayTitle,workflowName,headBranch,status,conclusion,createdAt` |
-| Inspect one run | `actions_get` method=`get_workflow_run` | `gh run view RUN_ID -R O/R` |
-| List a run's jobs | `actions_list` method=`list_workflow_jobs` | `gh run view RUN_ID -R O/R --json jobs` |
-| Failed-log excerpt | `get_job_logs` (`run_id: RUN_ID`, `failed_only: true`, `tail_lines: 100`, `return_content: true`) | [scripts/run_log_digest.py](scripts/run_log_digest.py): `python3 scripts/run_log_digest.py --repo O/R --run-id RUN_ID [--tail 50]` |
+| List workflow runs | list workflow runs | `gh run list -R O/R --limit 20 --json databaseId,displayTitle,workflowName,headBranch,status,conclusion,createdAt` |
+| Inspect one run | read one workflow run | `gh run view RUN_ID -R O/R` |
+| List a run's jobs | list a run's jobs | `gh run view RUN_ID -R O/R --json jobs` |
+| Failed-log excerpt | read job logs, failed-only, with a tail limit (about 100 lines) | [scripts/run_log_digest.py](scripts/run_log_digest.py): `python3 scripts/run_log_digest.py --repo O/R --run-id RUN_ID [--tail 50]` |
 
 NEVER run bare `gh run view --log` or fetch full logs: run logs can be
 megabytes and will flood the context. Always request failed-only output
@@ -118,17 +121,29 @@ Read [references/actions-recipes.md](references/actions-recipes.md) when
 the task needs artifacts, run timing/usage, or filtered run listings
 beyond the table above.
 
+## Releases and tags (read-only)
+
+| Task | MCP capability | gh |
+|---|---|---|
+| List releases | list releases | `gh release list -R O/R --limit 20` |
+| Read one release | read a release by tag, or the latest release | `gh release view TAG -R O/R` (omit `TAG` for the latest) |
+| List tags | — | `gh api repos/O/R/tags --jq '.[].name'` |
+
+On the REST tier: `python3 scripts/rest_read.py releases --repo O/R`
+(`--tag TAG` or `--latest` for one), and `python3 scripts/rest_read.py
+tags --repo O/R`. Reading releases here is research; creating, editing, or
+publishing one belongs to `github-releases`.
+
 ## Gotchas
 
-- MCP tool names have changed across github-mcp-server versions. If a tool
-  named in a table is absent, list the github server's available tools and
-  pick the same-purpose name; if none matches, fall back to the gh column.
-- The `discussions` and `actions` toolsets are not in the GitHub MCP
-  server's default set. If those tools are missing while other github
-  tools exist, the toolset must be enabled — local server: the
-  `GITHUB_TOOLSETS` environment variable; remote server: the per-toolset
-  URL such as `https://api.githubcopilot.com/mcp/x/discussions`.
-  Configuring that belongs to `github-tooling-setup`.
+- If no available MCP tool's description matches a row's capability, that
+  capability is missing from the connected server — use the gh column for
+  that row instead of guessing.
+- The GitHub MCP server groups tools into optional toolsets, and the
+  Discussions and Actions groups are not in its default set. If those
+  capabilities are missing while other GitHub tools exist, the toolset
+  must be enabled on the server side — configuring that belongs to
+  `github-tooling-setup`.
 - The REST tier can only read. Unauthenticated clients get 60 requests
   per hour per IP (search: 10 per minute); the script reports exhaustion
   with the reset time — stop and tell the user rather than retrying. A
@@ -143,4 +158,6 @@ beyond the table above.
 - `gh run list` shows GitHub Actions workflow runs only; check runs
   reported by external CI apps do not appear there.
 - Discussion numbers are per-repository and not shared with issue/PR
-  numbers: `discussionNumber` 42 and issue #42 are unrelated items.
+  numbers: discussion 42 and issue #42 are unrelated items.
+- Draft releases are invisible to anyone without push access — a release
+  the user mentions but the tools cannot see is usually still a draft.

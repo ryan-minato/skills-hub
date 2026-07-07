@@ -31,6 +31,9 @@ prints token values.
 | A run's jobs | `python3 scripts/rest_read.py jobs --repo O/R --run-id ID` |
 | Failed jobs + log tails | `python3 scripts/rest_read.py run-failures --repo O/R --run-id ID [--tail 50]` |
 | Search issues/PRs | `python3 scripts/rest_read.py search --repo O/R --query "repo:O/R is:issue TEXT"` |
+| List releases | `python3 scripts/rest_read.py releases --repo O/R [--limit 20]` |
+| Read one release | `python3 scripts/rest_read.py releases --repo O/R --tag TAG` (or `--latest`) |
+| List tags | `python3 scripts/rest_read.py tags --repo O/R` |
 | List discussions | `python3 scripts/rest_read.py discussions --repo O/R` |
 | Read one discussion | `python3 scripts/rest_read.py discussion --repo O/R --number N` |
 

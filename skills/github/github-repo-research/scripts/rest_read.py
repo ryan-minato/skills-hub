@@ -23,6 +23,9 @@ Subcommands:
     run-failures  Failed jobs, failed steps, and log tails (--run-id ID,
                   --tail N).
     search        Search issues and PRs (--query "is:issue repo:O/R text").
+    releases      List releases (--limit), or one release (--tag TAG or
+                  --latest).
+    tags          List tags (--limit).
     discussions   List discussions (GraphQL with token; Atom feed without).
     discussion    One discussion (--number N; GraphQL with token,
                   best-effort HTML extraction without).
@@ -288,6 +291,58 @@ def cmd_labels(args) -> None:
         emit(raw)
         return
     emit([{"name": lb["name"], "description": lb.get("description")} for lb in raw])
+
+
+def _release_item(raw: dict, *, with_body: bool) -> dict:
+    item = {
+        "tag": raw.get("tag_name"),
+        "name": raw.get("name"),
+        "draft": raw.get("draft"),
+        "prerelease": raw.get("prerelease"),
+        "author": (raw.get("author") or {}).get("login"),
+        "published_at": raw.get("published_at"),
+        "url": raw.get("html_url"),
+    }
+    if with_body:
+        item["body"] = raw.get("body")
+        item["assets"] = [
+            {"name": asset.get("name"), "size": asset.get("size")}
+            for asset in raw.get("assets") or []
+        ]
+    return item
+
+
+def cmd_releases(args) -> None:
+    if args.latest or args.tag:
+        path = (
+            f"/repos/{args.repo}/releases/latest"
+            if args.latest
+            else f"/repos/{args.repo}/releases/tags/{args.tag}"
+        )
+        raw = _api_json(path)
+        if args.raw:
+            emit(raw)
+            return
+        emit(_release_item(raw, with_body=True))
+        return
+    raw = _api_json(f"/repos/{args.repo}/releases", {"per_page": args.limit})
+    if args.raw:
+        emit(raw)
+        return
+    emit([_release_item(entry, with_body=False) for entry in raw])
+
+
+def cmd_tags(args) -> None:
+    raw = _api_json(f"/repos/{args.repo}/tags", {"per_page": args.limit})
+    if args.raw:
+        emit(raw)
+        return
+    emit(
+        [
+            {"name": tag["name"], "commit_sha": (tag.get("commit") or {}).get("sha")}
+            for tag in raw
+        ]
+    )
 
 
 def cmd_prs(args) -> None:
@@ -726,6 +781,17 @@ def build_parser() -> argparse.ArgumentParser:
     common(p_search)
     p_search.add_argument("--query", required=True)
     p_search.set_defaults(func=cmd_search)
+
+    p_rels = sub.add_parser("releases", help="list releases or read one")
+    common(p_rels)
+    which = p_rels.add_mutually_exclusive_group()
+    which.add_argument("--tag", help="one release by tag name")
+    which.add_argument("--latest", action="store_true", help="the latest release")
+    p_rels.set_defaults(func=cmd_releases)
+
+    p_tags = sub.add_parser("tags", help="list tags")
+    common(p_tags)
+    p_tags.set_defaults(func=cmd_tags)
 
     p_discs = sub.add_parser("discussions", help="list discussions")
     common(p_discs)

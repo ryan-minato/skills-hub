@@ -47,30 +47,46 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/github/github-issue-conventions",
         "./skills/github/github-issues",
-        "./skills/github/github-pr-conventions",
         "./skills/github/github-pull-requests",
-        "./skills/github/github-repo-research",
-        "./skills/github/github-tooling-setup"
+        "./skills/github/github-repo-research"
       ],
-      "description": "GitHub collaboration workflows: issues, PRs, repo research, and conventions authoring."
+      "description": "GitHub collaboration workflows: issues, PRs, and repo research."
     },
     {
       "name": "gitlab",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/gitlab/gitlab-issue-conventions",
         "./skills/gitlab/gitlab-issues",
         "./skills/gitlab/gitlab-merge-requests",
-        "./skills/gitlab/gitlab-mr-conventions",
         "./skills/gitlab/gitlab-planning",
         "./skills/gitlab/gitlab-repo-research",
-        "./skills/gitlab/gitlab-tooling-setup",
         "./skills/gitlab/gitlab-wiki"
       ],
-      "description": "GitLab collaboration workflows: issues, MRs, pipelines, planning, wiki, and conventions authoring."
+      "description": "GitLab collaboration workflows: issues, MRs, pipelines, planning, and wiki."
+    },
+    {
+      "name": "meta-github",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/meta-github/github-issue-conventions",
+        "./skills/meta-github/github-pr-conventions",
+        "./skills/meta-github/github-tooling-setup"
+      ],
+      "description": "GitHub harness authoring: agent tooling setup and repository conventions (issue forms, labels, PR rules, automation)."
+    },
+    {
+      "name": "meta-gitlab",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/meta-gitlab/gitlab-issue-conventions",
+        "./skills/meta-gitlab/gitlab-mr-conventions",
+        "./skills/meta-gitlab/gitlab-tooling-setup"
+      ],
+      "description": "GitLab harness authoring: agent tooling setup and project conventions (description templates, scoped labels, MR rules, CI validation)."
     }
   ]
 }

@@ -15,6 +15,8 @@ and other compatible clients) how to perform specific tasks well.
 | [`engineering`](skills/engineering/) | General programming methodology skills, not tied to a language or framework | Per project, as needed |
 | [`github`](skills/github/) | GitHub collaboration workflows: MCP-first issue/PR/Discussions/Actions operations and conventions authoring | Per project, as needed |
 | [`gitlab`](skills/gitlab/) | GitLab collaboration workflows: glab-first issue/MR/pipeline operations, planning, wiki, and conventions authoring | Per project, as needed |
+| [`meta-github`](skills/meta-github/) | GitHub harness authoring: agent tooling setup and repository conventions (issue forms, labels, PR rules, automation) | Per project, as needed |
+| [`meta-gitlab`](skills/meta-gitlab/) | GitLab harness authoring: agent tooling setup and project conventions (description templates, scoped labels, MR rules, CI validation) | Per project, as needed |
 | [`ops`](skills/ops/) | General workflow operations, not invoked directly | Per project, as needed |
 
 Each catalog's README lists its skills.
@@ -49,7 +51,7 @@ need:
 ```
 /plugin marketplace add ryan-minato/skills
 /plugin install core@ryan-minato-skills
-/plugin install github@ryan-minato-skills   # or gitlab@, devcontainer@, engineering@
+/plugin install github@ryan-minato-skills   # or gitlab@, meta-github@, meta-gitlab@, ...
 ```
 
 ## Contributing

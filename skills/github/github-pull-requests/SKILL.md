@@ -1,34 +1,37 @@
 ---
 name: github-pull-requests
 description: >
-  Operates GitHub pull requests through one recommended path — GitHub MCP
-  tools when the server is connected, exact gh commands otherwise: create,
-  comment, close/reopen, draft/ready, merge, read PR state and diff, read
-  CI check results and failed-job logs, and read or reply to review
-  threads including Copilot code review, with a mandatory pre-publish
-  review gate. Use when operating on a pull request — "open/create a PR",
-  "comment on the PR", "did the checks pass", "why is CI red on my PR",
-  "what did Copilot's review say", "reply to the review comments",
-  "merge PR #N", or "mark the PR ready".
+  Operates GitHub pull requests through one recommended path — the connected
+  GitHub MCP server's PR tools when available, exact gh commands otherwise:
+  create, comment, close/reopen, draft/ready, merge, edit labels and
+  milestone, read PR state and diff, read CI check results and failed-job
+  logs, and read or reply to review threads including Copilot code review —
+  always discovering the repository's PR template and contributing rules
+  before opening anything, with a mandatory pre-publish review gate. Use
+  when operating on a pull request — "open/create a PR", "comment on the
+  PR", "did the checks pass", "why is CI red on my PR", "what did Copilot's
+  review say", "reply to the review comments", "merge PR #N", or "mark the
+  PR ready".
 license: Apache-2.0
 ---
 
 # GitHub Pull Requests
 
-This skill operates pull requests: create, comment, read state and diff,
-read check results, manage draft state, merge, and work with review
-threads. For issue work use `github-issues`; for read-only research
-across a repository (issues, PRs, Actions, Discussions — including repos
-without write access) use `github-repo-research`; for authoring PR
-templates and automation use `github-pr-conventions`; if GitHub tooling
-is missing entirely, set it up with `github-tooling-setup`.
+Operate pull requests: create, comment, read state and diff, read check
+results and failed-job logs, manage draft state, edit metadata, merge, and
+work with review threads including Copilot code review. For issue work use
+`github-issues`; for milestone, label, and project-board lifecycle use
+`github-planning`; for read-only research across a repository use
+`github-repo-research`; for authoring PR templates and automation use
+`github-pr-conventions`.
 
 ## Choose your path (do this first, once per session)
 
-1. Look at the tools available in this session. If any tool name contains
-   `issue_read`, `pull_request_read`, or a `github` MCP server prefix (for
-   example `mcp__github__...`), the GitHub MCP server is connected: use the
-   **MCP** column of every table below.
+1. Look at the tools available in this session. If a connected MCP server
+   provides GitHub tools for the work this skill covers (each tool's
+   description states its purpose; names vary across server versions), use
+   the **MCP** column of every table below, picking the tool whose
+   description matches the row's capability.
 2. Otherwise run `gh auth status`. If it exits 0, use the **gh** column.
 3. Otherwise stop and tell the user GitHub tooling is not set up. This skill
    pairs with `github-tooling-setup`. If it is not installed, install it from
@@ -40,11 +43,37 @@ is missing entirely, set it up with `github-tooling-setup`.
 
 ## Identify the repository
 
-Run `git remote get-url origin`. Take the part after `github.com/` or
-`github.com:`, strip a trailing `.git`, and split on `/` to get `OWNER` and
-`REPO`. If there is no `origin` remote, ask the user for them. Substitute
-wherever the tables show `O/R` (gh: `-R O/R`; MCP: the `owner` and `repo`
-parameters).
+Run `git remote get-url origin`. The owner/repo pair is the path right
+after the host, with any trailing `.git` stripped. If there is no origin
+remote, or the user named a different repository, use that instead.
+Substitute the pair wherever the tables show `O/R` (gh: `-R O/R`; MCP: the
+owner and repo parameters).
+
+## Match the project's conventions (before any create)
+
+Before creating anything, discover what the repository already defines and
+use it — never invent parallel structure:
+
+| Artifact | How to check |
+|---|---|
+| PR template(s) | `.github/PULL_REQUEST_TEMPLATE.md` (also `PULL_REQUEST_TEMPLATE.md` at root or in `docs/`), or multiple under `.github/PULL_REQUEST_TEMPLATE/` — if one exists, the PR body follows its structure section by section |
+| Contributing rules | `CONTRIBUTING.md` (root, `.github/`, or `docs/`) — PR titling, base-branch, and review rules stated there are binding |
+| Labels | `gh label list -R O/R`, or the MCP tool that lists repository labels |
+| Open milestones | `gh api repos/O/R/milestones -q '.[].title'` |
+
+If a project-level convention skill or an AGENTS.md conventions section
+covers this task, follow it over this skill's defaults.
+Done when: each artifact was checked and the draft uses the repository's
+existing structures (or the user approved new ones).
+
+## Authoring defaults
+
+Write all published text — titles, bodies, comments, notes — as
+professional, concise prose. Default to English unless the user or the
+project's own conventions call for another language. State facts and
+requests directly; no filler, and no emojis unless the project's existing
+content uses them. The project's templates and conventions win over these
+defaults.
 
 ## Pre-publish gate (mandatory)
 
@@ -68,25 +97,33 @@ explicitly; record the skip in your summary.
 Done when: a `SAFE TO PUBLISH: YES` verdict exists for the exact content
 being sent.
 
-In this skill the gate applies to: create, comment, review submission, and
-any edit that changes public text.
+In this skill the gate applies to: create, comment, review submission and
+replies, and any edit that changes public text or metadata. Pure reads,
+draft/ready flips, and merges of already-reviewed PRs carry no new content
+and skip it.
 
 ## Operations
 
-| Task | MCP tool | gh command |
+Use the column chosen above. Send multi-line bodies through a file, never
+an inline shell string (`--body-file FILE` for gh; fill the MCP body
+parameter from the file).
+
+| Task | MCP capability | gh command |
 |---|---|---|
-| Create PR | `create_pull_request` (base, head, title, body; optional draft, reviewers) | `gh pr create -R O/R --base BASE --head BRANCH --title "TITLE" --body-file BODY.md [--draft]` |
-| Comment | `add_issue_comment` (PRs share issue numbering) | `gh pr comment N -R O/R --body-file COMMENT.md` |
-| Read PR | `pull_request_read` method=`get` | `gh pr view N -R O/R --json number,title,state,isDraft,mergeable,reviewDecision,url` |
-| Read diff | `pull_request_read` method=`get_diff` | `gh pr diff N -R O/R` |
-| Check results | `pull_request_read` method=`get_status` (rollup) or `get_check_runs` | `gh pr checks N -R O/R` |
-| Close / reopen | `update_pull_request` state=`closed`/`open` | `gh pr close N -R O/R` / `gh pr reopen N -R O/R` |
-| Draft → ready | `update_pull_request` draft=false | `gh pr ready N -R O/R` |
-| Merge | `merge_pull_request` (merge_method `squash`) | `gh pr merge N -R O/R --squash` |
+| Create PR | create a pull request (base, head, title, body; optional draft, reviewers) | `gh pr create -R O/R --base BASE --head BRANCH --title "TITLE" --body-file BODY.md [--draft]` |
+| Comment | comment on an issue or PR (PRs share issue numbering) | `gh pr comment N -R O/R --body-file COMMENT.md` |
+| Read PR | read PR details | `gh pr view N -R O/R --json number,title,state,isDraft,mergeable,reviewDecision,url` |
+| Read diff | read a PR's diff | `gh pr diff N -R O/R` |
+| Check results | read a PR's status rollup or check runs | `gh pr checks N -R O/R` |
+| Close / reopen | update a PR's state | `gh pr close N -R O/R` / `gh pr reopen N -R O/R` |
+| Draft → ready | update a PR's draft flag | `gh pr ready N -R O/R` |
+| Edit labels / milestone | update a PR's metadata | `gh pr edit N -R O/R --add-label L --remove-label M --milestone "TITLE"` |
+| Merge | merge a PR with an explicit method | `gh pr merge N -R O/R --squash` |
 
 The default merge method is squash, because linear history is the safer
 default — deviate only when the project's convention says otherwise.
 After create and comment operations, report the returned URL to the user.
+Done when: the URL is reported.
 
 - Read [references/checks-and-logs.md](references/checks-and-logs.md)
   when a check is failing and you need the logs.
@@ -95,18 +132,20 @@ After create and comment operations, report the returned URL to the user.
   requesting a Copilot code review.
 - Read [references/pr-recipes.md](references/pr-recipes.md) when the task
   is not in the table above (update branch, reviewers, linked issues,
-  revert).
+  revert, checkout).
 
 ## Gotchas
 
-- MCP tool names have changed across github-mcp-server versions. If a tool
-  named in a table is absent, list the github server's available tools and
-  pick the same-purpose name; if none matches, fall back to the gh column.
+- If no available MCP tool's description matches a row's capability, that
+  capability is missing from the connected server — use the gh column for
+  that row instead of guessing.
 - `gh pr checks` exits with code 8 while checks are still pending — that is
   not an error; wait and re-run, or use `--watch`.
-- PRs and issues share one number space: that is why `add_issue_comment`
-  comments on a PR, and why a bare `#N` can refer to either.
+- PRs and issues share one number space: the issue-comment capability
+  comments on a PR, and a bare `#N` can refer to either.
 - A PR created from a fork needs `--head FORK_OWNER:BRANCH` (MCP: the same
-  `owner:branch` form in the `head` parameter).
+  `owner:branch` form in the head parameter).
+- Labels and milestones set on a PR must already exist in the repository —
+  the conventions section above exists so this never surprises you.
 - Never dump a full CI log into context — full run logs can be megabytes.
   Follow the failed-only + tail rule in references/checks-and-logs.md.

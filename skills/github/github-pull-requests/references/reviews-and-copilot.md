@@ -6,8 +6,7 @@ publishes text — the Pre-publish gate in SKILL.md applies before each one.
 
 ## Read review summaries
 
-- MCP: `pull_request_read` with method `get_reviews` (owner, repo,
-  pullNumber).
+- MCP: the capability that reads a PR's reviews.
 - gh: `gh api repos/O/R/pulls/N/reviews`
 
 Each review carries an author (`user.login`), a `state` (`APPROVED`,
@@ -15,7 +14,7 @@ Each review carries an author (`user.login`), a `state` (`APPROVED`,
 
 ## Read inline review comments
 
-- MCP: `pull_request_read` with method `get_review_comments`.
+- MCP: the capability that reads a PR's review comments.
 - gh: `gh api repos/O/R/pulls/N/comments`
 
 These are code-anchored comments (each has `path`, a line position, and a
@@ -34,9 +33,8 @@ append this to either `gh api` call above:
 
 Replies are publishing — run the Pre-publish gate first.
 
-- MCP: `add_reply_to_pull_request_comment` (owner, repo, pullNumber,
-  `commentId` — camelCase, the numeric id of the inline comment being
-  replied to — and `body`).
+- MCP: the capability that replies to a PR review comment (takes the
+  numeric id of the inline comment being replied to, and the body).
 - gh: `gh api -X POST repos/O/R/pulls/N/comments/COMMENT_ID/replies -F body=@REPLY.md`
   (the `@` makes gh read the body from the file).
 
@@ -48,27 +46,23 @@ inline review comments" above.
 Review bodies and inline comments are publishing — run the Pre-publish
 gate first.
 
-- MCP, review without inline comments (one call):
-  `pull_request_review_write` method=`create` with `event` (`COMMENT`,
-  `APPROVE`, or `REQUEST_CHANGES`) and `body` — passing `event` submits
-  the review immediately.
+- MCP, review without inline comments: the review-authoring capability in
+  its immediate-submit form — pass the event (`COMMENT`, `APPROVE`, or
+  `REQUEST_CHANGES`) and the body in one call.
 - MCP, review with inline comments (three steps, in order):
-  1. `pull_request_review_write` method=`create` with **no `event`** —
-     this creates a pending review; passing `event` here would submit at
-     once and step 2 would fail.
-  2. One `add_comment_to_pending_review` per inline comment: required
-     `owner`, `repo`, `pullNumber`, `path`, `body`, and `subjectType`
-     (`LINE` for a line comment, `FILE` for a whole-file comment);
-     `line` and `side` optional refinements for `LINE`.
-  3. `pull_request_review_write` method=`submit_pending` with `event` and
-     the summary `body`.
+  1. Start a **pending** review with the review-authoring capability —
+     pass no event; passing one submits immediately and step 2 fails.
+  2. Add each inline comment to the pending review with the
+     pending-comment capability: path, body, and whether it anchors to a
+     line or the whole file (line and side as optional refinements).
+  3. Submit the pending review with the event and the summary body.
 - gh: `gh pr review N -R O/R --comment --body-file REVIEW.md` — replace
   `--comment` with `--approve` or `--request-changes` when that is the
   verdict the user asked for.
 
 ## Request a Copilot code review
 
-- MCP: `request_copilot_review` (owner, repo, pullNumber).
+- MCP: the capability that requests a Copilot review for a PR.
 - gh (requires gh ≥ 2.88): `gh pr edit N -R O/R --add-reviewer @copilot`
 
 Copilot code review must be enabled for the repository or organization.

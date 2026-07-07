@@ -6,8 +6,7 @@ path"; `O/R` and `N` come from "Identify the repository".
 
 ## 1. Identify the failing checks
 
-- MCP: `pull_request_read` with method `get_check_runs` (owner, repo,
-  pullNumber).
+- MCP: the capability that reads a PR's check runs.
 - gh: `gh pr checks N -R O/R --json name,state,bucket,link,workflow` —
   the failing checks are the rows with `bucket` = `fail`.
 
@@ -25,11 +24,10 @@ path"; `O/R` and `N` come from "Identify the repository".
 
 ## 3. Fetch failed logs only
 
-- MCP: `get_job_logs`, one of two shapes — all failed jobs in the run:
-  (owner, repo, `run_id: RUN_ID`, `failed_only: true`, `tail_lines: 100`,
-  `return_content: true`); or a single job: (owner, repo,
-  `job_id: JOB_ID`, `tail_lines: 100`, `return_content: true`). Never
-  combine `job_id` with `failed_only`.
+- MCP: the job-log capability, in one of two shapes — all failed jobs in
+  the run (run id + failed-only + a tail limit of about 100 lines), or a
+  single job (job id + the same tail limit). Never combine a single-job id
+  with the failed-only switch.
 - gh: `gh run view RUN_ID -R O/R --log-failed | tail -n 100` for all
   failed jobs in the run, or
   `gh run view -R O/R --job JOB_ID --log-failed | tail -n 100` for one

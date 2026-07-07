@@ -6,7 +6,9 @@ name: tag-check
 on:
   push:
     tags:
-      - "**"
+      # Police release tags only — align this pattern with the policy's
+      # tag prefix so convenience tags (latest, nightly) are not failed.
+      - "v*"
 
 permissions:
   contents: read

@@ -37,7 +37,7 @@ existing `.github/release.yml`, whether the label taxonomy exists
 whether commit messages follow Conventional Commits (type-mapped bump
 rules only work then), existing release automation in
 `.github/workflows/`, `AGENTS.md` / `CLAUDE.md` for recorded
-conventions, and where project skills live — `.claude/skills/` if it
+conventions, and where project skills live — use `.claude/skills/` if it
 exists, else `.agents/skills/` if it exists, else plan to create
 `.agents/skills/`. Never invent structure parallel to what the project
 already defines: build on what exists, or get the user's explicit
@@ -89,8 +89,9 @@ repository.
 ## Tag check in CI
 
 Copy [assets/workflow-tag-check.yml](assets/workflow-tag-check.yml) to
-`.github/workflows/tag-check.yml` and set its regex to the policy's tag
-format. It runs on tag pushes, validates the tag name, and verifies the
+`.github/workflows/tag-check.yml` and set both its trigger pattern and
+its regex to the policy's tag format (the trigger polices release tags
+only, so convenience tags like `latest` are not failed). It runs on tag pushes, validates the tag name, and verifies the
 tagged commit is reachable from the default branch — a wrong-format or
 off-branch tag fails the run with a fix-it message before anyone
 releases from it. First-party actions only; the checks are plain `run:`
@@ -103,13 +104,24 @@ Done when: the workflow parses and its regex equals the policy doc's.
 For the default deliverable, copy
 [assets/project-skill-releases.md](assets/project-skill-releases.md) to
 `<skills-dir>/<repo-name>-releases/SKILL.md` and fill every
-`{{PLACEHOLDER}}` (`{{REPO_NAME}}`, `{{OWNER_REPO}}`, `{{TAG_FORMAT}}`
-and `{{TAG_REGEX}}` from the policy, `{{BUMP_RULE}}`, `{{NOTES_PATH}}` —
-generated via release.yml or the template). The template pre-wires the
-draft-first flow from `github-releases`, the repository's tag rule, and
-the condensed pre-publish gate. For the AGENTS.md fallback, copy
+`{{PLACEHOLDER}}`:
+
+| Placeholder | Fill with |
+|---|---|
+| `{{REPO_NAME}}` / `{{OWNER_REPO}}` | From the origin remote |
+| `{{POLICY_DOC_PATH}}` | Where the versioning policy doc was installed |
+| `{{TAG_FORMAT}}` / `{{TAG_REGEX}}` | From the policy doc |
+| `{{BUMP_RULE}}` | The policy doc's bump rule, one sentence |
+| `{{NOTES_RULE}}` | The notes rule (generated via release.yml, or the template path) |
+| `{{NOTES_RULE_SHORT}}` | The same as one imperative clause |
+| `{{EXTRA_CREATE_FLAGS}}` | Extra `gh release create` flags the policy implies (for example `--verify-tag` for annotated tags), or empty |
+
+The template pre-wires the draft-first flow from `github-releases`, the
+repository's tag rule, and the condensed pre-publish gate. For the
+AGENTS.md fallback, copy
 [assets/agents-md-releases-section.md](assets/agents-md-releases-section.md)
-into the project's `AGENTS.md` and fill the same placeholders.
+into the project's `AGENTS.md` and fill the same placeholders (it uses a
+subset).
 Refinement beyond the template pairs with `great-skill-writer`
 (`npx skills add ryan-minato/skills --skill great-skill-writer`).
 

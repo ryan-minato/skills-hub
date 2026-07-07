@@ -10,6 +10,8 @@ changelog:
   categories:
     - title: Breaking changes
       labels:
+        # Not part of the github-issue-conventions taxonomy — create it
+        # (gh label create breaking --color b60205) or delete this category.
         - breaking
     - title: Features
       labels:

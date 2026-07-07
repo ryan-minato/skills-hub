@@ -35,8 +35,8 @@ final content (tag name, release title, NOTES.md, every asset file):
 4. Professional, concise wording; English unless the project's conventions
    say otherwise.
 
-If any check fails, fix the draft and re-check. Publish only after
-everything passes. Only the user may skip this gate, explicitly; note
+If any check fails, fix the draft and re-check. Publish only after the
+full text passes. Only the user may skip this gate, explicitly; note
 the skip in your summary.
 
 ## Cut a release

@@ -23,7 +23,8 @@ Catalogs section of `ARCHITECTURE.md`.
   symlinks to every public skill, so this repo's agents can use them.
   `.claude/skills` is a symlink to `.agents/skills` for Claude Code discovery.
 - `.agents/knowledge/` — local knowledge base, synced to Linear Documents.
-- `.claude-plugin/plugin.json` — the public skill list (plugin manifest).
+- `.claude-plugin/marketplace.json` — plugin marketplace: one plugin per
+  non-empty catalog.
 - `scripts/` — repository tooling (validators, longer custom logic).
 - `ARCHITECTURE.md` — how these mechanisms fit together.
 
@@ -63,7 +64,7 @@ Catalogs section of `ARCHITECTURE.md`.
 - External documentation URLs → `.agents/knowledge/references.md`.
 - Knowledge base changed, or Linear docs may be stale → use the
   `knowledge-sync` project skill.
-- Repo mechanics (symlinks, plugin manifest, sync design) →
+- Repo mechanics (symlinks, plugin marketplace, sync design) →
   `ARCHITECTURE.md`.
 
 ## Validation
@@ -77,8 +78,8 @@ Catalogs section of `ARCHITECTURE.md`.
 
 | When this changes | Update |
 |---|---|
-| Public skill added/removed | Symlink in `.agents/skills/`, `.claude-plugin/plugin.json`, catalog `README.md` + `README.zh.md` |
-| Catalog added/removed | Catalog scaffold, the Catalogs section in `ARCHITECTURE.md`, `.claude-plugin/plugin.json` |
+| Public skill added/removed | Symlink in `.agents/skills/`, catalog `README.md` + `README.zh.md` (and `.claude-plugin/marketplace.json` only if it is the catalog's first or last skill) |
+| Catalog added/removed | Catalog scaffold, the Catalogs section in `ARCHITECTURE.md`, `.claude-plugin/marketplace.json` (a plugin entry once the catalog has a skill) |
 | Any `README.md` | The matching `README.zh.md` (and vice versa) |
 | `.agents/knowledge/` documents | Run the `knowledge-sync` project skill after merge |
 | Repo structure or check commands | This file and `ARCHITECTURE.md` |

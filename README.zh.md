@@ -14,11 +14,14 @@
 | [`devcontainer`](skills/devcontainer/) | Dev Container 创作类 skill：Feature、Template 与预构建镜像 | 按需安装到项目 |
 | [`engineering`](skills/engineering/) | 通用编程方法论类 skill，不绑定特定语言或框架 | 按需安装到项目 |
 | [`github`](skills/github/) | GitHub 协作工作流：MCP 优先的 issue/PR/Discussions/Actions 操作与规范创作 | 按需安装到项目 |
+| [`gitlab`](skills/gitlab/) | GitLab 协作工作流：glab 优先的 issue/MR/流水线操作、规划、wiki 与规范创作 | 按需安装到项目 |
 | [`ops`](skills/ops/) | 不直接调用的通用工作流操作 | 按需安装到项目 |
 
 每个 catalog 的 README 列出了其包含的 skill。
 
 ## 安装
+
+### 单个 skill（skills CLI）
 
 使用 [skills CLI](https://github.com/vercel-labs/skills) 安装单个 skill：
 
@@ -35,6 +38,17 @@ npx skills add ryan-minato/skills --skill <skill-name> -g
 
 建议将 `core` 类 skill 全局安装，使其在所有项目中可用；
 其他 catalog 的 skill 按需安装到需要的项目中。
+
+### 作为 Claude Code 插件
+
+每个 catalog 也会作为独立的 Claude Code 插件发布。先添加一次 marketplace，
+再按整个 catalog 安装，只启用需要的插件：
+
+```
+/plugin marketplace add ryan-minato/skills
+/plugin install core@ryan-minato-skills
+/plugin install github@ryan-minato-skills   # 或 gitlab@、devcontainer@、engineering@
+```
 
 ## 参与贡献
 

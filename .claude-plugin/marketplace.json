@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ryan-minato-skills",
+  "owner": {
+    "name": "ryan-minato"
+  },
+  "description": "Curated Agent Skills library, distributed as per-catalog Claude Code plugins.",
+  "plugins": [
+    {
+      "name": "core",
+      "source": "./",
+      "skills": ["./skills/core"],
+      "description": "Skills recommended for global (user-level) installation: commits, sensitivity, skill authoring, methodology."
+    },
+    {
+      "name": "devcontainer",
+      "source": "./",
+      "skills": ["./skills/devcontainer"],
+      "description": "Dev Container authoring skills: Features, Templates, and prebuilt images."
+    },
+    {
+      "name": "engineering",
+      "source": "./",
+      "skills": ["./skills/engineering"],
+      "description": "General programming methodology skills, not tied to a language or framework."
+    },
+    {
+      "name": "github",
+      "source": "./",
+      "skills": ["./skills/github"],
+      "description": "GitHub collaboration workflows: issues, PRs, repo research, and conventions authoring."
+    },
+    {
+      "name": "gitlab",
+      "source": "./",
+      "skills": ["./skills/gitlab"],
+      "description": "GitLab collaboration workflows: issues, MRs, pipelines, planning, wiki, and conventions authoring."
+    }
+  ]
+}

@@ -15,7 +15,7 @@ skills/<catalog>/<skill-name>/   Public, distributable skills
   skills/                        Skills visible to this repo's agents
   knowledge/                     Local knowledge base (synced to Linear)
 .claude/skills -> ../.agents/skills
-.claude-plugin/plugin.json       Public skill list (plugin manifest)
+.claude-plugin/marketplace.json  Plugin marketplace (one plugin per catalog)
 scripts/                         Repository tooling
 justfile                         Canonical check recipes
 .gitmessage                      Commit message template
@@ -39,9 +39,9 @@ Public skills are grouped into catalogs under `skills/`:
 - `ops` — general workflow operations, not invoked directly by users.
 
 Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,
-`CONTEXT.md`), an entry in this list, and a path entry in
-`.claude-plugin/plugin.json`. `scripts/validate_skills.py` cross-checks this
-list against the directories in `skills/`.
+`CONTEXT.md`), an entry in this list, and — once it has a skill — a plugin
+entry in `.claude-plugin/marketplace.json`. `scripts/validate_skills.py`
+cross-checks this list against the directories in `skills/`.
 
 ## Skill Visibility (symlink mechanism)
 
@@ -65,13 +65,30 @@ directly.
 `scripts/validate_skills.py` (via `just validate` and pre-commit) enforces
 that symlinks exist, don't dangle, and point to the right targets.
 
-## Public Skill List (plugin manifest)
+## Plugin Marketplace
 
-`.claude-plugin/plugin.json` declares the catalog directories in its
-`skills` array. Everything under those paths is public; project-only skills
-live in `.agents/skills/` and are therefore excluded by construction. Users
-install skills either as a Claude Code plugin or per-skill with
-`npx skills add ryan-minato/skills`.
+`.claude-plugin/marketplace.json` publishes the repo as a Claude Code
+**plugin marketplace**: one plugin per non-empty catalog. Each entry uses a
+marketplace-root `source` (`"./"`) plus a `skills` filter
+(`["./skills/<catalog>"]`); because the source resolves to the marketplace
+root, that filter *replaces* the default skill scan, so each plugin loads
+exactly its own catalog. No skill files move — the 2-level
+`skills/<catalog>/<skill>/` layout is unchanged. The empty `ops` catalog is
+omitted until it has a skill. Project-only skills live in `.agents/skills/`
+and are excluded by construction.
+
+Users add the marketplace once, then install catalogs individually:
+
+```
+/plugin marketplace add ryan-minato/skills
+/plugin install <catalog>@ryan-minato-skills
+```
+
+The per-skill `npx skills add ryan-minato/skills` channel is independent and
+unaffected: its default discovery finds the 2-level layout directly and does
+not read the marketplace file. (Tradeoff of the marketplace-root `source`:
+each plugin's cache copies the whole repo — negligible for a text-only
+library.)
 
 Because installed skills are copied out of this repo, public skills must be
 fully self-contained (rules in `.agents/knowledge/skill-quality.md`).

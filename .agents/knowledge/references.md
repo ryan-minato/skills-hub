@@ -16,6 +16,7 @@ skill belong in that catalog's `CONTEXT.md`, not here.
 
 - Claude Code skills (discovery paths, `.claude/skills/`): https://code.claude.com/docs/en/skills
 - Claude Code plugin manifest reference (`.claude-plugin/plugin.json`): https://code.claude.com/docs/en/plugins-reference
+- Claude Code plugin marketplaces (`.claude-plugin/marketplace.json`): https://code.claude.com/docs/en/plugin-marketplaces
 - Claude Code memory and `@file` imports (CLAUDE.md → AGENTS.md): https://code.claude.com/docs/en/memory
 
 ## Tooling

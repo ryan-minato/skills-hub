@@ -14,11 +14,14 @@ and other compatible clients) how to perform specific tasks well.
 | [`devcontainer`](skills/devcontainer/) | Dev Container authoring skills: Features, Templates, and prebuilt images | Per project, as needed |
 | [`engineering`](skills/engineering/) | General programming methodology skills, not tied to a language or framework | Per project, as needed |
 | [`github`](skills/github/) | GitHub collaboration workflows: MCP-first issue/PR/Discussions/Actions operations and conventions authoring | Per project, as needed |
+| [`gitlab`](skills/gitlab/) | GitLab collaboration workflows: glab-first issue/MR/pipeline operations, planning, wiki, and conventions authoring | Per project, as needed |
 | [`ops`](skills/ops/) | General workflow operations, not invoked directly | Per project, as needed |
 
 Each catalog's README lists its skills.
 
 ## Installation
+
+### Individual skills (skills CLI)
 
 Install individual skills with the [skills CLI](https://github.com/vercel-labs/skills):
 
@@ -36,6 +39,18 @@ npx skills add ryan-minato/skills --skill <skill-name> -g
 `core` skills are recommended for global installation so they are available
 in every project; install other catalogs' skills into the projects that need
 them.
+
+### As Claude Code plugins
+
+Each catalog is also published as its own Claude Code plugin. Add the
+marketplace once, then install whole catalogs and enable only the ones you
+need:
+
+```
+/plugin marketplace add ryan-minato/skills
+/plugin install core@ryan-minato-skills
+/plugin install github@ryan-minato-skills   # or gitlab@, devcontainer@, engineering@
+```
 
 ## Contributing
 

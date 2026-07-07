@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: End-to-end workflow for creating or modifying a skill in this repository — scaffolding, symlinks, plugin manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
+description: End-to-end workflow for creating or modifying a skill in this repository — scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
 ---
 
 # Skill Authoring
@@ -53,31 +53,33 @@ worth building and where it belongs:
    ln -s ../../skills/<catalog>/<skill-name> .agents/skills/<skill-name>
    ```
 
-3. Confirm the catalog path is listed in the `skills` array of
-   `.claude-plugin/plugin.json` (it normally already is; new catalogs need a
-   new entry).
+3. A new catalog's **first** skill needs a plugin entry in
+   `.claude-plugin/marketplace.json`
+   (`{ "name": "<catalog>", "source": "./", "skills": ["./skills/<catalog>"] }`);
+   adding a skill to an already-published catalog needs no marketplace change.
 4. Add the skill to the catalog's `README.md` **and** `README.zh.md` tables.
 
 ## Creating a project-only skill
 
 1. Create `.agents/skills/<skill-name>/SKILL.md` (real directory, no
-   symlink, never listed in plugin.json or catalog READMEs).
+   symlink, never listed in marketplace.json or catalog READMEs).
 2. Repo path references are allowed here, but all other quality standards
    still apply.
 
 ## Removing or moving a skill
 
 Remove/update the symlink in `.agents/skills/`, the catalog README.md +
-README.zh.md entries, and plugin.json if a catalog path changed. The
-validator catches anything missed.
+README.zh.md entries, and `.claude-plugin/marketplace.json` if the catalog
+became empty (remove its entry) or was renamed. The validator catches
+anything missed.
 
 ## Finish
 
 1. Walk the "Checklist before committing" in
    `.agents/knowledge/skill-quality.md`.
-2. Run `just check` (repo-wide validation, including symlinks, plugin
-   manifest, and catalog consistency) and fix everything it reports;
-   warnings deserve a look even though they don't fail.
+2. Run `just check` (repo-wide validation, including symlinks, the
+   marketplace manifest, and catalog consistency) and fix everything it
+   reports; warnings deserve a look even though they don't fail.
 3. Commit using the repository convention (`.gitmessage`): Conventional
    Commits, scope = the skill name, e.g.
    `feat(<skill-name>): add <skill-name> skill`.

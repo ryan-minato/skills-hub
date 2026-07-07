@@ -36,10 +36,10 @@ glab issue list -R G/P --search "TEXT" --in title,description
 glab mr list -R G/P --search "TEXT"
 ```
 
-## MCP tools
+## MCP capabilities
 
-`search` (18.4) covers instance/group/project search;
-`semantic_code_search` (18.7, Beta) finds code by meaning rather than
-keywords — it needs GitLab Duo with semantic search enabled on the
-instance, so treat an "unknown tool" response as a version/tier gate,
-not an error.
+The search capability (18.4) covers instance/group/project search; the
+semantic code search capability (18.7, Beta) finds code by meaning
+rather than keywords — it needs GitLab Duo with semantic search enabled
+on the instance, so treat its absence as a version/tier gate, not an
+error.

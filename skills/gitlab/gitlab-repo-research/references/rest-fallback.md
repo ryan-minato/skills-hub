@@ -30,6 +30,9 @@ full API payload. `--help` lists every subcommand and flag.
 | Pipeline jobs | `python3 scripts/rest_read.py jobs --project G/P --host HOST --pipeline-id ID` |
 | Failed-job log tails | `python3 scripts/rest_read.py pipeline-failures --project G/P --host HOST --pipeline-id ID [--tail 50]` |
 | Search | `python3 scripts/rest_read.py search --scope issues --query "TEXT" --host HOST [--group GROUP]` |
+| List releases | `python3 scripts/rest_read.py releases --project G/P --host HOST [--limit 20]` |
+| Read one release | `python3 scripts/rest_read.py releases --project G/P --host HOST --tag TAG` (or `--latest`) |
+| List tags | `python3 scripts/rest_read.py tags --project G/P --host HOST` |
 
 ## What a token changes
 

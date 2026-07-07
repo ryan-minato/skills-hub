@@ -2,7 +2,7 @@
 
 The only mutating operations in this skill; run them solely on the
 user's explicit request, and report what was triggered. glab only — the
-MCP `manage_pipeline` tool (18.10) covers run/retry/cancel where
+MCP pipeline-management capability (18.10) covers run/retry/cancel where
 present, but the glab column stays the recommended path.
 
 ## Retry, cancel, run

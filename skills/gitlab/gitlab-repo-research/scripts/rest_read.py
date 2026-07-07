@@ -35,6 +35,9 @@ Subcommands:
     search             Instance-level search, or group-level with --group
                        (--scope issues|merge_requests|projects|milestones|
                        users, --query TEXT).
+    releases           List releases (--limit), or one release (--tag TAG
+                       or --latest).
+    tags               List repository tags (--limit).
 
 Exit codes: 0 = read succeeded, 1 = network/HTTP failure (a 429 reports the
 Retry-After delay instead of sleeping), 2 = bad arguments.
@@ -309,6 +312,60 @@ def cmd_labels(args) -> None:
                 "description": lb.get("description"),
             }
             for lb in raw
+        ]
+    )
+
+
+def _release_item(raw: dict, *, with_body: bool) -> dict:
+    item = {
+        "tag": raw.get("tag_name"),
+        "name": raw.get("name"),
+        "upcoming": raw.get("upcoming_release"),
+        "released_at": raw.get("released_at"),
+        "web_url": (raw.get("_links") or {}).get("self"),
+    }
+    if with_body:
+        item["description"] = raw.get("description")
+        item["assets"] = [
+            {"name": link.get("name"), "type": link.get("link_type")}
+            for link in ((raw.get("assets") or {}).get("links") or [])
+        ]
+        item["milestones"] = [
+            m.get("title") for m in raw.get("milestones") or []
+        ]
+    return item
+
+
+def cmd_releases(args) -> None:
+    base = f"{_project_path(args.project)}/releases"
+    if args.latest or args.tag:
+        path = (
+            f"{base}/permalink/latest"
+            if args.latest
+            else f"{base}/{urllib.parse.quote(args.tag, safe='')}"
+        )
+        raw = _api_json(path)
+        emit(raw if args.raw else _release_item(raw, with_body=True))
+        return
+    raw = _api_json(base, {"per_page": args.limit})
+    emit(raw if args.raw else [_release_item(e, with_body=False) for e in raw])
+
+
+def cmd_tags(args) -> None:
+    raw = _api_json(
+        f"{_project_path(args.project)}/repository/tags", {"per_page": args.limit}
+    )
+    if args.raw:
+        emit(raw)
+        return
+    emit(
+        [
+            {
+                "name": tag.get("name"),
+                "commit_sha": ((tag.get("commit") or {}).get("id") or "")[:8],
+                "message": tag.get("message"),
+            }
+            for tag in raw
         ]
     )
 
@@ -638,6 +695,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--query", required=True)
     p_search.add_argument("--group", help="full group path for group-level search")
     p_search.set_defaults(func=cmd_search)
+
+    p_rels = sub.add_parser("releases", help="list releases or read one")
+    common(p_rels)
+    which = p_rels.add_mutually_exclusive_group()
+    which.add_argument("--tag", help="one release by tag name")
+    which.add_argument("--latest", action="store_true", help="the latest release")
+    p_rels.set_defaults(func=cmd_releases)
+
+    p_tags = sub.add_parser("tags", help="list repository tags")
+    common(p_tags)
+    p_tags.set_defaults(func=cmd_tags)
 
     return parser
 

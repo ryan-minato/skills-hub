@@ -2,40 +2,41 @@
 name: gitlab-issues
 description: >
   Operates GitLab issues through one recommended path — exact glab
-  commands, with GitLab Duo MCP tools as the annotated alternative where
-  they exist: create, comment, close and reopen, edit labels and
-  assignees, read details and comments, list issues and labels — on
-  gitlab.com or any self-managed host, with a mandatory pre-publish
-  review gate before anything is posted. Use when working with GitLab
-  issues — "file an issue", "open an issue", "create an issue", "comment
-  on issue #N", "close this issue", "reopen the issue", "what does issue
-  #N say", "list open bugs", "label this issue", or "assign this issue".
+  commands, with the GitLab Duo MCP server's issue tools as the annotated
+  alternative where the capability exists: create, comment, close and
+  reopen, edit labels, assignees and milestone, read details and comments,
+  list issues and labels — always discovering the project's description
+  templates, labels, and milestones before creating anything, on
+  gitlab.com or any self-managed host, with a mandatory pre-publish review
+  gate. Use when working with GitLab issues — "file an issue", "open an
+  issue", "create an issue", "comment on issue #N", "close this issue",
+  "reopen the issue", "what does issue #N say", "list open bugs", "label
+  this issue", "assign this issue", or "add the issue to the milestone".
 license: Apache-2.0
 ---
 
 # GitLab Issues
 
 Operate GitLab issues in any project: create, comment, close or reopen,
-edit labels and assignees, read details and comments, list issues and
-labels. This skill covers issue operations only: merge request work
-belongs to `gitlab-merge-requests`, read-only research across a project
-(issues, MRs, pipelines, search) to `gitlab-repo-research`,
-milestone/iteration/board/epic lifecycle to `gitlab-planning`, authoring
-issue templates or a label taxonomy to `gitlab-issue-conventions`, and
-setting up missing GitLab tooling to `gitlab-tooling-setup`.
+edit labels, assignees, and milestone, read details and comments, list
+issues and labels. This skill covers issue operations only: merge-request
+work belongs to `gitlab-merge-requests`; milestone, iteration, board,
+epic, and label lifecycle to `gitlab-planning`; read-only research across
+a project to `gitlab-repo-research`; authoring issue templates or a label
+taxonomy to `gitlab-issue-conventions`.
 
 ## Choose your path (do this first, once per session)
 
 1. Run `glab auth status`. If it exits 0 and lists the target host, use the
    **glab** column of every table below. For a self-managed host, check that
    host specifically: `glab auth status --hostname HOST`.
-2. Otherwise, look at the tools available in this session. If any tool name
-   contains `create_issue`, `get_merge_request`, or a `gitlab` MCP server
-   prefix (for example `mcp__gitlab__...`), the GitLab Duo MCP server is
-   connected: use the **MCP** column — but only for rows that show an MCP
-   tool. Rows marked `—` have no MCP tool, and a self-managed instance older
-   than a tool's minimum version lacks that tool: for those tasks, tell the
-   user glab is required.
+2. Otherwise, look at the tools available in this session. If a connected
+   MCP server provides GitLab tools for the work this skill covers (each
+   tool's description states its purpose; names vary across server
+   versions), use the **MCP** column — but only for rows that name an MCP
+   capability. Rows marked `—` have no MCP tool, and an older self-managed
+   instance may lack a capability entirely: for those tasks, tell the user
+   glab is required.
 3. Otherwise stop and tell the user GitLab tooling is not set up. This skill
    pairs with `gitlab-tooling-setup`. If it is not installed, install it from
    https://github.com/ryan-minato/skills.git:
@@ -53,10 +54,36 @@ Run `git remote get-url origin`. The host is the part right after
 trailing `.git` stripped; GitLab paths can nest (`group/subgroup/project`
 is one project — keep the full path). If there is no origin remote, or the
 user named a different project, use that instead. Substitute the full path
-wherever the tables show `G/P` (glab: `-R G/P`; MCP: the project `id`
-parameter). Inside the project's checkout, glab resolves the host from the
-remote on its own; outside it, pass `--hostname HOST` to `glab api`/`glab
-auth` and set `GITLAB_HOST=HOST` for other command groups.
+wherever the tables show `G/P` (glab: `-R G/P`; MCP: the project
+identifier parameter). Inside the project's checkout, glab resolves the
+host from the remote on its own; outside it, pass `--hostname HOST` to
+`glab api`/`glab auth` and set `GITLAB_HOST=HOST` for other command
+groups.
+
+## Match the project's conventions (before any create)
+
+Before creating anything, discover what the project already defines and
+use it — never invent parallel structure:
+
+| Artifact | How to check |
+|---|---|
+| Description templates | List `.gitlab/issue_templates/` (locally, or `glab api "projects/:fullpath/repository/tree?path=.gitlab/issue_templates"`); if one matches the report type, use its body as the scaffold and fill every section — templates may deliberately embed quick actions, keep them |
+| Labels | `glab label list -R G/P` — apply only labels that already exist (an unknown `-l NAME` silently creates a label) |
+| Open milestones | `glab milestone list -R G/P` — assign only existing milestones |
+
+If a project-level convention skill or an AGENTS.md conventions section
+covers this task, follow it over this skill's defaults.
+Done when: each artifact was checked and the draft uses the project's
+existing structures (or the user approved new ones).
+
+## Authoring defaults
+
+Write all published text — titles, bodies, comments, notes — as
+professional, concise prose. Default to English unless the user or the
+project's own conventions call for another language. State facts and
+requests directly; no filler, and no emojis unless the project's existing
+content uses them. The project's templates and conventions win over these
+defaults.
 
 ## Pre-publish gate (mandatory)
 
@@ -84,7 +111,8 @@ Done when: a `SAFE TO PUBLISH: YES` verdict exists for the exact content
 being sent.
 
 The gate applies to create, comment, and any edit that changes public text
-or metadata (title, description, labels, assignees, milestone).
+or metadata (title, description, labels, assignees, milestone). Pure reads
+and lists carry no new content and skip it.
 
 ## Operations
 
@@ -93,28 +121,32 @@ inline shell string: write the body to a file first, then pass it with
 `-d "$(cat BODY.md)"` or `-m "$(cat COMMENT.md)"` (glab has no
 `--body-file`; command substitution does not re-expand file contents).
 
-| Task | glab command | MCP tool (min GitLab) |
+| Task | glab command | MCP capability (min GitLab) |
 |---|---|---|
-| Create issue | `glab issue create -R G/P -t "TITLE" -d "$(cat BODY.md)" [-l LABEL] [-a USER] -y` | `create_issue` (18.4) |
-| Comment | `glab issue note N -R G/P -m "$(cat COMMENT.md)"` | `create_workitem_note` (18.7) |
+| Create issue | `glab issue create -R G/P -t "TITLE" -d "$(cat BODY.md)" [-l LABEL] [-a USER] [-m "MILESTONE"] -y` | create an issue (18.4) |
+| Comment | `glab issue note N -R G/P -m "$(cat COMMENT.md)"` | comment on an issue/work item (18.7) |
 | Close | `glab issue close N -R G/P` | — |
 | Reopen | `glab issue reopen N -R G/P` | — |
-| Read issue + comments | `glab issue view N -R G/P --comments` | `get_issue`, then `get_workitem_notes` (18.4 / 18.7) |
+| Read issue + comments | `glab issue view N -R G/P --comments` | read an issue (18.4), then its comments (18.7) |
 | List issues | `glab issue list -R G/P` (open by default; `--closed`, `--all`) | — |
-| List available labels | `glab label list -R G/P -F json` | `search_labels` (18.9) |
+| List available labels | `glab label list -R G/P -F json` | search labels (18.9) |
 | Edit labels/assignees/title | `glab issue update N -R G/P [-l NEW] [-u OLD] [-a +USER] [-t "T"]` | — |
+| Set / clear milestone | `glab issue update N -R G/P -m "TITLE"` (`-m ""` clears) | — |
 
 After any create or comment, the response contains the new item's URL;
 always report that URL to the user.
 Done when: the URL is reported.
 
 Read [references/issue-recipes.md](references/issue-recipes.md) when the
-task is not a row in the table above (confidential issues, milestone/due
-date/weight, iteration or epic assignment, lock discussion, linked
-issues, move to another project, search and filters).
+task is not a row in the table above (confidential issues, due date and
+weight, iteration or epic assignment, lock discussion, linked issues, move
+to another project, search and filters).
 
 ## Gotchas
 
+- If no available MCP tool's description matches a row's capability, that
+  capability is missing from the connected server — use glab for that row
+  instead of guessing.
 - Issues and merge requests have **separate iid number spaces** in
   GitLab: `#42` and `!42` are different objects, and `glab issue`
   commands cannot touch an MR.
@@ -135,8 +167,5 @@ issues, move to another project, search and filters).
   with `+` to add (`-a +USER`) or `!`/`-` to remove.
 - Unknown label names never error, but the two mechanisms disagree:
   `-l NAME` via glab/API silently **creates** a new project label, while
-  a `/label ~NAME` quick action silently **ignores** it. List labels
-  first when the taxonomy matters.
-- The MCP server has no issue list/edit/close tools at all — on the
-  MCP-only path, tell the user those tasks require glab instead of
-  improvising with other tools.
+  a `/label ~NAME` quick action silently **ignores** it. The conventions
+  section above exists so neither surprises you.

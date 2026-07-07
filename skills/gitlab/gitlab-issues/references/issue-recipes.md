@@ -18,13 +18,12 @@ glab issue update N -R G/P -c                                   # make confident
 glab issue update N -R G/P -p                                   # make public again
 ```
 
-## Milestone, due date, weight
+## Due date, weight
 
-Assign to an existing milestone by title (create milestones with
-`gitlab-planning`). Weight requires Premium.
+Weight requires Premium. (Milestone assignment is a main-table row in
+SKILL.md; create milestones with `gitlab-planning`.)
 
 ```bash
-glab issue update N -R G/P -m "MILESTONE TITLE"   # -m "" unassigns
 glab issue update N -R G/P --due-date 2026-08-31
 glab issue update N -R G/P -w 3
 ```
@@ -85,5 +84,5 @@ glab issue list -R G/P -t incident            # issue types: issue, incident, te
 glab issue list -R G/P -O json                # machine-readable output
 ```
 
-The MCP `search` tool (18.4) covers cross-project search; per-project
+The MCP search capability (18.4) covers cross-project search; per-project
 filtering is glab's `issue list` flags as above.

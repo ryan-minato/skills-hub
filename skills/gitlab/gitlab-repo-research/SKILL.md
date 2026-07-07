@@ -38,10 +38,11 @@ also owns the reads that immediately precede it.
 2. Otherwise, look at the tools available in this session. If a connected
    MCP server provides GitLab tools for the work this skill covers (each
    tool's description states its purpose; names vary across server
-   versions), use the **MCP** column — but only for rows that name an MCP
-   capability. Rows marked `—` have no MCP tool, and an older self-managed
-   instance may lack a capability entirely: for those tasks, tell the user
-   glab is required.
+   versions), use the **MCP** column, picking the tool whose description
+   matches the row's capability — but only for rows that name one. Rows
+   marked `—` have no MCP tool, and an older self-managed instance may
+   lack a capability entirely: for those tasks, tell the user glab is
+   required.
 3. Otherwise, if the target project is public, or a token is set in
    `GITLAB_TOKEN`/`GITLAB_ACCESS_TOKEN` even though glab is missing, use the
    REST fallback: read [references/rest-fallback.md](references/rest-fallback.md)
@@ -143,10 +144,6 @@ group scoping, or the Duo semantic code search.
 
 ## Gotchas
 
-- If no available MCP tool's description matches a row's capability, that
-  capability is missing from the connected server (MCP tools are
-  version-gated, 18.3–19.2) — use the glab column for that row; it is
-  not an error.
 - Unauthenticated REST on gitlab.com is rate-limited: on HTTP 429 the
   script reports the `Retry-After` value — stop and tell the user;
   never hammer retries. Self-managed limits are whatever the admin set.

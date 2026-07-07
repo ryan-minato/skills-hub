@@ -118,10 +118,11 @@ skills/gitlab/` finds them).
 2. Otherwise, look at the tools available in this session. If a connected
    MCP server provides GitLab tools for the work this skill covers (each
    tool's description states its purpose; names vary across server
-   versions), use the **MCP** column — but only for rows that name an MCP
-   capability. Rows marked `—` have no MCP tool, and an older self-managed
-   instance may lack a capability entirely: for those tasks, tell the user
-   glab is required.
+   versions), use the **MCP** column, picking the tool whose description
+   matches the row's capability — but only for rows that name one. Rows
+   marked `—` have no MCP tool, and an older self-managed instance may
+   lack a capability entirely: for those tasks, tell the user glab is
+   required.
 3. Otherwise stop and tell the user GitLab tooling is not set up. This skill
    pairs with `gitlab-tooling-setup`. If it is not installed, install it from
    https://github.com/ryan-minato/skills.git:

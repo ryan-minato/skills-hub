@@ -18,6 +18,6 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | Description |
 |---|---|
-| [github-issues](github-issues/) | Issue operations through MCP-first/gh-fallback decision tables — create, comment, close/reopen, read, labels, assignees — behind a mandatory pre-publish review gate. |
+| [github-issues](github-issues/) | Issue operations through MCP-first/gh-fallback decision tables — create, comment, close/reopen, read, labels, assignees, milestone — discovering the repository's issue templates, labels, and milestones before any create, behind a mandatory pre-publish review gate. |
 | [github-pull-requests](github-pull-requests/) | Pull-request operations through MCP-first/gh-fallback decision tables — create, comment, merge, CI check results, failed-job logs, Copilot review threads — behind a mandatory pre-publish review gate. |
 | [github-repo-research](github-repo-research/) | Read-only investigation of any repository — issues, PRs, Actions runs and failed-job logs, Discussions — via MCP, gh, or a bundled REST script that works unauthenticated on public repos, with digest tooling that keeps huge logs out of context. |

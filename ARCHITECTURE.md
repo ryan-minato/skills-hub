@@ -33,6 +33,9 @@ Public skills are grouped into catalogs under `skills/`:
 - `github` — GitHub collaboration workflow skills: MCP-first issue/PR/
   Discussions/Actions operations and conventions authoring, with embedded
   pre-publish review.
+- `gitlab` — GitLab collaboration workflow skills: glab-first issue/MR/
+  pipeline operations, planning and wiki, and conventions authoring — on
+  gitlab.com or self-managed hosts, with embedded pre-publish review.
 - `ops` — general workflow operations, not invoked directly by users.
 
 Adding a catalog requires: the catalog scaffold (`README.md`, `README.zh.md`,

@@ -1,0 +1,43 @@
+# Validates the MR description against the MR template: every required
+# heading must be present and the security checkbox must be present AND
+# ticked — a deleted checkbox line is a failure, not a pass. The heading
+# list in the script must stay in sync with
+# .gitlab/merge_request_templates/Default.md.
+#
+# Paste this job directly into .gitlab-ci.yml: merge-request-pipeline
+# rules only enable MR pipelines when written there directly, not when
+# they live in a file pulled in through the `include:` keyword.
+# If the project defines custom `stages:`, add a matching `stage:` key.
+# To make the check blocking, enable Settings > Merge requests >
+# "Pipelines must succeed".
+#
+# Tokenless and image-independent by design (POSIX sh + grep only) — safe
+# for fork MRs; never add secrets to this job.
+mr-checklist:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - |
+      if [ "$CI_MERGE_REQUEST_DESCRIPTION_IS_TRUNCATED" = "true" ]; then
+        echo "MR description exceeds the CI variable limit; cannot validate. Shorten the description." >&2
+        exit 1
+      fi
+      desc="$CI_MERGE_REQUEST_DESCRIPTION"
+      status=0
+      for heading in "## Summary" "## Changes" "## Testing" "## Checklist"; do
+        case "$desc" in
+          *"$heading"*) : ;;
+          *) echo "Missing required section: $heading" >&2; status=1 ;;
+        esac
+      done
+      if printf '%s\n' "$desc" | grep -q '^[[:space:]]*- \[ \].*[Ss]ecrets'; then
+        echo "The security checklist item (no secrets, credentials, or personal data) is unchecked." >&2
+        status=1
+      elif ! printf '%s\n' "$desc" | grep -q '^[[:space:]]*- \[[xX]\].*[Ss]ecrets'; then
+        echo "The security checklist item is missing from the MR description; restore it from the template and tick it." >&2
+        status=1
+      fi
+      if [ "$status" -eq 0 ]; then
+        echo "MR description contains all required sections and the security checkbox is ticked."
+      fi
+      exit "$status"

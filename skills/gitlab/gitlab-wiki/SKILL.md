@@ -4,8 +4,9 @@ description: >
   Operates GitLab project and group wikis through the authenticated glab
   CLI and the wikis REST API: list, read, create, update, rename, and
   delete pages, upload attachments, and clone the wiki's git repository
-  for bulk restructures — with a mandatory pre-publish review gate before
-  any page content goes live. Use when working with a GitLab wiki — "add
+  for bulk restructures — always discovering the wiki's existing page
+  structure before creating anything, with a mandatory pre-publish review
+  gate before any page content goes live. Use when working with a GitLab wiki — "add
   a wiki page", "update the wiki", "document this in the wiki", "read
   the wiki page on X", "what does the wiki say about X", "attach an
   image to the wiki page", "rename this wiki page", "fix the wiki
@@ -46,6 +47,31 @@ user named a different project, use that instead. For a **group wiki**
 (Premium), replace `projects/:fullpath` in every row with
 `groups/GROUP%2FSUBGROUP` (URL-encoded group path). Outside a checkout,
 pass `--hostname HOST` to `glab api`.
+
+## Match the project's conventions (before any create)
+
+Before creating anything, discover what the project already defines and
+use it — never invent parallel structure:
+
+| Artifact | How to check |
+|---|---|
+| Existing pages and their naming/nesting | `glab api projects/:fullpath/wikis` — follow the existing directory scheme and title style |
+| Sidebar | a page slugged `_sidebar` overrides the default navigation — a new page may need a sidebar entry too |
+| Format in use | the `format` field in the page list (markdown/asciidoc/...) — match it |
+
+If a project-level convention skill or an AGENTS.md conventions section
+covers this task, follow it over this skill's defaults.
+Done when: each artifact was checked and the draft uses the project's
+existing structures (or the user approved new ones).
+
+## Authoring defaults
+
+Write all published text — titles, bodies, comments, notes — as
+professional, concise prose. Default to English unless the user or the
+project's own conventions call for another language. State facts and
+requests directly; no filler, and no emojis unless the project's existing
+content uses them. The project's templates and conventions win over these
+defaults.
 
 ## Pre-publish gate (mandatory)
 

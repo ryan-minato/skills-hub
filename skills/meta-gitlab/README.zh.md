@@ -19,5 +19,6 @@ npx skills add ryan-minato/skills --skill <skill-name>
 | Skill | 说明 |
 |---|---|
 | [gitlab-tooling-setup](gitlab-tooling-setup/) | 按操作系统安装 glab CLI 并对 gitlab.com 或任意自建实例完成认证，可选配置 GitLab Duo MCP server（Premium/Ultimate，18.6+），附带报告可用性与认证状态的探测脚本。 |
+| [gitlab-commit-conventions](gitlab-commit-conventions/) | 为项目创作提交规范：基于历史分析的约定式提交规则（含驱动变更日志生成的 Changelog trailer）、提交进仓库的零依赖 Python 校验器、免 token 的 MR 流水线 CI 任务，以及生成的项目级 commit skill——并以 AGENTS.md 章节作为 fallback 交付物。 |
 | [gitlab-issue-conventions](gitlab-issue-conventions/) | 为项目创作 issue 规范：内嵌 quick actions 的描述模板、由幂等同步脚本应用的 scoped 标签体系、定时清扫自动化配方，以及生成的项目级 issue skill——并以 AGENTS.md 章节作为 fallback 交付物。 |
 | [gitlab-mr-conventions](gitlab-mr-conventions/) | 为项目创作 merge request 规范：Default.md MR 模板、贡献规则、在 merge request 流水线中运行的免 token CI 清单校验任务，以及生成的项目级 MR skill——并以 AGENTS.md 章节作为 fallback 交付物。 |

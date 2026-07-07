@@ -87,6 +87,7 @@
       "source": "./",
       "strict": false,
       "skills": [
+        "./skills/meta-gitlab/gitlab-commit-conventions",
         "./skills/meta-gitlab/gitlab-issue-conventions",
         "./skills/meta-gitlab/gitlab-mr-conventions",
         "./skills/meta-gitlab/gitlab-tooling-setup"

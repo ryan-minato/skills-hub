@@ -1,0 +1,16 @@
+# Validates every commit message in a merge request against the
+# project's commit conventions, using the committed dependency-free
+# validator. Tokenless — safe on fork MRs; never add secrets to it.
+# Copy this job DIRECTLY into .gitlab-ci.yml: merge-request-pipeline
+# rules inside include:d files do not enable merge request pipelines.
+commit-check:
+  # The full (Debian-based) python image ships git; slim/alpine do not.
+  image: python:3.12
+  variables:
+    # Load-bearing: the default shallow clone may not contain the merge
+    # base, and the range below cannot resolve without it.
+    GIT_DEPTH: "0"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - python3 scripts/check_commits.py --range "$CI_MERGE_REQUEST_DIFF_BASE_SHA..$CI_COMMIT_SHA"

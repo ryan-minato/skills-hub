@@ -8,14 +8,17 @@ Tokens are created at https://github.com/settings/personal-access-tokens
 Recommended: a **fine-grained PAT**, scoped to the specific repositories
 the agent works on, granting only the permissions the task needs:
 
-- Issues: read/write for issue work.
+- Issues: read/write for issue and milestone work.
 - Pull requests: read/write for PR work.
-- Contents: read (write only when pushing commits).
+- Contents: read (write when pushing commits, tags, or releases).
 - Actions: read, when workflow runs or logs are inspected.
 - Discussions: read, for research tasks.
+- Projects: read/write when the agent manages Projects v2 boards.
 
 Fallback: a **classic PAT** with the `repo` scope; add `read:org` when
-org or team data is needed. Use it only where fine-grained PATs are not
+org or team data is needed, and `project` when the agent manages
+Projects v2 boards (for OAuth logins, `gh auth refresh -s project` adds
+the same scope). Use a classic PAT only where fine-grained PATs are not
 accepted.
 
 ## Which variable each consumer reads

@@ -19,6 +19,6 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | Description |
 |---|---|
-| [github-tooling-setup](github-tooling-setup/) | Install and configure the GitHub MCP server (remote HTTP or local stdio) for any agent framework via the official per-host install guides, plus gh CLI install and authentication per OS, with a probe script reporting what is available and authenticated. |
+| [github-tooling-setup](github-tooling-setup/) | Install and configure the GitHub MCP server (remote HTTP or local stdio) for any agent framework via the official per-host install guides, plus gh CLI install and authentication per OS with the token scopes the operational skills need (repo, project), with a probe script reporting what is available and authenticated. |
 | [github-issue-conventions](github-issue-conventions/) | Author a repository's issue conventions: issue forms, a label taxonomy applied by an idempotent sync script, first-party issue automation, and a generated project-level issue skill. |
 | [github-pr-conventions](github-pr-conventions/) | Author a repository's pull-request conventions: PR template, contributing rules, auto-labeling and checklist-validation workflows, and a generated project-level PR skill. |

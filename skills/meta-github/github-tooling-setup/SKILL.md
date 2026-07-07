@@ -4,11 +4,13 @@ description: >
   Installs and configures GitHub tooling for a coding agent: the GitHub
   MCP server (remote HTTP or local stdio) for whatever agent framework is
   hosting the session, using the official per-host install guides fetched
-  at runtime, plus gh CLI installation and authentication per OS, then
-  verifies both. Use when connecting an agent to GitHub — "set up GitHub
-  MCP", "install gh", "connect this agent to GitHub", "gh auth failed",
-  "GitHub tools not working" — or when another GitHub skill reports that
-  tooling is not set up.
+  at runtime, plus gh CLI installation and authentication per OS with the
+  token scopes the operational github skills need (repo, project for
+  Projects v2), then verifies both. Use when connecting an agent to
+  GitHub — "set up GitHub MCP", "install gh", "connect this agent to
+  GitHub", "gh auth failed", "missing project scope", "GitHub tools not
+  working" — or when another GitHub skill reports that tooling is not set
+  up.
 license: Apache-2.0
 compatibility: >
   scripts/check_tooling.py requires Python 3.9+ (stdlib only). Network
@@ -19,15 +21,17 @@ compatibility: >
 
 Install and configure what an agent needs to work with GitHub: the GitHub
 MCP server for the framework hosting the session, and the gh CLI with
-authentication. Work through the sections in order; skip whatever the
-assessment shows is already in place.
+authentication. This skill sets up the harness; the day-to-day operations
+that use it live in the `github` catalog's skills. Work through the
+sections in order; skip whatever the assessment shows is already in
+place.
 
 ## Assess current state
 
-1. Inspect the tools available in this session. If any tool name contains
-   `issue_read`, `pull_request_read`, or a `github` MCP server prefix
-   (for example `mcp__github__...`), the GitHub MCP server is already
-   connected.
+1. Inspect the tools available in this session. If a connected MCP server
+   provides GitHub tools (issue, pull-request, or repository capabilities
+   — each tool's description states its purpose; names vary across server
+   versions), the GitHub MCP server is already connected.
 2. Run [scripts/check_tooling.py](scripts/check_tooling.py):
 
    ```bash
@@ -88,8 +92,11 @@ change, the session must be restarted before the server's tools can
 appear. Tell the user this explicitly. After the restart:
 
 1. Re-run the Assess step (tool list + script).
-2. Smoke test: on the MCP path call the `get_me` tool; on the gh path
-   run `gh api user -q .login`.
+2. Smoke test: on the MCP path call the tool that reports the
+   authenticated user; on the gh path run `gh api user -q .login`.
+3. If the agent will manage Projects v2 boards, check the scopes line of
+   `gh auth status` lists `project`; if missing, `gh auth refresh -s
+   project` (browser prompt) or add the permission to the PAT.
 
 Done when: the probe reports authenticated AND one smoke call returns
 the login.
@@ -109,6 +116,7 @@ the login.
   `GITHUB_TOOLSETS` (local) or a per-toolset URL (remote).
 - `GH_TOKEN` overrides credentials stored by `gh auth login`; when gh
   acts as the wrong account, check that variable first.
-- MCP tool names have changed across github-mcp-server versions. If a tool
-  named in a table is absent, list the github server's available tools and
-  pick the same-purpose name; if none matches, fall back to the gh column.
+- MCP tool names change across github-mcp-server versions — match tools
+  by the purpose stated in their descriptions, never by remembered names;
+  when no tool's description covers a needed capability, that capability
+  is missing from the server (often a disabled toolset).

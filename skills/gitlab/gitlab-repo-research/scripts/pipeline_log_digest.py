@@ -20,6 +20,9 @@ Output: a single JSON object on stdout:
     {"pipeline_id": ..., "status": ...,
      "failed_jobs": [{"job_id": ..., "name": ..., "stage": ...,
                       "failure_reason": ..., "log_tail": [...]}]}
+A job whose trace could not be fetched (private project, expired trace)
+carries an empty "log_tail" plus a "log_error" string, so a consumer can
+tell a fetch failure apart from a job that produced no output.
 
 Diagnostics go to stderr, never stdout.
 
@@ -185,23 +188,23 @@ def main() -> int:
         trace_proc = run_glab_api(
             f"projects/{project}/jobs/{job_id}/trace", args.hostname
         )
+        entry = {
+            "job_id": job_id,
+            "name": name,
+            "stage": job.get("stage"),
+            "failure_reason": job.get("failure_reason"),
+            "log_tail": [],
+        }
         if trace_proc.returncode != 0:
-            log(
-                f"note: no trace for job {job_id} ({name}): "
-                f"{trace_proc.stderr.strip() or 'glab returned no trace'}"
-            )
-            tail = []
+            # Report the fetch failure as data so a consumer can tell it
+            # apart from a job that simply produced no output. Common on
+            # private projects or expired traces (token/permission).
+            reason = trace_proc.stderr.strip() or "glab returned no trace"
+            log(f"note: no trace for job {job_id} ({name}): {reason}")
+            entry["log_error"] = reason
         else:
-            tail = clean_trace(trace_proc.stdout)[-args.tail :]
-        failed_jobs.append(
-            {
-                "job_id": job_id,
-                "name": name,
-                "stage": job.get("stage"),
-                "failure_reason": job.get("failure_reason"),
-                "log_tail": tail,
-            }
-        )
+            entry["log_tail"] = clean_trace(trace_proc.stdout)[-args.tail :]
+        failed_jobs.append(entry)
 
     digest = {
         "pipeline_id": pipeline.get("id", args.pipeline_id),

@@ -20,9 +20,11 @@ tag-check:
         echo "Tag '$CI_COMMIT_TAG' does not match the policy regex $TAG_REGEX (see docs/versioning-policy.md)." >&2
         exit 1
       fi
+    # Use FETCH_HEAD, not origin/<branch>: a tag pipeline's clone may not
+    # populate the remote-tracking ref depending on the runner's refspec.
     - git fetch origin "$CI_DEFAULT_BRANCH" --quiet
     - |
-      if ! git merge-base --is-ancestor "$CI_COMMIT_SHA" "origin/$CI_DEFAULT_BRANCH"; then
+      if ! git merge-base --is-ancestor "$CI_COMMIT_SHA" FETCH_HEAD; then
         echo "Tag '$CI_COMMIT_TAG' points at a commit not reachable from $CI_DEFAULT_BRANCH — release tags are cut from the default branch." >&2
         exit 1
       fi

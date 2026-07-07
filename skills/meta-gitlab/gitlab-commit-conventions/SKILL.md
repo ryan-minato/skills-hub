@@ -108,9 +108,10 @@ findings, not a crash, on the history sample.
 ## CI validation
 
 Copy the job in [assets/commit-check-job.yml](assets/commit-check-job.yml)
-**directly into `.gitlab-ci.yml`** (create the file with just this job if
-absent) — GitLab ignores merge-request-pipeline rules that exist only
-inside `include:`d files. The job runs in merge request pipelines (Free),
+into the project's pipeline config — `.gitlab-ci.yml`, or a file it
+`include:`s (job `rules:` are evaluated the same either way; create
+`.gitlab-ci.yml` with just this job if the project has none). The job runs
+in merge request pipelines (Free),
 is tokenless (safe on fork MRs — never add secrets to it), sets
 `GIT_DEPTH: "0"` so the merge base is present, and validates
 `$CI_MERGE_REQUEST_DIFF_BASE_SHA..$CI_COMMIT_SHA` with the committed

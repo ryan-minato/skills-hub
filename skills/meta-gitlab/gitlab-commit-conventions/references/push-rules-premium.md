@@ -24,7 +24,9 @@ returns 404 for push-rule endpoints on unlicensed tiers.)
 
 ## Limits of the regex
 
-- One expression, applied to the **first line** of every commit — it
+- One expression, matched against the whole message in **multiline mode**
+  (`^`/`$` are line anchors, so `^type: .{1,72}$` still targets the subject
+  line; disable with `(?-m)`) — it
   can enforce shape and types, but not scope sets per path, body
   wrapping, or trailer presence per type. Keep the committed validator
   and CI job as the complete check; the push rule is a coarse outer

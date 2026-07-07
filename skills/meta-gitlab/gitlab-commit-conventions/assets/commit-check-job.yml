@@ -1,8 +1,8 @@
 # Validates every commit message in a merge request against the
 # project's commit conventions, using the committed dependency-free
 # validator. Tokenless — safe on fork MRs; never add secrets to it.
-# Copy this job DIRECTLY into .gitlab-ci.yml: merge-request-pipeline
-# rules inside include:d files do not enable merge request pipelines.
+# Add this job to the project's pipeline config (.gitlab-ci.yml, or a
+# file it include:s — job rules are evaluated the same either way).
 commit-check:
   # The full (Debian-based) python image ships git; slim/alpine do not.
   image: python:3.12

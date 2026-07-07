@@ -30,7 +30,7 @@ targets the right host.
 GitLab has no draft releases — `glab release create` publishes the tag,
 name, notes, and asset links the moment the call succeeds, so this gate
 runs on the complete assembled release before create. Before that call,
-review the exact final content (tag name, release name, NOTES.md, every
+review the exact final text (tag name, release name, NOTES.md, every
 asset file or link):
 
 1. No secrets: tokens, keys, passwords, connection strings, internal URLs.

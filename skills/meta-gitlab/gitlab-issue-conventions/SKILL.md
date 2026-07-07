@@ -147,13 +147,14 @@ and (for a skill) its frontmatter `name` matches its directory name.
 
 Everything this skill wrote is local files — nothing is published yet. Hand
 the changes to the project's normal git flow (branch, commit, review); that
-flow, not this skill, publishes them and carries its own review gates. The
-one action this skill itself performs against the server is the label sync
-`--apply`, covered by the plan-first dry run plus the user's agreement on
-`labels.json`.
+flow, not this skill, publishes them and carries its own review gates.
 Done when: the user has the list of every file created or changed, one line
 each on what it does, and any follow-up steps (label sync to run, the
 default branch merge that activates the templates).
+
+The one action this skill performs against the server itself is the label
+sync `--apply` — covered by the plan-first dry run plus the user's
+agreement on `labels.json`.
 
 ## Gotchas
 

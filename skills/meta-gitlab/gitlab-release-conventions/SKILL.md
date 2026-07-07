@@ -112,6 +112,12 @@ pipelines, is tokenless, validates the tag name, and verifies the
 tagged commit is reachable from the default branch. Validate the edited
 `.gitlab-ci.yml` with `glab ci lint` when glab is authenticated.
 
+Read [references/automation-recipes.md](references/automation-recipes.md)
+when the user wants more than the tag check — creating releases from tag
+pipelines (release-cli) or attaching build artifacts. Note the hard
+constraint there: GitLab has no draft releases, so CI-created releases
+publish immediately and are appropriate only for fully mechanical notes.
+
 Done when: the job is in `.gitlab-ci.yml`, parses, and its regex equals
 the policy doc's.
 

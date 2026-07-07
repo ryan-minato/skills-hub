@@ -22,8 +22,9 @@ tag_regex: '^v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$'
 ## Matching rules
 
 - `categories:` keys are `Changelog:` trailer **values**, matched
-  case-sensitively — `Changelog: Added` misses an `added` key and lands
-  in the default bucket.
+  case-sensitively — GitLab has no default category, so `Changelog: Added`
+  against an `added` key matches nothing and is dropped from the changelog
+  entirely (the SKILL's gotcha and the config's own header say the same).
 - Commits without the trailer are excluded entirely; an empty generated
   changelog almost always means the trailer habit is missing, not that
   nothing changed.

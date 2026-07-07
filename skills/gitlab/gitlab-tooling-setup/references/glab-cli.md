@@ -67,7 +67,9 @@ the install survives rebuilds.
 
 - Humans: `glab auth login` walks through browser/OAuth or token entry
   interactively — direct the user to run it in their own terminal; never
-  start it from an agent session.
+  start it from an agent session. On a headless machine with no browser,
+  the user can run `glab auth login --hostname HOST --device` (OAuth
+  device flow, GitLab ≥ 17.9).
 - Self-managed instances with a non-standard API location can pass
   `--api-host` / `--api-protocol` to `glab auth login`.
 

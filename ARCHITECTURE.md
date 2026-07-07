@@ -69,13 +69,19 @@ that symlinks exist, don't dangle, and point to the right targets.
 
 `.claude-plugin/marketplace.json` publishes the repo as a Claude Code
 **plugin marketplace**: one plugin per non-empty catalog. Each entry uses a
-marketplace-root `source` (`"./"`) plus a `skills` filter
-(`["./skills/<catalog>"]`); because the source resolves to the marketplace
-root, that filter *replaces* the default skill scan, so each plugin loads
-exactly its own catalog. No skill files move — the 2-level
-`skills/<catalog>/<skill>/` layout is unchanged. The empty `ops` catalog is
-omitted until it has a skill. Project-only skills live in `.agents/skills/`
-and are excluded by construction.
+marketplace-root `source` (`"./"`) and a `skills` array that **enumerates the
+catalog's skill directories** (`./skills/<catalog>/<skill>`). Those exact
+paths do double duty: Claude Code loads each as a single skill (and with a
+marketplace-root source the explicit list *replaces* the default scan, so a
+plugin loads only its own catalog), and the `npx skills add` picker groups
+skills under the catalog name by matching each path to a discovered skill.
+No skill files move. The empty `ops` catalog is omitted until it has a skill;
+project-only skills live in `.agents/skills/` (marked `metadata.internal:
+true`) and are excluded.
+
+`scripts/gen_marketplace.py` (via `just gen-marketplace`) regenerates the
+`skills` arrays from the catalogs on disk, and the validator fails if any
+plugin's list drifts from its catalog — so the lists are never hand-edited.
 
 Users add the marketplace once, then install catalogs individually:
 
@@ -83,12 +89,6 @@ Users add the marketplace once, then install catalogs individually:
 /plugin marketplace add ryan-minato/skills
 /plugin install <catalog>@ryan-minato-skills
 ```
-
-The per-skill `npx skills add ryan-minato/skills` channel is independent and
-unaffected: its default discovery finds the 2-level layout directly and does
-not read the marketplace file. (Tradeoff of the marketplace-root `source`:
-each plugin's cache copies the whole repo — negligible for a text-only
-library.)
 
 Because installed skills are copied out of this repo, public skills must be
 fully self-contained (rules in `.agents/knowledge/skill-quality.md`).

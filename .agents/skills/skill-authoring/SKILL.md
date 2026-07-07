@@ -55,10 +55,12 @@ worth building and where it belongs:
    ln -s ../../skills/<catalog>/<skill-name> .agents/skills/<skill-name>
    ```
 
-3. A new catalog's **first** skill needs a plugin entry in
-   `.claude-plugin/marketplace.json`
-   (`{ "name": "<catalog>", "source": "./", "skills": ["./skills/<catalog>"] }`);
-   adding a skill to an already-published catalog needs no marketplace change.
+3. Run `just gen-marketplace` to sync the skill into its catalog plugin's
+   `skills[]` in `.claude-plugin/marketplace.json` (the validator enforces the
+   list matches the catalog exactly). A brand-new catalog also needs a
+   hand-added plugin entry —
+   `{ "name": "<catalog>", "source": "./", "strict": false, "skills": [] }`
+   with a `description` — before running the generator.
 4. Add the skill to the catalog's `README.md` **and** `README.zh.md` tables.
 
 ## Creating a project-only skill
@@ -71,9 +73,9 @@ worth building and where it belongs:
 ## Removing or moving a skill
 
 Remove/update the symlink in `.agents/skills/`, the catalog README.md +
-README.zh.md entries, and `.claude-plugin/marketplace.json` if the catalog
-became empty (remove its entry) or was renamed. The validator catches
-anything missed.
+README.zh.md entries, and run `just gen-marketplace` to resync
+`.claude-plugin/marketplace.json` (remove a plugin entry by hand only if its
+catalog became empty). The validator catches anything missed.
 
 ## Finish
 

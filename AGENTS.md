@@ -73,12 +73,14 @@ Catalogs section of `ARCHITECTURE.md`.
 - `just validate` — skill layout and harness consistency only.
 - `just check-skill <dir>...` — lint specific skill directories while drafting.
 - `just lint` — ruff over `scripts/`.
+- `just gen-marketplace` — regenerate `marketplace.json` skills[] after
+  adding or removing a public skill.
 
 ## Keep In Sync
 
 | When this changes | Update |
 |---|---|
-| Public skill added/removed | Symlink in `.agents/skills/`, catalog `README.md` + `README.zh.md` (and `.claude-plugin/marketplace.json` only if it is the catalog's first or last skill) |
+| Public skill added/removed | Symlink in `.agents/skills/`, catalog `README.md` + `README.zh.md`, and `.claude-plugin/marketplace.json` (`just gen-marketplace`) |
 | Catalog added/removed | Catalog scaffold, the Catalogs section in `ARCHITECTURE.md`, `.claude-plugin/marketplace.json` (a plugin entry once the catalog has a skill) |
 | Any `README.md` | The matching `README.zh.md` (and vice versa) |
 | `.agents/knowledge/` documents | Run the `knowledge-sync` project skill after merge |

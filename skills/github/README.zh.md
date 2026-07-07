@@ -18,4 +18,5 @@ npx skills add ryan-minato/skills --skill <skill-name>
 |---|---|
 | [github-issues](github-issues/) | 通过 MCP 优先 / gh 回退的决策表执行 issue 操作——创建、评论、关闭/重开、读取、标签、指派、milestone——创建前先发现仓库既有的 issue 模板、标签与 milestone，全部经过强制的发布前审查关卡。 |
 | [github-pull-requests](github-pull-requests/) | 通过 MCP 优先 / gh 回退的决策表执行 pull request 操作——创建、评论、合并、标签/milestone、CI 检查结果、失败任务日志、Copilot 审查线程——创建前先发现仓库的 PR 模板与贡献规则，全部经过强制的发布前审查关卡。 |
+| [github-planning](github-planning/) | 经 REST API 管理 milestone 生命周期（gh 没有 milestone 命令）、label 生命周期（含重命名与跨仓库克隆）以及 Projects v2——项目、条目、Status 等字段——预先处理 project token scope，并附带用于条目编辑的 node ID 解析脚本。 |
 | [github-repo-research](github-repo-research/) | 对任意仓库的只读调查——issue、PR、Actions 运行与失败日志、Discussions、release、tag——可经 MCP、gh 或内置 REST 脚本（公开仓库无需认证），并附带避免大日志涌入上下文的摘要工具。 |

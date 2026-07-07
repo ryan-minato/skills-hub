@@ -48,6 +48,7 @@
       "strict": false,
       "skills": [
         "./skills/github/github-issues",
+        "./skills/github/github-planning",
         "./skills/github/github-pull-requests",
         "./skills/github/github-repo-research"
       ],

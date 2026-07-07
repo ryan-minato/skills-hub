@@ -9,7 +9,7 @@ the repository and adds the repo-level checks:
      directory (targets starting with `../` or `/`).
   2. Every public skill is symlinked into .agents/skills/ and no symlink
      there dangles.
-  3. plugin.json skill paths exist.
+  3. marketplace.json publishes one plugin per non-empty catalog.
   4. Every catalog has README.md, README.zh.md, and CONTEXT.md; the root
      README.zh.md exists.
   5. Catalog directories match the catalog list in ARCHITECTURE.md.
@@ -30,7 +30,8 @@ import check_skill as skill_linter
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = REPO_ROOT / "skills"
 AGENT_SKILLS_DIR = REPO_ROOT / ".agents" / "skills"
-PLUGIN_MANIFEST = REPO_ROOT / ".claude-plugin" / "plugin.json"
+MARKETPLACE_MANIFEST = REPO_ROOT / ".claude-plugin" / "marketplace.json"
+LEGACY_PLUGIN_MANIFEST = REPO_ROOT / ".claude-plugin" / "plugin.json"
 ARCHITECTURE_MD = REPO_ROOT / "ARCHITECTURE.md"
 
 ESCAPING_LINK = re.compile(r"\]\((?:\.\./|/)[^)]*\)")
@@ -167,32 +168,124 @@ def check_symlinks() -> None:
             )
 
 
-def check_plugin_manifest() -> None:
-    if not PLUGIN_MANIFEST.is_file():
+def catalog_skill_subdirs(catalog: Path) -> list[Path]:
+    """Skill directories (each holding a SKILL.md) directly under a catalog."""
+    if not catalog.is_dir():
+        return []
+    return [p for p in catalog.iterdir() if p.is_dir() and (p / "SKILL.md").is_file()]
+
+
+def nonempty_catalog_names() -> set[str]:
+    """Catalogs under skills/ that publish at least one skill."""
+    if not SKILLS_DIR.is_dir():
+        return set()
+    return {c.name for c in SKILLS_DIR.iterdir() if catalog_skill_subdirs(c)}
+
+
+def check_marketplace_manifest() -> None:
+    """The repo publishes as a pure marketplace: one plugin per non-empty
+    catalog, each entry using a marketplace-root `source` plus a `skills`
+    filter (`./skills/<catalog>`) that replaces the default scan."""
+    if LEGACY_PLUGIN_MANIFEST.is_file():
         fail(
-            ".claude-plugin/plugin.json: missing. It publishes the public "
-            "skill list for plugin installs. Fix: restore it from git "
-            "history."
+            ".claude-plugin/plugin.json: the repo now publishes as a "
+            "marketplace (.claude-plugin/marketplace.json), not one plugin. "
+            "A leftover plugin.json is merged into every marketplace-root "
+            "plugin and cross-loads all catalogs. Fix: remove it "
+            "(git rm .claude-plugin/plugin.json)."
+        )
+
+    if not MARKETPLACE_MANIFEST.is_file():
+        fail(
+            ".claude-plugin/marketplace.json: missing. It publishes each "
+            "catalog as an installable plugin. Fix: create it with `name`, "
+            "`owner`, and one `plugins` entry per non-empty catalog."
         )
         return
     try:
-        manifest = json.loads(PLUGIN_MANIFEST.read_text(encoding="utf-8"))
+        manifest = json.loads(MARKETPLACE_MANIFEST.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         fail(
-            f".claude-plugin/plugin.json: invalid JSON ({exc}). Plugin "
-            f"installs will fail. Fix: repair the syntax."
+            f".claude-plugin/marketplace.json: invalid JSON ({exc}). "
+            f"Marketplace adds will fail. Fix: repair the syntax."
         )
         return
-    paths = manifest.get("skills", [])
-    if isinstance(paths, str):
-        paths = [paths]
-    for path in paths:
-        if not (REPO_ROOT / path.lstrip("./")).is_dir():
+
+    if not manifest.get("name"):
+        fail(
+            ".claude-plugin/marketplace.json: missing top-level `name` (the "
+            "marketplace id users type as `<plugin>@<name>`). Fix: add a "
+            "kebab-case `name`."
+        )
+    owner = manifest.get("owner")
+    if not isinstance(owner, dict) or not owner.get("name"):
+        fail(
+            ".claude-plugin/marketplace.json: missing `owner.name`. The "
+            'schema requires an owner. Fix: add `"owner": {"name": "..."}`.'
+        )
+    plugins = manifest.get("plugins")
+    if not isinstance(plugins, list) or not plugins:
+        fail(
+            ".claude-plugin/marketplace.json: `plugins` must be a non-empty "
+            "list, one entry per non-empty catalog. Fix: add the entries."
+        )
+        return
+
+    listed_catalogs: set[str] = set()
+    for entry in plugins:
+        if not isinstance(entry, dict):
             fail(
-                f".claude-plugin/plugin.json: skills path `{path}` does not "
-                f"exist. Plugin installs would silently miss skills. Fix: "
-                f"update the path or create the directory."
+                ".claude-plugin/marketplace.json: every `plugins` entry must "
+                "be an object with `name`, `source`, and `skills`."
             )
+            continue
+        name = entry.get("name", "")
+        if not name or not skill_linter.NAME_RE.fullmatch(name):
+            fail(
+                f".claude-plugin/marketplace.json: plugin name `{name}` is "
+                f"not kebab-case; claude.ai marketplace sync rejects "
+                f"non-kebab names. Fix: rename to lowercase-hyphen."
+            )
+        if not entry.get("source"):
+            fail(
+                f".claude-plugin/marketplace.json: plugin `{name}` has no "
+                f'`source`. Fix: add `"source": "./"`.'
+            )
+        skills = entry.get("skills", [])
+        if isinstance(skills, str):
+            skills = [skills]
+        if not skills:
+            fail(
+                f".claude-plugin/marketplace.json: plugin `{name}` lists no "
+                f"`skills` path. With a marketplace-root source each entry "
+                f"must name its catalog container. Fix: add "
+                f'`"skills": ["./skills/{name}"]`.'
+            )
+        for path in skills:
+            catalog = REPO_ROOT / path.lstrip("./")
+            if catalog.parent != SKILLS_DIR or not catalog.is_dir():
+                fail(
+                    f".claude-plugin/marketplace.json: plugin `{name}` skills "
+                    f"path `{path}` is not a catalog directory under skills/. "
+                    f"Fix: point it at `./skills/<catalog>`."
+                )
+                continue
+            if not catalog_skill_subdirs(catalog):
+                fail(
+                    f".claude-plugin/marketplace.json: plugin `{name}` skills "
+                    f"path `{path}` has no `<skill>/SKILL.md` subdir. An empty "
+                    f"catalog must not be published. Fix: remove the entry "
+                    f"until the catalog has a skill."
+                )
+                continue
+            listed_catalogs.add(catalog.name)
+
+    for missing in sorted(nonempty_catalog_names() - listed_catalogs):
+        fail(
+            f".claude-plugin/marketplace.json: catalog `{missing}` has skills "
+            f"but no plugin entry, so it cannot be installed. Fix: add a "
+            f'`plugins` entry with `"skills": ["./skills/{missing}"]`.'
+        )
 
 
 def check_root_files() -> None:
@@ -211,7 +304,7 @@ def main() -> int:
     check_catalogs()
     check_architecture_md_catalog_list()
     check_symlinks()
-    check_plugin_manifest()
+    check_marketplace_manifest()
     check_root_files()
 
     for warning in warnings:

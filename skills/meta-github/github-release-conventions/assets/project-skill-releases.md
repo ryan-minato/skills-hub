@@ -24,20 +24,25 @@ policy source of truth is {{POLICY_DOC_PATH}}.
 
 ## Pre-publish gate (mandatory)
 
-Publishing a release publishes the notes, the tag, and every asset, and
-notifies watchers — the draft step exists so this gate always runs
-before the release goes live. Before `--draft=false`, review the exact
-final content (tag name, release title, NOTES.md, every asset file):
+Everything you send becomes public the moment the call succeeds. Creating a
+draft release publishes only the draft to collaborators, but publishing it
+notifies watchers. Before publish, review the exact final content: tag name,
+release title, NOTES.md, and every asset.
 
-1. No secrets: tokens, keys, passwords, connection strings, internal URLs.
-2. No personal data beyond what the task needs.
-3. No internal-only context: codenames, private hostnames, unreleased plans.
-4. Professional, concise wording; English unless the project's conventions
-   say otherwise.
+1. Prefer a clean-context subagent review when available; otherwise do the
+   same deep review yourself against the final draft, not memory.
+2. No secrets or credentials: tokens, keys, passwords, connection strings,
+   internal URLs, cookies, or signing material.
+3. No personal data beyond what the task needs: names, emails, phone
+   numbers, addresses, account identifiers, screenshots.
+4. No internal-only context: codenames, private hostnames, ticket links,
+   unreleased plans, or private branch names.
+5. No accidental unrelated content, and professional concise wording;
+   English unless the project's conventions say otherwise.
 
-If any check fails, fix the draft and re-check. Publish only after the
-full text passes. Only the user may skip this gate, explicitly; note
-the skip in your summary.
+If any check fails, fix the draft and re-check. Publish only after the full
+text passes. Only the user may skip this gate, explicitly; note the skip in
+your summary.
 
 ## Cut a release
 

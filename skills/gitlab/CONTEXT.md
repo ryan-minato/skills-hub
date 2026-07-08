@@ -249,15 +249,16 @@ any body or comment can execute as a GitLab quick action (for example
 
 1. Prefer a clean-context subagent review when one is available and the
    surface is not trivial. Give it only the exact final text or files under
-   review.
+   review, with no extra intent or reassurance.
 2. Otherwise review the exact final text yourself. For short text fully
    visible in context, inspect it directly. For attachments, screenshots,
    generated bodies, long notes, or content too large to inspect reliably
    inline, write the exact outgoing content to a scratch directory and
    review those files from disk.
-3. Check secrets and credentials, personal data, internal-only context,
-   unintended quick actions, accidental unrelated content, and wording
-   quality. Any finding means `SAFE TO PUBLISH: NO`.
+3. Check every artifact for secrets or credentials, personal data, internal
+   identifiers or URLs, unintended quick actions, accidental unrelated
+   content, and wording a maintainer would regret publishing. Any finding
+   means `SAFE TO PUBLISH: NO`.
 4. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
    `NO`, fix every finding and review the exact final content again. Never
    edit-and-publish without re-review.

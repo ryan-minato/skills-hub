@@ -11,11 +11,11 @@ The policy source of truth is {{POLICY_DOC_PATH}}.
 - **Notes**: {{NOTES_RULE}} Write them to `NOTES.md` before creating
   anything.
 - **Milestones**: {{MILESTONE_RULE}}
-- **Flow (no drafts on GitLab)**: review the exact assembled content
-  *before* creating — tag name, release name, NOTES.md, every asset: no
-  secrets or tokens, no personal data beyond the task's needs, no
-  internal-only context, no unintended quick actions (lines starting
-  with `/`), professional concise wording. Only after everything
-  passes: `glab release create TAG -R {{PROJECT_PATH}} --name "NAME"
+- **Flow (no drafts on GitLab)**: review the exact assembled content *before* creating — preferably
+  with a clean-context subagent — tag name, release name, NOTES.md, every
+  asset: no secrets or credentials, no personal data beyond the task's
+  needs, no internal-only context, no unintended quick actions (lines
+  starting with `/`), no accidental unrelated content, professional
+  concise wording. Only after everything passes: `glab release create TAG -R {{PROJECT_PATH}} --name "NAME"
   --notes-file NOTES.md {{EXTRA_CREATE_FLAGS}}`, then report the
   release URL. Only the user may skip the review, explicitly.

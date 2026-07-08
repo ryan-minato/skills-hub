@@ -21,10 +21,10 @@ conventions:
   exactly one `type::*` and one `priority::*` and remove the status
   label (`glab issue update N -R {{PROJECT_PATH}} -l "..." -u
   "status::needs-triage"`).
-- **Before publishing anything** (issue, comment, edit), review the
-  exact final text: no secrets or tokens, no personal data beyond the
-  task's needs, no internal-only context, no unintended quick actions
-  (any body line starting with `/` can execute as one), professional and
-  concise wording, English unless the project says otherwise. Fix and
-  re-check before sending; only the user may skip this review,
-  explicitly.
+- **Before publishing anything** (issue, comment, edit), review the exact final text directly, preferably with a clean-context
+  subagent when the surface is not trivial: no secrets or credentials, no
+  personal data beyond the task's needs, no internal-only context, no
+  unintended quick actions (any body line starting with `/` can execute
+  as one), no accidental unrelated content, professional concise wording,
+  English unless the project says otherwise. Fix and re-check before
+  sending; only the user may skip this review, explicitly.

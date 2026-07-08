@@ -13,15 +13,16 @@ these conventions:
   `glab mr create -R {{PROJECT_PATH}} -s BRANCH -b {{DEFAULT_BRANCH}}
   -t "TITLE" -d "$(cat BODY.md)" -y` (never inline multi-line text;
   never `--fill` — it publishes unreviewed generated content).
-- **Before creating or editing an MR**, review the exact final content —
-  including `git log {{DEFAULT_BRANCH}}..BRANCH` and
+- **Before creating or editing an MR**, review the exact final content — preferably with a clean-context
+  subagent — including `git log {{DEFAULT_BRANCH}}..BRANCH` and
   `git diff {{DEFAULT_BRANCH}}...BRANCH`, since an MR publishes every
-  commit message and the complete diff: no secrets or tokens, no
+  commit message and the complete diff: no secrets or credentials, no
   personal data beyond the task's needs, no internal-only context, no
   unintended quick actions (any line starting with `/` can execute as
-  one), professional and concise wording, English unless the project
-  says otherwise. Fix and re-check before sending; only the user may
-  skip this review, explicitly.
+  one), no accidental unrelated files or generated churn, professional
+  concise wording, English unless the project says otherwise. Fix the
+  draft or branch and re-check before sending; only the user may skip
+  this review, explicitly.
 - **Reviews**: read the diff (`glab mr diff N -R {{PROJECT_PATH}}`) and
   pipeline state (`glab ci get --merge-request N -R {{PROJECT_PATH}}`)
   before writing; comment with

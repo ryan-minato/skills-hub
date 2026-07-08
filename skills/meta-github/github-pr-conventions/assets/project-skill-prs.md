@@ -46,20 +46,25 @@ conventions below.
 Everything you send becomes public the moment the call succeeds — and
 creating a PR publishes every commit message and the complete diff of
 `{{DEFAULT_BRANCH}}...HEAD`, not just the description. Before any call
-that creates or edits public content, review the exact final text (for a
-PR: title, body, `git log {{DEFAULT_BRANCH}}..HEAD --format=full`, and
-`git diff {{DEFAULT_BRANCH}}...HEAD`):
+that creates or edits public content, review the exact final content: title,
+body, comments or review text, `git log {{DEFAULT_BRANCH}}..HEAD
+--format=full`, and `git diff {{DEFAULT_BRANCH}}...HEAD`.
 
-1. No secrets: tokens, keys, passwords, connection strings, internal URLs.
-2. No personal data beyond what the task needs.
-3. No internal-only context: codenames, private hostnames, unreleased plans.
-4. Professional, concise wording; English unless the project's conventions
+1. Prefer a clean-context subagent review when available; otherwise do the
+   same deep review yourself against the final draft, not memory.
+2. No secrets or credentials: tokens, keys, passwords, connection strings,
+   internal URLs, cookies, or signing material.
+3. No personal data beyond what the task needs: names, emails, phone
+   numbers, addresses, account identifiers, screenshots.
+4. No internal-only context: codenames, private hostnames, ticket links,
+   unreleased plans, or private branch names.
+5. No accidental unrelated files or generated churn in the diff, and
+   professional concise wording; English unless the project's conventions
    say otherwise.
 
-If any check fails, fix the draft — or the branch, when the finding is
-in the diff — and re-check. Publish only after the full text passes.
-Only the user may skip this gate, explicitly; note the skip in your
-summary.
+If any check fails, fix the draft — or the branch, when the finding is in
+the diff — and re-check. Publish only after the full text passes. Only the
+user may skip this gate, explicitly; note the skip in your summary.
 
 ## Create a pull request
 

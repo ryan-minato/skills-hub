@@ -20,9 +20,10 @@ Issues in `{{OWNER_REPO}}` follow these conventions:
   `status/needs-triage`
   (`gh issue edit N -R {{OWNER_REPO}} --add-label ... --remove-label
   status/needs-triage`).
-- **Before publishing anything** (issue, comment, edit), review the
-  exact final text: no secrets or tokens, no personal data beyond the
-  task's needs, no internal-only context (codenames, private hostnames),
-  professional and concise wording, English unless the project says
-  otherwise. Fix and re-check before sending; only the user may skip
-  this review, explicitly.
+- **Before publishing anything** (issue, comment, edit), review the exact final text directly, preferably with a clean-context
+  subagent when the surface is not trivial: no secrets or credentials, no
+  personal data beyond the task's needs, no internal-only context
+  (codenames, private hostnames, ticket links, unreleased plans), no
+  accidental unrelated content, professional concise wording, English
+  unless the project says otherwise. Fix and re-check before sending;
+  only the user may skip this review, explicitly.

@@ -76,24 +76,24 @@ defaults.
 ## Pre-publish gate (mandatory)
 
 Everything you send becomes visible the moment the call succeeds — to the
-whole internet on public projects, and to every member just as instantly
-on private or internal ones: title, body, every comment, labels, commit
-messages, the full diff, attachment contents, and the branch name.
-Pushing to the wiki repository publishes every commit message and the
-complete content of every committed file, not just the page you edited.
-A line starting with `/` in any body or comment can execute as a GitLab
-quick action (for example `/close`). Before ANY call that creates or
-edits such content:
+whole internet on public projects, and to every member just as instantly on
+private or internal ones: page titles, bodies, attachment names and contents,
+commit messages, and every committed wiki file. Pushing to the wiki
+repository publishes every commit message and the complete content of every
+committed file, not just the page you edited. A line starting with `/` in
+any body can execute as a GitLab quick action when rendered through an API
+write. Before ANY call that creates or edits such content:
 
-1. Write the exact outgoing content to files in a scratch directory
-   (page title and body, each attachment; on the git path also
-   `git log origin/HEAD..HEAD --format=full > commits.txt` and
-   `git diff origin/HEAD..HEAD > diff.patch`).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
+1. Write the exact outgoing content to a scratch directory: page title and
+   body, each attachment, and for the git path also `git log
+   origin/HEAD..HEAD --format=full > commits.txt`, `git diff
+   origin/HEAD..HEAD > diff.patch`, plus added or changed wiki files.
+2. Run the review procedure in [references/publish-review.md](references/publish-review.md)
+   over that directory. Read that file every time — do not review from
+   memory.
 3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
-   `NO`, fix every finding, rebuild the files, review again. Never
-   edit-and-publish without re-review.
+   `NO`, fix every finding, rebuild the files from the fixed content, and
+   review again. Never edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
 explicitly; record the skip in your summary.

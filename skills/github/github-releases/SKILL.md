@@ -94,13 +94,21 @@ every asset, and notifies watchers — the draft step exists so this gate
 always runs before the release goes live. Before ANY call that creates or
 edits public content:
 
-1. Write the exact outgoing content to files in a scratch directory (the
-   tag name, release title, NOTES.md, and every asset file).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On `NO`,
-   fix every finding, rebuild the files, review again. Never edit-and-publish
-   without re-review.
+1. Prefer a clean-context subagent review when one is available. Give it only
+   the exact final release text or files under review, with no extra intent
+   or reassurance.
+2. Otherwise review the exact final release yourself. Short release names,
+   tags, and comments may be inspected directly. Long notes, generated
+   notes, attachments, screenshots, assets, or content too large to inspect
+   reliably inline must be written to a scratch directory and reviewed from
+   disk.
+3. Check every artifact for secrets or credentials, personal data, internal
+   identifiers or URLs, accidental unrelated content, and wording a
+   maintainer would regret publishing. Any finding means
+   `SAFE TO PUBLISH: NO`.
+4. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
+   `NO`, fix every finding and review the exact final content again. Never
+   edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
 explicitly; record the skip in your summary.

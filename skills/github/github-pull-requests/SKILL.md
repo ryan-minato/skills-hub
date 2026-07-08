@@ -83,14 +83,15 @@ and the branch name. Creating a PR publishes every commit message and the
 complete diff of `BASE...HEAD`, not just the description. Before ANY call
 that creates or edits public content:
 
-1. Write the exact outgoing content to files in a scratch directory (title,
-   body, each comment; for PRs also `git log BASE..HEAD --format=full >
-   commits.txt` and `git diff BASE...HEAD > diff.patch`; copy attachments in).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On `NO`,
-   fix every finding, rebuild the files, review again. Never edit-and-publish
-   without re-review.
+1. Write the exact outgoing content to a scratch directory: title, body,
+   each comment or review body, `git log BASE..HEAD --format=full >
+   commits.txt`, `git diff BASE...HEAD > diff.patch`, and any attachments.
+2. Run the review procedure in [references/publish-review.md](references/publish-review.md)
+   over that directory. Read that file every time — do not review from
+   memory.
+3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
+   `NO`, fix every finding, rebuild the files from the fixed content, and
+   review again. Never edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
 explicitly; record the skip in your summary.

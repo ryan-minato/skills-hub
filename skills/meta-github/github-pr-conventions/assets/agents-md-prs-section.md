@@ -14,14 +14,15 @@ Pull requests in `{{OWNER_REPO}}` follow these conventions:
   multi-line text).
 - **Labels** follow the prefixes {{LABEL_PREFIXES}}; path-based labels
   are applied by the labeler workflow — do not add those by hand.
-- **Before creating or editing a PR**, review the exact final content —
-  including `git log {{DEFAULT_BRANCH}}..HEAD` and
+- **Before creating or editing a PR**, review the exact final content — preferably with a clean-context
+  subagent — including `git log {{DEFAULT_BRANCH}}..HEAD` and
   `git diff {{DEFAULT_BRANCH}}...HEAD`, since a PR publishes every
-  commit message and the complete diff: no secrets or tokens, no
-  personal data beyond the task's needs, no internal-only context,
-  professional and concise wording, English unless the project says
-  otherwise. Fix and re-check before sending; only the user may skip
-  this review, explicitly.
+  commit message and the complete diff: no secrets or credentials, no
+  personal data beyond the task's needs, no internal-only context, no
+  accidental unrelated files or generated churn, professional concise
+  wording, English unless the project says otherwise. Fix the draft or
+  branch and re-check before sending; only the user may skip this review,
+  explicitly.
 - **Reviews**: read the diff (`gh pr diff N -R {{OWNER_REPO}}`) and CI
   status (`gh pr checks N -R {{OWNER_REPO}}`) before writing; submit
   with `gh pr review N -R {{OWNER_REPO}} --comment --body-file

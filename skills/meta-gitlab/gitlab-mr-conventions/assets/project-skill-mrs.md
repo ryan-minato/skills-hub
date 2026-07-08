@@ -41,17 +41,23 @@ Everything you send becomes visible the moment the call succeeds — to the
 whole internet on public projects, and to every member just as instantly on
 private or internal ones — and creating an MR publishes every commit
 message and the complete diff of `{{DEFAULT_BRANCH}}...BRANCH`, not just
-the description. Before any call that creates or edits such content,
-review the exact final text (for an MR: title, description,
+the description. Before any call that creates or edits such content, review
+the exact final content: title, description, comments or review text,
 `git log {{DEFAULT_BRANCH}}..BRANCH --format=full`, and
-`git diff {{DEFAULT_BRANCH}}...BRANCH`):
+`git diff {{DEFAULT_BRANCH}}...BRANCH`.
 
-1. No secrets: tokens, keys, passwords, connection strings, internal URLs.
-2. No personal data beyond what the task needs.
-3. No internal-only context: codenames, private hostnames, unreleased plans.
-4. No unintended quick actions: a body line starting with `/` can execute
+1. Prefer a clean-context subagent review when available; otherwise do the
+   same deep review yourself against the final draft, not memory.
+2. No secrets or credentials: tokens, keys, passwords, connection strings,
+   internal URLs, cookies, or signing material.
+3. No personal data beyond what the task needs: names, emails, phone
+   numbers, addresses, account identifiers, screenshots.
+4. No internal-only context: codenames, private hostnames, ticket links,
+   unreleased plans, or private branch names.
+5. No unintended quick actions: a body line starting with `/` can execute
    as one (for example `/close`).
-5. Professional, concise wording; English unless the project's conventions
+6. No accidental unrelated files or generated churn in the diff, and
+   professional concise wording; English unless the project's conventions
    say otherwise.
 
 If any check fails, fix the draft — or the branch, when the finding is in

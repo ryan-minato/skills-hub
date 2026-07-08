@@ -38,7 +38,7 @@ in the `meta-github` catalog.
   convention skills / AGENTS.md). Inventing structure parallel to what the
   repository already defines is a defect, not a style choice.
 - Bodies stay well under 200 lines. Per-framework matrices, GraphQL
-  queries, log recipes, and the publish-review procedure live in
+  queries, log recipes, and commit-backed publish-review procedures live in
   `references/` behind precise load conditions. Deterministic multi-step
   logic (ID resolution, version bumping, log digestion) lives in `scripts/`
   (python3 ≥3.9 stdlib only, invoked with plain `python3`, non-interactive,
@@ -49,10 +49,11 @@ in the `meta-github` catalog.
   PR/discussion titles and bodies, comments, labels, milestone and project
   names, release notes and assets, commit messages, diffs, attachments,
   branch and tag names. Every skill that publishes embeds the canonical
-  pre-publish gate in its body and ships its own copy of
-  `references/publish-review.md` — the review procedure is never delegated
-  to a separate skill that might not be loaded. Tailoring is allowed only
-  where the canonical text marks it.
+  pre-publish gate in its body. Short text is reviewed directly by the
+  agent; commit-backed or bulky surfaces (especially PRs) ship a
+  self-contained `references/publish-review.md`. The review procedure is
+  never delegated to a separate skill that might not be loaded. Tailoring
+  is allowed only where the canonical text marks it.
 - **Authoring defaults are canonical.** Every skill that authors prose
   embeds the fixed "Authoring defaults" block below, word-for-word
   identical to the gitlab catalog's copy.
@@ -184,9 +185,10 @@ project names, and label names are visible to everyone who can see the
 repository."; `github-releases` uses "Publishing a release publishes the
 notes, the tag, and every asset, and notifies watchers — the draft step
 exists so this gate always runs before the release goes live."
-The parenthetical artifact list in step 1 is a second per-skill slot:
-`github-releases` replaces it with its own artifact list; every other
-line of the steps is fixed.
+The paragraph after the checklist is a second per-skill slot:
+`github-pull-requests` points to `references/publish-review.md`;
+`github-releases` adds long notes and assets to the file-review triggers;
+every other line of the steps is fixed.
 
 ```markdown
 ## Pre-publish gate (mandatory)
@@ -197,14 +199,21 @@ and the branch name. [Creating a PR publishes every commit message and the
 complete diff of `BASE...HEAD`, not just the description.] Before ANY call
 that creates or edits public content:
 
-1. Write the exact outgoing content to files in a scratch directory (title,
-   body, each comment; for PRs also `git log BASE..HEAD --format=full >
-   commits.txt` and `git diff BASE...HEAD > diff.patch`; copy attachments in).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On `NO`,
-   fix every finding, rebuild the files, review again. Never edit-and-publish
-   without re-review.
+1. Prefer a clean-context subagent review when one is available and the
+   surface is not trivial. Give it only the exact final text or files under
+   review, with no extra intent or reassurance.
+2. Otherwise review the exact final text yourself. For short text fully
+   visible in context, inspect it directly. For attachments, screenshots,
+   generated bodies, long notes, or content too large to inspect reliably
+   inline, write the exact outgoing content to a scratch directory and
+   review those files from disk.
+3. Check every artifact for secrets or credentials, personal data, internal
+   identifiers or URLs, accidental unrelated content, and wording a
+   maintainer would regret publishing. Any finding means
+   `SAFE TO PUBLISH: NO`.
+4. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
+   `NO`, fix every finding and review the exact final content again. Never
+   edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
 explicitly; record the skip in your summary.
@@ -214,11 +223,13 @@ being sent.
 
 ### publish-review.md
 
-The canonical copy of the full review procedure is
-`github-issues/references/publish-review.md`; the copies in
-`github-pull-requests`, `github-planning`, and `github-releases` must be
-verbatim-identical. The condensed version embedded in generated project
-skills is canonical in the meta-github catalog's CONTEXT.md.
+Detailed `publish-review.md` files are used only where the publishing
+surface includes commit ranges or bulky files. The canonical GitHub copy is
+`github-pull-requests/references/publish-review.md`. Short issue, planning,
+and release text uses the inline gate above unless the content is too large
+or file-based, in which case the same checklist is applied to the files.
+The condensed version embedded in generated project skills is canonical in
+the meta-github catalog's CONTEXT.md.
 
 ## Disambiguation
 

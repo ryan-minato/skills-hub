@@ -12,9 +12,10 @@ The policy source of truth is {{POLICY_DOC_PATH}}.
   anything.
 - **Flow (draft-first)**: create the draft
   (`gh release create TAG -R {{OWNER_REPO}} --draft --title "TITLE"
-  --notes-file NOTES.md`), then review the exact assembled content —
-  tag name, title, NOTES.md, every asset: no secrets or tokens, no
-  personal data beyond the task's needs, no internal-only context,
-  professional concise wording. Only after everything passes:
+  --notes-file NOTES.md`), then review the exact assembled content — preferably with a clean-context
+  subagent — tag name, title, NOTES.md, every asset: no secrets or
+  credentials, no personal data beyond the task's needs, no
+  internal-only context, no accidental unrelated content, professional
+  concise wording. Only after everything passes:
   `gh release edit TAG -R {{OWNER_REPO}} --draft=false`, and report the
   release URL. Only the user may skip the review, explicitly.

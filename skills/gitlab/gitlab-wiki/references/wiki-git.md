@@ -51,7 +51,8 @@ old-page: new-section/new-page
 1. Make the edits on a local clone.
 2. Assemble the scratch directory for the pre-publish gate in SKILL.md:
    `git log origin/HEAD..HEAD --format=full > commits.txt`,
-   `git diff origin/HEAD..HEAD > diff.patch`, plus any added files.
+   `git diff origin/HEAD..HEAD > diff.patch`, plus every added or changed
+   wiki file and attachment.
 3. Only after `SAFE TO PUBLISH: YES`:
 
    ```bash

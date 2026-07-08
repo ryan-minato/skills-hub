@@ -92,22 +92,27 @@ defaults.
 ## Pre-publish gate (mandatory)
 
 Everything you send becomes visible the moment the call succeeds — to the
-whole internet on public projects, and to every member just as instantly
-on private or internal ones: title, body, every comment, labels, commit
-messages, the full diff, attachment contents, and the branch name.
-Milestone, board, list, epic, and label names and descriptions are
-visible to everyone who can see the project. A line starting with `/` in
-any body or comment can execute as a GitLab quick action (for example
-`/close`). Before ANY call that creates or edits such content:
+whole internet on public projects, and to every member just as instantly on
+private or internal ones: title, body, every comment, labels, commit
+messages, the full diff, attachment contents, and the branch name. A line
+starting with `/` in any body or comment can execute as a GitLab quick
+action (for example `/close`). Milestone, board, list, epic, and label names and descriptions are visible to everyone who can see the project. Before ANY call that creates or edits such
+content:
 
-1. Write the exact outgoing content to files in a scratch directory
-   (title, body, each comment; for MRs also `git log TARGET..SOURCE
-   --format=full > commits.txt` and `git diff TARGET...SOURCE >
-   diff.patch`; copy attachments in).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
-   `NO`, fix every finding, rebuild the files, review again. Never
+1. Prefer a clean-context subagent review when one is available and the
+   surface is not trivial. Give it only the exact final text or files under
+   review, with no extra intent or reassurance.
+2. Otherwise review the exact final text yourself. For short text fully
+   visible in context, inspect it directly. For attachments, screenshots,
+   generated bodies, long notes, or content too large to inspect reliably
+   inline, write the exact outgoing content to a scratch directory and
+   review those files from disk.
+3. Check every artifact for secrets or credentials, personal data, internal
+   identifiers or URLs, unintended quick actions, accidental unrelated
+   content, and wording a maintainer would regret publishing. Any finding
+   means `SAFE TO PUBLISH: NO`.
+4. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
+   `NO`, fix every finding and review the exact final content again. Never
    edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,

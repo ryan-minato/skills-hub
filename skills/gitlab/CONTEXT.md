@@ -56,7 +56,7 @@ catalog.
   / AGENTS.md). Inventing structure parallel to what the project already
   defines is a defect, not a style choice.
 - Bodies stay well under 200 lines. Install matrices, recipe long-tails,
-  GraphQL, log procedures, and the publish-review procedure live in
+  GraphQL, log procedures, and commit-backed publish-review procedures live in
   `references/` behind precise load conditions. Deterministic multi-step
   logic (version bumping, log digestion) lives in `scripts/` (python3
   ≥3.9 stdlib only, invoked with plain `python3`, non-interactive, exit
@@ -81,10 +81,12 @@ catalog.
   `/` in any body or comment can execute as a GitLab **quick action**
   (`/close`, `/assign`, ...) — a hazard in drafted text and, deliberately
   used, the sanctioned way to do things glab lacks flags for. Every skill
-  that publishes embeds the canonical pre-publish gate in its body and
-  ships its own copy of `references/publish-review.md` — the review
-  procedure is never delegated to a separate skill that might not be
-  loaded. Tailoring is allowed only where the canonical text marks it.
+  that publishes embeds the canonical pre-publish gate in its body. Short
+  text is reviewed directly by the agent; commit-backed or bulky surfaces
+  (especially MRs and wiki git pushes) ship a self-contained
+  `references/publish-review.md`. The review procedure is never delegated
+  to a separate skill that might not be loaded. Tailoring is allowed only
+  where the canonical text marks it.
 - **Authoring defaults are canonical.** Every skill that authors prose
   embeds the fixed "Authoring defaults" block below, word-for-word
   identical to the github catalog's copy.
@@ -228,9 +230,10 @@ not just the page you edited."; `gitlab-releases` uses "GitLab has no
 draft releases — creating a release publishes the tag, name, notes, and
 asset links the moment the call succeeds, so this gate runs on the
 complete assembled release before create."
-The parenthetical artifact list in step 1 is a second per-skill slot:
-`gitlab-wiki` and `gitlab-releases` replace it with their own artifact
-lists; every other line of the steps is fixed.
+The paragraph after the checklist is a second per-skill slot:
+`gitlab-merge-requests` and `gitlab-wiki` point to
+`references/publish-review.md`; `gitlab-releases` adds long notes and
+assets to the file-review triggers; every other line of the steps is fixed.
 
 ```markdown
 ## Pre-publish gate (mandatory)
@@ -244,14 +247,19 @@ messages, the full diff, attachment contents, and the branch name.
 any body or comment can execute as a GitLab quick action (for example
 `/close`). Before ANY call that creates or edits such content:
 
-1. Write the exact outgoing content to files in a scratch directory
-   (title, body, each comment; for MRs also `git log TARGET..SOURCE
-   --format=full > commits.txt` and `git diff TARGET...SOURCE >
-   diff.patch`; copy attachments in).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
-3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
-   `NO`, fix every finding, rebuild the files, review again. Never
+1. Prefer a clean-context subagent review when one is available and the
+   surface is not trivial. Give it only the exact final text or files under
+   review.
+2. Otherwise review the exact final text yourself. For short text fully
+   visible in context, inspect it directly. For attachments, screenshots,
+   generated bodies, long notes, or content too large to inspect reliably
+   inline, write the exact outgoing content to a scratch directory and
+   review those files from disk.
+3. Check secrets and credentials, personal data, internal-only context,
+   unintended quick actions, accidental unrelated content, and wording
+   quality. Any finding means `SAFE TO PUBLISH: NO`.
+4. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
+   `NO`, fix every finding and review the exact final content again. Never
    edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
@@ -262,12 +270,13 @@ being sent.
 
 ### publish-review.md
 
-The canonical copy of the full review procedure is
-`gitlab-issues/references/publish-review.md`; the copies in
-`gitlab-merge-requests`, `gitlab-planning`, `gitlab-wiki`, and
-`gitlab-releases` must be verbatim-identical. It adapts the github
-catalog's procedure with GitLab wording and adds a quick-actions checklist
-bullet. The condensed version embedded in generated project skills is
+Detailed `publish-review.md` files are used only where the publishing
+surface includes commit ranges or bulky files. The canonical GitLab copies
+are `gitlab-merge-requests/references/publish-review.md` for MRs and
+`gitlab-wiki/references/publish-review.md` for wiki git pushes. Short issue,
+planning, and release text uses the inline gate above unless the content is
+too large or file-based, in which case the same checklist is applied to the
+files. The condensed version embedded in generated project skills is
 canonical in the meta-gitlab catalog's CONTEXT.md.
 
 ## Disambiguation

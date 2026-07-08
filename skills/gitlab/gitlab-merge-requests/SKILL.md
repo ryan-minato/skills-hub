@@ -92,23 +92,24 @@ defaults.
 ## Pre-publish gate (mandatory)
 
 Everything you send becomes visible the moment the call succeeds — to the
-whole internet on public projects, and to every member just as instantly
-on private or internal ones: title, body, every comment, labels, commit
-messages, the full diff, attachment contents, and the branch name.
-Creating an MR publishes every commit message and the complete diff of
-`TARGET...SOURCE`, not just the description. A line starting with `/` in
-any body or comment can execute as a GitLab quick action (for example
-`/close`). Before ANY call that creates or edits such content:
+whole internet on public projects, and to every member just as instantly on
+private or internal ones: title, body, every comment, labels, commit
+messages, the full diff, attachment contents, and the branch name. Creating
+an MR publishes every commit message and the complete diff of
+`TARGET...SOURCE`, not just the description. A line starting with `/` in any
+body or comment can execute as a GitLab quick action (for example `/close`).
+Before ANY call that creates or edits such content:
 
-1. Write the exact outgoing content to files in a scratch directory
-   (title, body, each comment; for MRs also `git log TARGET..SOURCE
-   --format=full > commits.txt` and `git diff TARGET...SOURCE >
-   diff.patch`; copy attachments in).
-2. Run the review procedure in references/publish-review.md over that
-   directory. Read that file every time — do not review from memory.
+1. Write the exact outgoing content to a scratch directory: title, body,
+   each comment or review body, `git log TARGET..SOURCE --format=full >
+   commits.txt`, `git diff TARGET...SOURCE > diff.patch`, and any
+   attachments.
+2. Run the review procedure in [references/publish-review.md](references/publish-review.md)
+   over that directory. Read that file every time — do not review from
+   memory.
 3. Publish only after the verdict is exactly `SAFE TO PUBLISH: YES`. On
-   `NO`, fix every finding, rebuild the files, review again. Never
-   edit-and-publish without re-review.
+   `NO`, fix every finding, rebuild the files from the fixed content, and
+   review again. Never edit-and-publish without re-review.
 
 Never publish unreviewed content. Only the user may skip this gate,
 explicitly; record the skip in your summary.

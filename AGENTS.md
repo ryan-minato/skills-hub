@@ -48,9 +48,9 @@ Catalogs section of `ARCHITECTURE.md`.
 - **Task management**: Linear, team "Aoi", project "Skills" (via the Linear
   MCP server configured in `.mcp.json`).
 - **Workflow**: every change to tracked files is issue-driven and uses
-  atomic commits, per-commit safety gates, Linear status updates, and a
-  draft PR before review. Full procedure: the `issue-workflow` project
-  skill.
+  atomic commits, per-commit safety gates, best-effort sensitivity checks,
+  Linear status updates, and a draft PR before review. Full procedure: the
+  `issue-workflow` project skill.
 
 ## When To Read What
 

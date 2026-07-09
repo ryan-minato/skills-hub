@@ -73,10 +73,17 @@ Commits are **atomic**: one logical change per commit, and every commit must
 independently satisfy the full quality bar — do not stage unrelated work
 together, and do not leave the tree broken between commits.
 
-- For **every** commit, run `just commit-gate`, then the complete
-  `git-commit` skill gates (convention discovery, atomicity, secret/PII
-  scan, hooks and local checks, message validation). The sensitivity scan is
-  mandatory before each commit, not once per session.
+- For **every** commit, run `just commit-gate`, then make a best-effort
+  pass with the `sensitivity-check` skill against the staged commit content
+  (`git diff --cached --no-ext-diff` and, when useful, the staged files).
+  Check both secrets and PII. Use the preferred engines when available, fall
+  back to lite engines or deep reading when they are not, and record any
+  degradation. A confirmed finding blocks the commit until fixed or
+  explicitly cleared by the user.
+- Then run the complete `git-commit` skill gates (convention discovery,
+  atomicity, secret/PII scan, hooks and local checks, message validation).
+  The sensitivity check is mandatory before each commit, not once per
+  session.
 - Never bypass hooks: `--no-verify`, `SKIP=...`, or disabling hook managers
   is forbidden. A failing hook or check stops the flow until fixed.
 - No `Co-Authored-By` or tool-attribution trailers in commit messages.

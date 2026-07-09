@@ -47,10 +47,10 @@ Catalogs section of `ARCHITECTURE.md`.
   changes. Template: `.gitmessage` (installed by `just setup`).
 - **Task management**: Linear, team "Aoi", project "Skills" (via the Linear
   MCP server configured in `.mcp.json`).
-- **Workflow**: every change to tracked files is issue-driven — proactive
-  work starts by creating the Linear issue(s) (parent + sub-issues for
-  related groups), work happens on the issue's branch, and one PR covers
-  one parent issue. Full procedure: the `issue-workflow` project skill.
+- **Workflow**: every change to tracked files is issue-driven and uses
+  atomic commits, per-commit safety gates, Linear status updates, and a
+  draft PR before review. Full procedure: the `issue-workflow` project
+  skill.
 
 ## When To Read What
 

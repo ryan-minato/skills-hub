@@ -1,6 +1,6 @@
 ---
 name: issue-workflow
-description: Issue-driven development workflow for this repository — create the Linear issue before any proactive change, work on the issue's branch, comment at milestones, keep every commit atomic and hook-clean, and hand off a copy-pastable PR after pushing. Use when starting any proactive creation or modification of tracked files, when picking up an existing Linear issue, when creating a work branch, or when preparing a push or pull request in this repo.
+description: Issue-driven development workflow for this repository — create the Linear issue before any proactive change, work on the issue's branch, comment at milestones, keep every commit atomic and hook-clean, open a draft PR, and mark it ready after final validation. Use when starting any proactive creation or modification of tracked files, when picking up an existing Linear issue, when creating a work branch, or when preparing a push or pull request in this repo.
 metadata:
   internal: true
 ---
@@ -8,7 +8,7 @@ metadata:
 # Issue Workflow
 
 Project-only workflow skill for this repository. Follow it for every change
-to tracked files, from first intent to PR handoff. It layers the
+to tracked files, from first intent to PR readiness. It layers the
 issue/branch/PR flow on top of the commit gates defined by the `git-commit`
 skill.
 
@@ -59,11 +59,13 @@ Work happens on the issue's branch, never directly on `main`:
 ## 3. Work and milestone comments
 
 After completing a todo milestone — a sub-issue's scope, a meaningful
-checkpoint, or a change of direction — post a comment (`save_comment`) on
-the issue that scope belongs to, using the milestone-comment template: what
-was done, what remains, any deviations. Also post one before ending a
-session with work still in flight, so the issue reflects reality when no
-agent is running.
+checkpoint, a commit, or a change of direction — post a comment
+(`save_comment`) on the issue that scope belongs to, using the
+milestone-comment template: what was done, what remains, any deviations.
+Keep comments status-oriented; do not manually paste commit hashes or PR
+links just for traceability, because Linear links conforming branches and
+PRs automatically. Also post one before ending a session with work still in
+flight, so the issue reflects reality when no agent is running.
 
 ## 4. Commits
 
@@ -71,13 +73,16 @@ Commits are **atomic**: one logical change per commit, and every commit must
 independently satisfy the full quality bar — do not stage unrelated work
 together, and do not leave the tree broken between commits.
 
-- For **every** commit, run the complete `git-commit` skill gates
-  (convention discovery, atomicity, secret/PII scan, hooks and local checks,
-  message validation). The sensitivity scan is mandatory before each commit,
-  not once per session.
+- For **every** commit, run `just commit-gate`, then the complete
+  `git-commit` skill gates (convention discovery, atomicity, secret/PII
+  scan, hooks and local checks, message validation). The sensitivity scan is
+  mandatory before each commit, not once per session.
 - Never bypass hooks: `--no-verify`, `SKIP=...`, or disabling hook managers
   is forbidden. A failing hook or check stops the flow until fixed.
 - No `Co-Authored-By` or tool-attribution trailers in commit messages.
+- Commit authorship must use a GitHub or GitLab anonymous email address
+  unless the user explicitly approves using a private email for that
+  commit/session.
 
 ## 5. Complete sub-issues
 
@@ -88,18 +93,30 @@ milestone comment, then set the sub-issue to **Done**.
 sub-issue is Done. The parent's final state follows the PR's acceptance
 (merge → Done, rejection → Canceled) and is handled outside the agent.
 
-## 6. Push and hand off the PR
+## 6. Push and open a draft PR
+
+After a coherent first implementation pass exists and the branch is useful
+to review remotely:
 
 1. Run `just check` and fix everything it reports.
 2. Push the branch: `git push -u origin <branch>`. Do not force-push a
    branch others may have fetched.
-3. Set the parent issue to **In Review** and post a final status comment.
-4. Do **not** create the PR. End the final report to the user with a
-   **copy-pastable PR block**: a conventional-commit-style title matching
-   the parent issue, and a body following
-   `.github/PULL_REQUEST_TEMPLATE.md` — including `Closes <parent-id>` so
-   Linear resolves the parent when the PR merges. Link sub-issues as plain
-   references (no closing keywords; they are already Done).
+3. Create a **draft PR** with a conventional-commit-style title matching
+   the parent issue and a body following `.github/PULL_REQUEST_TEMPLATE.md`.
+   Include `Closes <parent-id>` so Linear resolves the parent when the PR
+   merges. Link sub-issues as plain references (no closing keywords; they
+   are already Done).
+4. Keep working on the PR branch. Continue posting milestone comments on
+   the owning Linear issue after each commit or meaningful checkpoint.
+
+## 7. Mark the PR ready
+
+When all sub-issues are Done and the branch is ready for human review:
+
+1. Run `just check` and fix everything it reports.
+2. Push the final branch state.
+3. Mark the draft PR **Ready for review**.
+4. Set the parent issue to **In Review** and post a final status comment.
 
 ## Gotchas
 

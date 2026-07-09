@@ -99,7 +99,7 @@ Posted on the issue owning the completed scope (see SKILL.md step 3).
 
 ```markdown
 **Done:**
-- <What was completed, with file paths or commit subjects where useful.>
+- <What was completed, with file paths where useful.>
 
 **Remaining:**
 - <What is still open in this issue's scope, or "Nothing".>

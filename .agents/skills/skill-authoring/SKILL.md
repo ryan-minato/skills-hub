@@ -43,17 +43,21 @@ worth building and where it belongs:
    skill there.
 
 Done when: the target location is recorded and either the behavioral cases,
-rubric, and baselines are defined or every skipped behavioral test names the
-missing capability.
+rubric, and no-skill baseline are defined or every skipped behavioral test
+names the missing capability.
 
 ## Gate behavioral tests by subagent support
 
-The gate passes when the invoking agent can dispatch clean-context subagents
-and assign each one a separate disposable git worktree. Do not maintain a
-framework allowlist or denylist; the testing reference supplies a neutral
-self-report prompt. If either capability is unavailable, do not load the
-reference or use the authoring agent as a solver or grader. Record the skipped
-tests and missing capability in the Linear milestone comment and handoff.
+The gate passes when the invoking agent can dispatch clean-context subagents,
+assign each one a separate disposable git worktree, and configure each
+subagent's skill discovery before that subagent starts. The candidate solver
+must discover the target normally from its worktree, while the no-skill solver
+must start without the target. Naming a worktree in the solver prompt after
+startup does not prove isolation. Do not maintain a framework allowlist or
+denylist; the testing reference supplies a neutral self-report prompt. If any
+capability is unavailable, do not load the reference or use the authoring agent
+as a solver or grader. Record the skipped tests and missing capability in the
+Linear milestone comment and handoff.
 
 ## Creating a public skill
 

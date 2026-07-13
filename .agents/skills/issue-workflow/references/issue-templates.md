@@ -18,6 +18,14 @@ conventional-commit type the work will produce:
 | `docs` | Docs |
 | `chore`, `ci`, `build`, `test` | Chore |
 
+A distributable skill is installed behavior, even when its source is Markdown.
+Classify a new capability as `feat`, a behavior-preserving restructure as
+`refactor`, and a correction to wrong, misleading, overly restrictive, or
+overly permissive behavior as `fix`. Test `fix` first: correction takes
+precedence even when the result is an improvement. Use `docs` only for
+supporting documentation that does not change the installed skill, then choose
+the issue label from the resulting type.
+
 A parent issue takes the label of its overall intent; sub-issues are
 labelled individually by their own intent.
 

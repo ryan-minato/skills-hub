@@ -44,7 +44,13 @@ Catalogs section of `ARCHITECTURE.md`.
   never ad-hoc equivalents, so results are consistent everywhere.
 - **Commits**: Conventional Commits in English; scope is the modified skill
   name(s), `", "`-separated; omit the scope for non-skill or repo-wide
-  changes. Template: `.gitmessage` (installed by `just setup`).
+  changes. Classify changes to distributable skills by their effect: `fix`
+  corrects wrong, misleading, overly restrictive, or overly permissive
+  installed behavior; `feat` adds a new capability; and `refactor`
+  restructures without changing behavior. Correction takes precedence over
+  improvement. Use `docs` only for supporting documentation that does not
+  change an installed skill; file format does not decide the type. Template:
+  `.gitmessage` (installed by `just setup`).
 - **Task management**: Linear, team "Aoi", project "Skills" (via the Linear
   MCP server configured in `.mcp.json`).
 - **Workflow**: every change to tracked files is issue-driven and uses

@@ -8,6 +8,18 @@
 #
 # type:  feat | fix | docs | refactor | chore | test | ci
 #
+# For distributable skills under skills/<catalog>/<skill-name>/, choose the
+# type by effect across SKILL.md, references, assets, and scripts:
+#   fix      -> correct wrong, misleading, overly restrictive, or overly
+#               permissive installed behavior (even when quality improves)
+#   feat     -> add a new installed capability, branch, or workflow
+#   refactor -> restructure without changing installed behavior
+#   docs     -> supporting docs only (README, knowledge, or explanatory text
+#               that does not change an installed skill)
+# Markdown is a file format, not a reason to use docs.
+# Test fix before feat: correcting existing behavior takes precedence over the
+# fact that the result is an improvement.
+#
 # scope: the name(s) of the modified skill(s).
 #   - one skill        -> feat(skill-authoring): add scaffold checklist
 #   - several skills   -> fix(knowledge-sync, skill-authoring): align paths

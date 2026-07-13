@@ -85,5 +85,13 @@ catalog became empty). The validator catches anything missed.
    marketplace manifest, and catalog consistency) and fix everything it
    reports; warnings deserve a look even though they don't fail.
 3. Commit using the repository convention (`.gitmessage`): Conventional
-   Commits, scope = the skill name, e.g.
-   `feat(<skill-name>): add <skill-name> skill`.
+   Commits, scope = the skill name. Classify a distributable skill change by
+   its effect across SKILL.md, references, assets, and scripts. First ask
+   whether it corrects wrong, misleading, overly restrictive, or overly
+   permissive installed behavior; if so, use `fix` even though the result is
+   an improvement. Otherwise use `feat` for a new capability and `refactor`
+   for a behavior-preserving restructure. Reserve `docs` for supporting
+   documentation that does not change an installed skill; Markdown alone does
+   not make a change documentation-only. Examples:
+   `feat(<skill-name>): add <skill-name> skill` and
+   `fix(<skill-name>): relax incorrect validation rule`.

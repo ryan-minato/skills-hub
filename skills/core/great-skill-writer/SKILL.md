@@ -4,10 +4,11 @@ description: >
   Write and improve Agent Skills that behave predictably — spec-compliant
   frontmatter, trigger-accurate descriptions, purposeful completion criteria,
   references split by branching condition, subagent-assisted behavioral tests,
-  and non-interactive scripts. Use when creating a skill (even from a bare
-  "make a skill for X"), when reviewing, pruning, or refactoring an existing
-  skill, or when diagnosing a skill that misfires — wrong triggers, premature
-  completion, or never-loaded references.
+  and non-interactive scripts. Use only when the request identifies an Agent
+  Skill, its SKILL.md, or an agent instruction package: create one (including
+  a bare "make a skill for X"), review, prune, refactor, or troubleshoot that
+  artifact's behavior. Do not use for application code, documentation search,
+  generic retrieval, or a system not identified as an Agent Skill.
 license: Apache-2.0
 compatibility: Validation requires uv; isolated tests require git worktree support.
 ---
@@ -34,19 +35,18 @@ lever on one or the other.
 ## Gate behavioral tests by subagent support
 
 Determine whether the invoking agent can dispatch clean-context subagents,
-assign each one a separate disposable git worktree, and configure each
-subagent's skill discovery before that subagent starts. The candidate solver
-must discover the target normally from its worktree, while the no-skill solver
-must start without the target. Naming a worktree in the solver prompt after
-startup does not prove isolation. Do not maintain a framework allowlist or
-denylist: use the current invocation's actual subagent facility.
+assign each one a separate disposable candidate worktree, and expose the
+target through normal skill discovery before each subagent starts. Naming a
+worktree or the target skill in the solver prompt does not prove discovery.
+Do not maintain a framework allowlist or denylist: use the current
+invocation's actual subagent facility.
 
 When a task will create or edit a skill and all capabilities are available,
 read [references/testing.md](references/testing.md) after defining the intended
-change and before the first edit. Follow it through the candidate comparison.
+change and before the first edit. Follow it through the candidate evaluation.
 When any capability is unavailable, do not load that reference or substitute
 the authoring agent for independent solvers: skip behavioral tests and report
-the skipped trigger tests, outcome comparison, independent grading, and the
+the skipped trigger tests, outcome evaluation, independent grading, and the
 missing capability in the final handoff. Review-only and diagnosis-only work
 does not load the reference.
 
@@ -241,5 +241,5 @@ Locate the observed symptom in [references/failure-modes.md](references/failure-
 when you begin — it maps symptoms (never triggers, fires wrongly, rushes steps,
 shallow work, ignored references, bloat) to causes and ordered fixes. If the
 task will edit the skill, apply the behavioral-test gate before the first edit.
-Apply the fix, complete any eligible comparison, then run steps 6–7 above on
+Apply the fix, complete any eligible evaluation, then run steps 6–7 above on
 the result.

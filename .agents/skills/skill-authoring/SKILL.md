@@ -37,27 +37,26 @@ worth building and where it belongs:
 3. Apply the isolated-subagent gate below. If it passes, read
    [references/testing.md](references/testing.md) and design its behavioral
    tests before editing. If it fails, do not read the reference; record the
-   skipped trigger tests, outcome comparison, independent grading, and reason
+   skipped trigger tests, outcome evaluation, independent grading, and reason
    for the Linear milestone comment and handoff. The `issue-workflow` skill
    must already have placed the current worktree on the issue branch; edit the
    skill there.
 
 Done when: the target location is recorded and either the behavioral cases,
-rubric, and no-skill baseline are defined or every skipped behavioral test
-names the missing capability.
+rubric, critical failures, and passing threshold are defined or every skipped
+behavioral test names the missing capability.
 
 ## Gate behavioral tests by subagent support
 
 The gate passes when the invoking agent can dispatch clean-context subagents,
-assign each one a separate disposable git worktree, and configure each
-subagent's skill discovery before that subagent starts. The candidate solver
-must discover the target normally from its worktree, while the no-skill solver
-must start without the target. Naming a worktree in the solver prompt after
-startup does not prove isolation. Do not maintain a framework allowlist or
-denylist; the testing reference supplies a neutral self-report prompt. If any
-capability is unavailable, do not load the reference or use the authoring agent
-as a solver or grader. Record the skipped tests and missing capability in the
-Linear milestone comment and handoff.
+assign each one a separate disposable candidate worktree, and expose the
+target through normal skill discovery before each subagent starts. Naming a
+worktree or the target skill in the solver prompt does not prove discovery.
+Do not maintain a framework allowlist or denylist; the testing reference
+supplies a neutral self-report prompt. If any capability is unavailable, do
+not load the reference or use the authoring agent as a solver or grader.
+Record the skipped tests and missing capability in the Linear milestone
+comment and handoff.
 
 ## Creating a public skill
 
@@ -124,7 +123,7 @@ run generated test material in the issue worktree.
 1. If the isolated-subagent gate passed, run the candidate tests from
    [references/testing.md](references/testing.md) in disposable test
    worktrees, apply the smallest general fix for each failure in the current
-   worktree, and rerun the complete affected comparison. Otherwise confirm the
+   worktree, and rerun the complete affected evaluation. Otherwise confirm the
    skipped tests and missing mechanism are recorded.
 2. Walk the "Checklist before committing" in
    `.agents/knowledge/skill-quality.md`.

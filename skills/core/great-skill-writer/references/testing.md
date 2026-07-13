@@ -1,8 +1,8 @@
 # Behavioral test-driven skill authoring
 
-Load this only after the subagent-support gate in SKILL.md passes. Use the
-authoring worktree for intended edits and disposable detached git worktrees for
-every test run. Never let a test edit the authoring worktree.
+Load this only when SKILL.md confirms clean-context subagents are available.
+Use a disposable detached candidate worktree for each test run when possible.
+Never let a test edit the authoring worktree.
 
 ## 1. Design acceptance tests before editing
 
@@ -18,8 +18,9 @@ Before editing, write:
 Keep task text, inputs, model capability, tools, and limits equal across every
 solver that will run them.
 
-Append the same neutral instrumentation to every solver prompt, without naming
-the target skill in the instrumentation:
+Use framework-native conversation history or skill-load telemetry to determine
+whether a solver loaded the target. If neither is available, append this neutral
+instrumentation to every solver prompt without naming the target skill:
 
 ```text
 End your answer with SKILLS_LOADED: <comma-separated skill names or none>.
@@ -27,40 +28,39 @@ List only skills whose bodies you actually loaded; do not load a skill merely
 to report it.
 ```
 
-## 2. Isolate every test run
+## 2. Isolate every test run when possible
 
 Create worktrees only immediately before a test run, with outputs outside
 version control:
 
 - **Candidate:** detach at the current `HEAD`, then transfer a complete
   temporary snapshot of intended tracked staged and unstaged changes plus
-  intended untracked files. Expose the target through the agent's normal skill
-  discovery.
+  intended untracked files.
 
 Give every writing solver its own worktree and output directory. Never let
-concurrent writers share a worktree. If isolation, skill exposure, or the
-candidate snapshot is incomplete, skip the behavioral tests and report the
-specific blocker instead of falling back to the authoring worktree.
-Never explicitly tell a trigger-test solver to use the target skill. If normal
-discovery cannot expose the candidate before the solver starts, skip the
-trigger tests rather than replacing them with explicit invocation.
+concurrent writers share a worktree. If a worktree or complete candidate
+snapshot is unavailable, use the best available environment, keep generated
+material outside version control, and record the isolation degradation.
+Never explicitly tell a trigger-test solver to use the target skill.
 
 ## 3. Evaluate the candidate
 
 Apply the smallest general skill change that should close the observed gap,
 then test the candidate:
 
-- **Trigger accuracy:** use a fresh clean-context subagent for every prompt and
-  read its final `SKILLS_LOADED` line. The target name present means loaded;
-  absent means not loaded. A missing or malformed line, or a reported skill
-  unavailable in that solver's worktree, invalidates the attempt. Retry an
-  invalid or unexpected result up to three total attempts. A valid case passes
-  only when at least two attempts match the expectation; if three attempts
-  yield no valid report, skip that case and report inadequate observability.
+- **Trigger accuracy:** use a fresh clean-context subagent for every prompt.
+  Observe target loading through framework-native history or telemetry; when
+  unavailable, read its final `SKILLS_LOADED` line. The target name present
+  means loaded; absent means not loaded. A missing observation or malformed
+  fallback report invalidates the attempt. Retry an invalid or unexpected
+  result up to three total attempts. A valid case passes only when at least two
+  attempts match the expectation; if three attempts yield no valid observation,
+  skip that case and report inadequate observability.
 - **Outcome quality:** run a candidate solver for every representative task in
   its own test worktree. Retain every output, including failures. An output is
-  valid only when its report includes the target. Apply the same three-attempt
-  limit, then skip and report if a valid output cannot be obtained.
+  valid only when the selected observation mechanism shows the target loaded.
+  Apply the same three-attempt limit, then skip and report if a valid output
+  cannot be obtained.
 - **Independent grading:** anonymize solver identities and give the outputs,
   rubric, and critical requirements to a clean-context subagent that produced
   none of the answers. Require a score and concrete evidence for every item.
@@ -72,7 +72,7 @@ then rerun the complete affected evaluation.
 
 ## 4. Clean up and report
 
-Record prompts, rubric, results, scores, evidence, and any skipped test with
-its reason. Remove every candidate test worktree, snapshot, fixture, harness,
-and evaluation output. Confirm the authoring worktree contains only intended
-changes before continuing.
+Record prompts, observation method, rubric, results, scores, evidence, every
+isolation degradation, and any skipped test with its reason. Remove every
+candidate test worktree, snapshot, fixture, harness, and evaluation output.
+Confirm the authoring worktree contains only intended changes before continuing.

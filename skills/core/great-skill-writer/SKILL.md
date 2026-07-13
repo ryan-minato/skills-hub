@@ -8,7 +8,7 @@ description: >
   pruning, or refactoring an existing skill, or diagnosing a skill that
   misfires — wrong triggers, premature completion, or never-loaded references.
 license: Apache-2.0
-compatibility: Validation requires uv. Optional isolated tests require git worktree support.
+compatibility: Validation requires uv.
 ---
 
 # Great Skill Writer
@@ -28,31 +28,21 @@ lever on one or the other.
 - Read [references/spec.md](references/spec.md) when a spec constraint is uncertain or a lint finding is unclear.
 - Read [references/glossary.md](references/glossary.md) when a term used here needs its full definition.
 
-## Test only when explicitly required
+## Run behavioral tests when subagents are available
 
-Testing is not default work. Test only when the user explicitly asks for
-tests or TDD, or an applicable project rule already read for this task
-explicitly requires testing. Do not infer a test requirement from the type of
-change. Without one, do not load `references/testing.md`, check subagent
-capabilities, run isolated script tests, or report skipped tests.
+Behavioral testing is default when the invoking framework can dispatch
+clean-context subagents; this is the only required capability. Define the
+intended change and read [references/testing.md](references/testing.md) before
+the first edit. If clean-context subagents are unavailable, skip behavioral
+tests and report that missing capability in the final handoff. Do not
+substitute the authoring agent for independent solvers.
 
-For TDD, define the intended change and read
-[references/testing.md](references/testing.md) before the first edit. For
-other required tests, run the applicable test at the stage the requirement
-specifies.
-
-When required testing includes behavioral evaluation, determine whether the
-invoking agent can dispatch clean-context subagents, assign each one a
-separate disposable candidate worktree, and expose the target through normal
-skill discovery before each subagent starts. Naming a worktree or the target
-skill in the solver prompt does not prove discovery. Do not maintain a
-framework allowlist or denylist: use the current invocation's actual
-subagent facility.
-
-If a required behavioral evaluation has all capabilities, follow
-`references/testing.md` through the candidate evaluation. Otherwise do not
-substitute the authoring agent for independent solvers; report the required
-tests skipped and the missing capability in the final handoff.
+Try to create a disposable candidate worktree and complete candidate snapshot
+immediately before each test run. If either is unavailable, run the test in the
+best available environment and record the isolation degradation; neither blocks
+testing. Prefer framework-native conversation history or skill-load telemetry
+to observe invocation. If neither is available, use the neutral instrumentation
+in `references/testing.md`.
 
 ## Rules that apply on every branch
 
@@ -220,17 +210,16 @@ Three passes over anything you wrote or touched:
    (a host may lack uv, Deno, or Bun — SKILL.md-only skills need no such
    line), and a relative markdown link in SKILL.md at first mention.
    Read [references/scripts-python.md](references/scripts-python.md) when writing Python, or [references/scripts-typescript.md](references/scripts-typescript.md) when writing for Deno or Bun.
-   When testing is explicitly required, test every added or changed script in
-   a disposable candidate git worktree immediately before testing. Generate an
-   untracked temporary harness there, and verify `--help` plus its usage
+   Test every added or changed script. First try a disposable candidate git
+   worktree immediately before testing; if it is unavailable, keep the
+   temporary harness and outputs outside version control in the best available
+   environment and record the isolation degradation. Verify `--help` plus its usage
    example, a representative success, an identical repeated run proving
    idempotence, and bad arguments exiting 2 with an actionable diagnostic.
    Remove the worktree and harness after recording results. This script test
-   does not require subagents or the behavioral-testing reference. If a
-   disposable worktree cannot be created, skip the required script test and
-   report why; never run generated test material in the authoring worktree.
-   Done when: each script meets every rule in this step's list and, when
-   testing is required, its test result or explicit skip reason is recorded.
+   does not require subagents or the behavioral-testing reference.
+   Done when: each script meets every rule in this step's list and its test
+   result or isolation-degradation reason is recorded.
 6. **Prune.** Run the three passes on your draft — including the description.
    Done when: a further deletion would change behaviour on a model the skill
    is meant to support.
@@ -245,6 +234,6 @@ Three passes over anything you wrote or touched:
 Read [references/failure-modes.md](references/failure-modes.md) when
 improving, reviewing, pruning, or diagnosing a skill. It maps symptoms (never
 triggers, fires wrongly, rushes steps, shallow work, ignored references,
-bloat) to causes and ordered fixes. If tests or TDD are explicitly required,
-follow the applicable testing branch before editing. Apply the fix, complete
-required evaluation, then run steps 6–7 above on the result.
+bloat) to causes and ordered fixes. Apply the behavioral-test gate before
+editing. Apply the fix, complete eligible evaluation, then run steps 6–7 above
+on the result.

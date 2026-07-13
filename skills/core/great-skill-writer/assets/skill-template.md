@@ -19,10 +19,11 @@ description: >
 ## [Workflow name]
 
 1. [First action, imperative.]
-   Done when: [checkable criterion — the agent can tell done from not-done;
-   exhaustive where thoroughness matters].
-2. [Next action.]
-   Done when: [criterion].
+2. [Next action whose execution benefits from an explicit boundary.]
+   Done when: [checkable criterion; exhaustive where thoroughness matters].
+
+<!-- Add Done when only when a meaningful, checkable boundary improves how
+the agent executes or judges a step. -->
 
 <!-- Conditional reference pointer — one per branch-specific file:
 Read [references/topic.md](references/topic.md) when [precise condition].

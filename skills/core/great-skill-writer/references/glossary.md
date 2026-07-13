@@ -153,8 +153,8 @@ _Avoid_: structure, organization, layout
 The ordered actions the agent performs — when a skill has them, the primary
 tier of its content, and the part that earns its place in SKILL.md. Not every
 skill has steps: a skill can be all steps, all **reference** (a review), or
-both, independent of invocation. Every step ends on a **completion
-criterion**, clear or vague.
+both, independent of invocation. A step can end on a **completion criterion**
+when an explicit boundary improves its execution or evaluation.
 
 _Avoid_: workflow, instructions, choreography
 
@@ -262,7 +262,10 @@ _Avoid_: keyword, term, motif
 ### Completion Criterion
 
 The condition that tells the agent a unit of work is done — the target it
-judges against. Two properties make it a lever, not just a quality. Its
+judges against. Use one when a unit is prone to premature completion, needs
+exhaustive effort, or has an observable success condition; omit it when it
+would not change execution or evaluation. Two properties make a criterion a
+lever, not just a label. Its
 **clarity** (can the agent tell done from not-done?) resists **premature
 completion** — a vague bound ("understanding reached") lets the agent declare
 done and slip to the next step; this axis needs _steps_ to bite, since
@@ -271,11 +274,12 @@ requires) sets **legwork** — "every modified model accounted for" forces
 thorough work where "produce a change list" does not — and this axis is _not_
 step-bound: it can bind a body of flat reference too, which is how a skill
 with no steps still carries an exhaustiveness bar ("every rule applied"). The
-strongest criteria are both checkable and exhaustive. Both properties buy
-more the less capable the running model: a strong model intuits the done-ness
-a vague bound leaves unstated, a weaker one holds the path only when it can
-check — so a criterion written for the weaker models a skill supports is
-never relaxed just because the development model didn't need it.
+strongest criteria are both checkable and exhaustive when both properties
+matter. These properties buy more the less capable the running model: a
+strong model intuits the done-ness a vague bound leaves unstated, a weaker one
+holds the path only when it can check — so a useful criterion written for the
+weaker models a skill supports is never relaxed just because the development
+model didn't need it.
 
 _Avoid_: done condition, exit condition, stopping rule
 
@@ -309,10 +313,10 @@ the agent's attention slips to being done rather than to the work. A
 between-steps failure: it needs **steps** to occur — a skill with no steps
 that quits early isn't premature completion but thin **legwork** under an
 unmet demand. A tug-of-war between two forces: visible **post-completion
-steps** (the pull forward) and the **completion criterion**'s clarity (the
-resistance — a sharp, checkable bar holds; a vague one gives way). Fuzziness
-is the necessary condition: a sharp bound resists the pull no matter how many
-later steps are visible, so a step that never rushes needs no defending. Two
+steps** (the pull forward) and any **completion criterion**'s clarity (the
+resistance — a sharp, checkable bar holds; an absent or vague one gives way).
+A sharp bound resists the pull no matter how many later steps are visible, so
+a step that never rushes needs no defending. Two
 levers hold a step that does, but reach for them in order: **sharpen the
 bound first** — it is local and cheap. Only when the criterion is irreducibly
 fuzzy _and_ you actually observe the rush do you **hide the later steps** —

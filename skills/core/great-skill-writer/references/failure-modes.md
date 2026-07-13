@@ -41,16 +41,17 @@ Ending the current step before it is genuinely done — attention slips to
 _being done_. Needs steps to occur; a skill with no steps that quits early is
 thin legwork instead.
 
-Confirm: find the step the agent rushed and read its completion criterion.
-If you cannot tell done from not-done by reading it, neither could the agent.
+Confirm: find the step the agent rushed and inspect its boundary. If a
+completion criterion exists but you cannot tell done from not-done by reading
+it, neither could the agent.
 
 Fix, strictly in this order:
 
-1. **Sharpen the completion criterion** — cheap and local. Replace vague
-   bounds ("understanding reached") with checkable ones ("every call site
-   listed with file and line"). Where thoroughness matters, make it
-   exhaustive ("every modified model accounted for", not "produce a change
-   list").
+1. **Add or sharpen a completion criterion** — cheap and local when the step
+   has a meaningful boundary. Replace vague bounds ("understanding reached")
+   with checkable ones ("every call site listed with file and line"). Where
+   thoroughness matters, make it exhaustive ("every modified model accounted
+   for", not "produce a change list").
 2. **Hide the post-completion steps** — only if the criterion is irreducibly
    fuzzy _and_ you observed the rush. Split the sequence so the tempting
    later steps live in a second skill or a subagent dispatch. Hiding only
@@ -157,8 +158,9 @@ Apply every item; report each as pass or fail with the offending line.
       branch, covers indirect phrasings, no body identity restated.
 - [ ] Invocation mode matches use: model-invoked only if the agent (or
       another skill) must reach it on its own.
-- [ ] Every step ends on a checkable completion criterion; criteria are
-      exhaustive where thoroughness matters.
+- [ ] Steps that benefit from an explicit boundary have a checkable
+      completion criterion; criteria are exhaustive where thoroughness
+      matters, and low-value criteria are omitted.
 - [ ] Every reference pointer states a precise load condition; no
       "see references/".
 - [ ] Inline content is needed by every branch; branch-specific content is

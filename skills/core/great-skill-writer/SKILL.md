@@ -2,8 +2,8 @@
 name: great-skill-writer
 description: >
   Write and improve Agent Skills that behave predictably — spec-compliant
-  frontmatter, trigger-accurate descriptions, bodies with checkable completion
-  criteria, references split by branching condition, and non-interactive
+  frontmatter, trigger-accurate descriptions, purposeful completion criteria,
+  references split by branching condition, and non-interactive
   scripts. Use when creating a skill (even from a bare "make a skill for X"),
   when reviewing, pruning, or refactoring an existing skill, or when diagnosing
   a skill that misfires — wrong triggers, premature completion, or never-loaded
@@ -102,14 +102,15 @@ non-spec field.
 
 Rank every piece of content by how immediately the agent needs it:
 
-1. **Steps** — ordered actions in SKILL.md, each ending on a completion
-   criterion that is _checkable_ (the agent can tell done from not-done) and,
+1. **Steps** — ordered actions in SKILL.md. Add a completion criterion when a
+   step needs a meaningful boundary: the work is prone to premature
+   completion, thoroughness matters, or the result has an observable success
+   condition. Make it _checkable_ (the agent can tell done from not-done) and,
    where thoroughness matters, _exhaustive_ ("every modified model accounted
-   for", not "produce a change list"). A demanding criterion drives legwork
-   even in flat reference: "every rule applied" binds a rule list just as
-   "every step done" binds a sequence. Sharp criteria are also the cheapest
-   floor-raiser: a strong model recovers from a vague bound, a weaker one
-   needs the checkable form.
+   for", not "produce a change list"). Omit it when it would not change how
+   the agent executes or judges the step. A demanding criterion can also drive
+   legwork in flat reference: "every rule applied" binds a rule list just as
+   "every step done" binds a sequence.
 2. **In-file reference** — rules and facts in SKILL.md, consulted on demand.
    A flat peer-set (every rule of a review on one rung) is fine.
 3. **Disclosed reference** — a `references/` file behind a context pointer,
@@ -171,16 +172,16 @@ Three passes over anything you wrote or touched:
    `<skill-name>/SKILL.md`. Name: lowercase `a-z0-9` with single hyphens,
    ≤64 chars, exactly equal to the directory name. Create `scripts/`,
    `references/`, `assets/` only when a file goes in.
-   Done when: the directory holds SKILL.md and no empty subdirectories.
 3. **Describe.** Write the frontmatter description per the rules above.
    Done when: it is third person, opens on the leading word, has one trigger
    per branch plus indirect phrasings, and restates nothing from the body.
-4. **Write the body.** Steps first, each ending `Done when: <criterion>`;
-   then in-file reference, applying the instruction patterns above where they
-   fit; then disclose branch-specific material into `references/` files, each
-   linked at first mention with a precise load condition.
-   Done when: every step has a checkable criterion and every reference file
-   is linked with a condition.
+4. **Write the body.** Steps first; add `Done when: <criterion>` only where a
+   checkable boundary improves execution reliability. Then add in-file
+   reference, applying the instruction patterns above where they fit; then
+   disclose branch-specific material into `references/` files, each linked at
+   first mention with a precise load condition.
+   Done when: every included completion criterion is checkable and every
+   reference file is linked with a condition.
 5. **Bundle scripts** — only if the same logic would be regenerated
    identically every run (validators, parsers, formatters); generate inline
    for one-off logic. Every script: no interactive prompts (they hang in

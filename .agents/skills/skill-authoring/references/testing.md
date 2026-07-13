@@ -1,50 +1,41 @@
 # Test-driven skill authoring
 
-Use this workflow for every skill created or modified in this repository. It
-tests the skill's invocation and effect before static validation; a clean lint
-result alone does not prove the skill adds value.
+Load this only after the subagent gate in SKILL.md passes. It tests
+the skill's invocation and effect; a clean lint result alone does not prove the
+skill adds value.
 
-## 1. Gate on capabilities
+## 1. Create test worktrees when possible
 
-Discover capabilities instead of inferring them from an agent environment's
-name. Trigger and outcome tests require all of these:
+The current issue worktree is the authoring worktree: design, edit, stage, and
+commit there. Do not create a test worktree until immediately before a test
+run.
 
-- subagents that start with context isolated from the authoring session;
-- a way to make the candidate skill available to one run and unavailable to
-  another while keeping other conditions equal;
-- for trigger tests, observable evidence that a run loaded the skill body.
-
-The evidence format belongs to the environment. Do not prescribe a particular
-agent API, configuration path, event name, or log shape. If a capability is
-missing, record the skipped test and reason in the Linear milestone comment and
-handoff. Never use the authoring agent as a substitute for an independent
-subagent. Script tests in step 5 do not require subagents.
-
-## 2. Create test worktrees only when testing
-
-Record the base revision before editing. The current issue worktree is the
-authoring worktree: design, edit, stage, and commit there. Do not create a
-test worktree until immediately before a test run.
-
-At the start of each test run, create detached disposable worktrees and
-separate output directories:
+At the start of each test run, try to create detached disposable candidate
+worktrees and separate output directories:
 
 - **Candidate:** create it at the current `HEAD`, then transfer a complete
   temporary snapshot of the intended current changes. Include tracked staged
   and unstaged changes plus intended untracked files; keep the snapshot patch
   and file copies outside version control.
-- **Previous version:** for an existing skill, create it at the recorded base
-  revision.
-- **No skill:** create it at the recorded base revision with the target skill
-  unavailable. A new skill needs only this baseline.
 
-Give every writing subagent its own test worktree and output directory. Never
-run tests, generated harnesses, or test-driven edits in the current issue
-worktree, and never let concurrent writers share a test worktree. If the
-required isolation or complete candidate snapshot cannot be created, stop and
-report the blocker.
+Give every writing subagent its own test worktree and output directory when
+available. Never let concurrent writers share a worktree. If isolation or a
+complete candidate snapshot is unavailable, use the best available environment,
+keep generated material outside version control, and record the isolation
+degradation. Never explicitly tell a trigger-test solver to use the target
+skill.
 
-## 3. Make the tests red
+## 2. Define acceptance tests before editing
+
+Use framework-native conversation history or skill-load telemetry to determine
+whether a solver loaded the target. If neither is available, append this neutral
+instrumentation to every solver prompt without naming the target skill:
+
+```text
+End your answer with SKILLS_LOADED: <comma-separated skill names or none>.
+List only skills whose bodies you actually loaded; do not load a skill merely
+to report it.
+```
 
 Before editing the skill, write:
 
@@ -52,53 +43,41 @@ Before editing the skill, write:
    three near-misses that share vocabulary but should not trigger it. Include
    direct and indirect phrasing, with the expected load decision for each.
 2. Two or three representative outcome tasks and a rubric of observable
-   requirements. Mark failures that count as critical regressions.
-3. The previous-version and no-skill baseline outputs when those runs are
-   available. Keep task text, inputs, model capability, tools, and limits equal
-   across solvers.
+   requirements. Mark critical failures and declare the aggregate score needed
+   to pass before seeing candidate output.
 
-The baselines must expose a meaningful gap. If they already satisfy every
-requirement, revise the cases or stop: the proposed change has not shown value.
-
-## 4. Make the tests green
+## 3. Make the tests green
 
 Apply the smallest general skill change that should close the observed gap,
 then test the candidate:
 
-- **Trigger accuracy:** use a fresh clean-context subagent for each prompt and
-  the environment's load evidence. Rerun an unexpected result until it has
-  three total attempts; it passes only when at least two attempts match the
-  expectation.
-- **Outcome quality:** run candidate, previous-version, and no-skill solvers
-  in parallel in their test worktrees where all three exist. For a new skill,
-  omit only the previous version. Retain every output, including failures.
+- **Trigger accuracy:** use a fresh clean-context subagent for each prompt.
+  Observe target loading through framework-native history or telemetry; when
+  unavailable, read its final `SKILLS_LOADED` line. The target name present
+  means loaded; absent means not loaded. A missing observation or malformed
+  fallback report invalidates the attempt. Retry an invalid or unexpected
+  result up to three total attempts. A valid case passes only when at least two
+  attempts match the expectation; if three attempts yield no valid observation,
+  skip that case and record inadequate observability.
+- **Outcome quality:** run a candidate solver for every representative task in
+  its own test worktree when possible. Retain every output, including failures.
+  An output is valid only when the selected observation mechanism shows the
+  target loaded. Apply the same three-attempt limit, then skip and record if a
+  valid output cannot be obtained.
 - **Independent grading:** anonymize solver identities and give the outputs,
   rubric, and critical requirements to a clean-context subagent that produced
   none of the answers. Require a score and concrete evidence for every item.
-  Accept the candidate only when it has no critical regression and its
-  aggregate score is strictly higher than every available baseline.
+  Accept the candidate only when it has no critical failure and its aggregate
+  score meets the threshold declared before the run.
 
-A tie is not improvement. On failure, fix the underlying instruction rather
-than patching one test prompt, then rerun the complete affected comparison.
+On failure, fix the underlying instruction rather than patching one test
+prompt, then rerun the complete affected evaluation.
 
-## 5. Test bundled scripts without subagents
+## 4. Clean up and report
 
-For every added or changed bundled script, generate an untracked temporary test
-harness inside the candidate test worktree and run it with the declared runtime.
-It must verify:
-
-- `--help` exits 0 and shows a usage example;
-- a representative invocation exits 0 with the expected output;
-- repeating the invocation proves idempotence;
-- bad arguments exit 2 with an actionable diagnostic.
-
-Add domain-specific cases when they protect correctness. Record the commands
-and results in the Linear milestone comment and handoff, then delete the harness,
-fixtures, and evaluation outputs before staging.
-
-## 6. Clean up
-
-After recording results, remove every detached candidate and baseline test
-worktree, snapshot, harness, fixture, and evaluation output. Keep the current
-issue worktree for the remaining commit and PR workflow, and confirm its
-`git status` shows only the intended repository changes.
+Record the cases, observation method, rubric, results, scores, evidence, every
+isolation degradation, and any skipped test with its reason in the Linear
+milestone comment and handoff. Remove every detached candidate test worktree,
+snapshot, harness, fixture, and evaluation output. Keep the current issue
+worktree for the remaining commit and PR workflow, and confirm its `git status`
+shows only the intended repository changes.

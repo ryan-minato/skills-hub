@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: End-to-end workflow for creating or modifying a skill in this repository — isolated test-first evaluation, scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
+description: End-to-end workflow for creating or modifying a skill in this repository — subagent-assisted behavioral evaluation, isolated script tests, scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
 metadata:
   internal: true
 ---
@@ -34,13 +34,24 @@ worth building and where it belongs:
      and read that catalog's `CONTEXT.md` for catalog-specific requirements.
    - **Project-only workflow skill** (serves this repo itself):
      `.agents/skills/<skill-name>/` as a real directory.
-3. Read [references/testing.md](references/testing.md) and design its tests
-   before editing. The `issue-workflow` skill must already have placed the
+3. Apply the subagent gate below. If it passes, read
+   [references/testing.md](references/testing.md) and design its behavioral
+   tests before editing. If it fails, do not read the reference; record the
+   skipped behavioral tests and missing capability for the Linear milestone
+   comment and handoff. The `issue-workflow` skill must already have placed the
    current worktree on the issue branch; edit the skill there.
 
-Done when: the target location, trigger expectations, outcome rubric, and
-available baselines are recorded; every skipped behavioral test names the
-missing capability.
+Done when: the target location is recorded and either the behavioral cases,
+rubric, critical failures, and passing threshold are defined or the missing
+subagent capability is recorded.
+
+## Gate behavioral tests by subagent support
+
+The gate passes when the invoking agent can dispatch clean-context subagents;
+this is the only required capability. Do not maintain a framework allowlist or
+denylist. If subagents are unavailable, do not load the reference or use the
+authoring agent as a solver or grader; record the skipped tests and missing
+capability in the Linear milestone comment and handoff.
 
 ## Creating a public skill
 
@@ -86,14 +97,25 @@ catalog became empty). The validator catches anything missed.
 
 ## Finish
 
-1. Run the candidate tests from [references/testing.md](references/testing.md)
-   in disposable test worktrees, apply the smallest general fix for each
-   failure in the current worktree, and rerun the complete affected comparison.
-2. Walk the "Checklist before committing" in
+1. Walk the "Checklist before committing" in
    `.agents/knowledge/skill-quality.md`.
-3. Run `just check` (repo-wide validation, including symlinks, the
+2. Run `just check` (repo-wide validation, including symlinks, the
    marketplace manifest, and catalog consistency) and fix everything it
    reports; warnings deserve a look even though they don't fail.
+3. **Test.** If the subagent gate passed, run the candidate tests from
+   [references/testing.md](references/testing.md). First try disposable
+   candidate worktrees and snapshots; if either is unavailable, use the best
+   available environment and record the isolation degradation. Prefer
+   framework-native conversation history or skill-load telemetry to observe
+   invocation; if neither is available, use the reference's neutral
+   self-report instrumentation. For every added or changed bundled script,
+   generate an untracked harness outside version control in the same
+   best-available isolated environment and verify `--help` plus its usage
+   example, a representative success, an identical repeated run proving
+   idempotence, and bad arguments exiting 2 with an actionable diagnostic.
+   Remove worktrees, harnesses, fixtures, and outputs after recording results.
+   On a test failure, fix the skill, then repeat steps 1–3. Otherwise confirm
+   skipped behavioral tests and their missing capability are recorded.
 4. Commit using the repository convention (`.gitmessage`): Conventional
    Commits, scope = the skill name. Classify a distributable skill change by
    its effect across SKILL.md, references, assets, and scripts. First ask

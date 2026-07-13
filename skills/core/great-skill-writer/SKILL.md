@@ -1,15 +1,13 @@
 ---
 name: great-skill-writer
 description: >
-  Write and improve Agent Skills that behave predictably — spec-compliant
-  frontmatter, trigger-accurate descriptions, purposeful completion criteria,
-  references split by branching condition, and non-interactive
-  scripts. Use when creating a skill (even from a bare "make a skill for X"),
-  when reviewing, pruning, or refactoring an existing skill, or when diagnosing
-  a skill that misfires — wrong triggers, premature completion, or never-loaded
-  references.
+  Skill authoring for predictable Agent Skills — spec-compliant frontmatter,
+  trigger-accurate descriptions, completion criteria, conditional references,
+  and non-interactive scripts. Use when a user asks to create, review, prune,
+  refactor, or troubleshoot an Agent Skill, its SKILL.md, or an agent
+  instruction package; not for application code or generic documentation.
 license: Apache-2.0
-compatibility: Validation step requires uv (runs scripts/lint_skill.py).
+compatibility: Validation requires uv.
 ---
 
 # Great Skill Writer
@@ -23,9 +21,9 @@ lever on one or the other.
 
 ## Route by task
 
-- Creating a new skill → run the workflow below.
+- Creating a new skill → define it in step 1, then run the remaining workflow.
 - Improving, reviewing, or pruning an existing skill, or diagnosing one that
-  misbehaved → read [references/failure-modes.md](references/failure-modes.md) when you start, then finish with steps 6–7 below.
+  misbehaved → follow the improvement workflow below.
 - Read [references/spec.md](references/spec.md) when a spec constraint is uncertain or a lint finding is unclear.
 - Read [references/glossary.md](references/glossary.md) when a term used here needs its full definition.
 
@@ -168,21 +166,26 @@ Three passes over anything you wrote or touched:
    If the agent already handles the task well bare, stop — the skill adds no
    value.
    Done when: all four answers are written and the value answer is non-empty.
-2. **Scaffold.** Copy [assets/skill-template.md](assets/skill-template.md) to
+2. **Define tests.** Read [references/testing.md](references/testing.md) when
+   the invoking framework can dispatch clean-context subagents, then define its
+   behavioral cases, rubric, critical failures, and passing threshold before
+   the first edit. Otherwise record the missing capability for the final
+   handoff; do not substitute the authoring agent for independent solvers.
+3. **Scaffold.** Copy [assets/skill-template.md](assets/skill-template.md) to
    `<skill-name>/SKILL.md`. Name: lowercase `a-z0-9` with single hyphens,
    ≤64 chars, exactly equal to the directory name. Create `scripts/`,
    `references/`, `assets/` only when a file goes in.
-3. **Describe.** Write the frontmatter description per the rules above.
+4. **Describe.** Write the frontmatter description per the rules above.
    Done when: it is third person, opens on the leading word, has one trigger
    per branch plus indirect phrasings, and restates nothing from the body.
-4. **Write the body.** Steps first; add `Done when: <criterion>` only where a
+5. **Write the body.** Steps first; add `Done when: <criterion>` only where a
    checkable boundary improves execution reliability. Then add in-file
    reference, applying the instruction patterns above where they fit; then
    disclose branch-specific material into `references/` files, each linked at
    first mention with a precise load condition.
    Done when: every included completion criterion is checkable and every
    reference file is linked with a condition.
-5. **Bundle scripts** — only if the same logic would be regenerated
+6. **Bundle scripts** — only if the same logic would be regenerated
    identically every run (validators, parsers, formatters); generate inline
    for one-off logic. Every script: no interactive prompts (they hang in
    non-interactive shells — take input via flags), `--help` with a usage
@@ -196,17 +199,35 @@ Three passes over anything you wrote or touched:
    line), and a relative markdown link in SKILL.md at first mention.
    Read [references/scripts-python.md](references/scripts-python.md) when writing Python, or [references/scripts-typescript.md](references/scripts-typescript.md) when writing for Deno or Bun.
    Done when: each script meets every rule in this step's list.
-6. **Prune.** Run the three passes on your draft — including the description.
+7. **Prune.** Run the three passes on your draft — including the description.
    Done when: a further deletion would change behaviour on a model the skill
    is meant to support.
-7. **Validate.** Run [`scripts/lint_skill.py`](scripts/lint_skill.py):
+8. **Validate.** Run [`scripts/lint_skill.py`](scripts/lint_skill.py):
    `uv run scripts/lint_skill.py --skill <skill-dir>`. Fix every error;
    for each warning, apply it or state why it doesn't apply.
+   This is default validation, not testing.
    Done when: exit code is 0 and every remaining warning has a stated reason.
+9. **Test.** If step 2 defined behavioral tests, try a disposable candidate
+   worktree and complete candidate snapshot immediately before each run. If
+   either is unavailable, use the best available environment and record the
+   isolation degradation; neither blocks testing. Prefer framework-native
+   conversation history or skill-load telemetry to observe invocation. If
+   neither is available, use the neutral instrumentation in
+   `references/testing.md`. Run every added or changed script in the same
+   best-available isolated environment and verify `--help` plus its usage
+   example, a representative success, an identical repeated run proving
+   idempotence, and bad arguments exiting 2 with an actionable diagnostic.
+   Remove generated harnesses and outputs after recording results. On a test
+   failure, revise the skill, then repeat steps 7–9.
+   Done when: every eligible behavioral and script test passes, or its skip or
+   isolation-degradation reason is recorded.
 
 ## Improve or diagnose an existing skill
 
-Locate the observed symptom in [references/failure-modes.md](references/failure-modes.md) when you begin — it maps
-symptoms (never triggers, fires wrongly, rushes steps, shallow work, ignored
-references, bloat) to causes and ordered fixes. Apply the fix, then run steps
-6–7 above on the result.
+1. **Diagnose.** Read [references/failure-modes.md](references/failure-modes.md) when improving, reviewing, pruning, or diagnosing a skill; it maps symptoms (never triggers, fires wrongly, rushes steps, shallow work, ignored references, bloat) to causes and ordered fixes.
+2. **Define tests.** Apply step 2 above before editing.
+3. **Fix.** Apply the smallest general fix for the observed failure.
+4. **Prune.** Run step 7 above.
+5. **Validate.** Run step 8 above.
+6. **Test.** Run step 9 above. On a failure, revise the skill and repeat steps
+   4–6.

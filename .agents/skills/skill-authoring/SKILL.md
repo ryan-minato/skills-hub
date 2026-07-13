@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: End-to-end workflow for creating or modifying a skill in this repository — framework-gated behavioral evaluation, isolated script tests, scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
+description: End-to-end workflow for creating or modifying a skill in this repository — subagent-assisted behavioral evaluation, isolated script tests, scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
 metadata:
   internal: true
 ---
@@ -34,7 +34,7 @@ worth building and where it belongs:
      and read that catalog's `CONTEXT.md` for catalog-specific requirements.
    - **Project-only workflow skill** (serves this repo itself):
      `.agents/skills/<skill-name>/` as a real directory.
-3. Apply the invoking-framework gate below. If it passes, read
+3. Apply the isolated-subagent gate below. If it passes, read
    [references/testing.md](references/testing.md) and design its behavioral
    tests before editing. If it fails, do not read the reference; record the
    skipped trigger tests, outcome comparison, independent grading, and reason
@@ -44,23 +44,16 @@ worth building and where it belongs:
 
 Done when: the target location is recorded and either the behavioral cases,
 rubric, and baselines are defined or every skipped behavioral test names the
-missing framework mechanism.
+missing capability.
 
-## Gate behavioral tests by invoking framework
+## Gate behavioral tests by subagent support
 
-Identify the framework and surface or mode that invoked this skill. A row
-passes only when its current mode supplies every named mechanism:
-
-| Invoking framework | The current mode passes when |
-|---|---|
-| Claude Code | Independent subagents are enabled; candidate and baseline runs can expose different skills; Skill calls are visible in a transcript or hook. |
-| Codex | The surface provides subagents, per-solver skill exposure, and evidence that a solver loaded the skill. Multi-agent execution or worktrees alone are insufficient. |
-| OpenCode | Task subagents are enabled; skill permissions can allow or deny the target per solver; child sessions show the native `skill` call. |
-| Gemini CLI | Subagents are enabled; separate runs can enable or disable the target skill; skill activation is observable. |
-| Another or unknown framework | Native facilities provide equivalent independent solvers, per-run skill isolation, and load evidence; uncertainty fails the gate. |
-
-Only a passing row permits loading the behavioral-testing reference. Never use
-the authoring agent as a solver or grader when the row fails.
+The gate passes when the invoking agent can dispatch clean-context subagents
+and assign each one a separate disposable git worktree. Do not maintain a
+framework allowlist or denylist; the testing reference supplies a neutral
+self-report prompt. If either capability is unavailable, do not load the
+reference or use the authoring agent as a solver or grader. Record the skipped
+tests and missing capability in the Linear milestone comment and handoff.
 
 ## Creating a public skill
 
@@ -124,7 +117,7 @@ run generated test material in the issue worktree.
 
 ## Finish
 
-1. If the invoking-framework gate passed, run the candidate tests from
+1. If the isolated-subagent gate passed, run the candidate tests from
    [references/testing.md](references/testing.md) in disposable test
    worktrees, apply the smallest general fix for each failure in the current
    worktree, and rerun the complete affected comparison. Otherwise confirm the

@@ -3,7 +3,7 @@ name: great-skill-writer
 description: >
   Write and improve Agent Skills that behave predictably — spec-compliant
   frontmatter, trigger-accurate descriptions, purposeful completion criteria,
-  references split by branching condition, framework-gated behavioral tests,
+  references split by branching condition, subagent-assisted behavioral tests,
   and non-interactive scripts. Use when creating a skill (even from a bare
   "make a skill for X"), when reviewing, pruning, or refactoring an existing
   skill, or when diagnosing a skill that misfires — wrong triggers, premature
@@ -31,27 +31,19 @@ lever on one or the other.
 - Read [references/spec.md](references/spec.md) when a spec constraint is uncertain or a lint finding is unclear.
 - Read [references/glossary.md](references/glossary.md) when a term used here needs its full definition.
 
-## Gate behavioral tests by invoking framework
+## Gate behavioral tests by subagent support
 
-Identify the agent framework and surface or mode that invoked this skill, then
-use its row below. A model provider is not the invoking framework. A row passes
-only when the current mode supplies every named mechanism.
+Determine whether the invoking agent can dispatch clean-context subagents and
+assign each one a separate disposable git worktree. Do not maintain a framework
+allowlist or denylist: use the current invocation's actual subagent facility.
 
-| Invoking framework | The current mode passes when |
-|---|---|
-| [Claude Code](https://code.claude.com/docs/en/sub-agents) | Independent subagents are enabled; candidate and baseline runs can expose different skills; Skill calls are visible in a transcript or hook. |
-| [Codex](https://openai.com/codex/) | The surface provides subagents, per-solver skill exposure, and evidence that a solver loaded the skill. Multi-agent execution or worktrees alone are insufficient. |
-| [OpenCode](https://opencode.ai/docs/agents/) | Task subagents are enabled; [skill permissions](https://opencode.ai/docs/skills/) can allow or deny the target per solver; child sessions show the native `skill` call. |
-| [Gemini CLI](https://geminicli.com/docs/core/subagents/) | Subagents are enabled; separate runs can enable or disable the target skill; [skill activation](https://geminicli.com/docs/cli/using-agent-skills/) is observable. |
-| Another or unknown framework | Its native facilities provide equivalent independent solvers, per-run skill isolation, and load evidence; uncertainty fails the gate. |
-
-When a task will create or edit a skill and its row passes, read
-[references/testing.md](references/testing.md) after defining the intended
+When a task will create or edit a skill and both capabilities are available,
+read [references/testing.md](references/testing.md) after defining the intended
 change and before the first edit. Follow it through the candidate comparison.
-When the row fails, do not load that reference or substitute the authoring
-agent for independent solvers: skip behavioral tests and report the skipped
-trigger tests, outcome comparison, independent grading, and the missing
-framework mechanism in the final handoff. Review-only and diagnosis-only work
+When either capability is unavailable, do not load that reference or substitute
+the authoring agent for independent solvers: skip behavioral tests and report
+the skipped trigger tests, outcome comparison, independent grading, and the
+missing capability in the final handoff. Review-only and diagnosis-only work
 does not load the reference.
 
 ## Rules that apply on every branch

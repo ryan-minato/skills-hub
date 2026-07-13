@@ -64,7 +64,7 @@ Catalogs section of `ARCHITECTURE.md`.
   PR handoff → use the `issue-workflow` project skill.
 - Creating or modifying any skill → use the `skill-authoring` project skill;
   it routes to `.agents/knowledge/skill-quality.md`, the catalog's
-  `CONTEXT.md`, framework-gated isolated behavioral tests, and independent
+  `CONTEXT.md`, subagent-capability-gated behavioral tests, and independent
   script and static validation.
 - Catalog-specific rules and references → `skills/<catalog>/CONTEXT.md`
   (catalog-scoped material belongs there, not in the global references).

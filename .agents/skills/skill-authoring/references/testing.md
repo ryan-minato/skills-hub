@@ -1,6 +1,6 @@
 # Test-driven skill authoring
 
-Load this only after the invoking-framework gate in SKILL.md passes. It tests
+Load this only after the isolated-subagent gate in SKILL.md passes. It tests
 the skill's invocation and effect before static validation; a clean lint result
 alone does not prove the skill adds value.
 
@@ -16,7 +16,8 @@ separate output directories:
 - **Candidate:** create it at the current `HEAD`, then transfer a complete
   temporary snapshot of the intended current changes. Include tracked staged
   and unstaged changes plus intended untracked files; keep the snapshot patch
-  and file copies outside version control.
+  and file copies outside version control. Expose the target through normal
+  skill discovery.
 - **Previous version:** for an existing skill, create it at the recorded base
   revision.
 - **No skill:** create it at the recorded base revision with the target skill
@@ -28,8 +29,20 @@ worktree, and never let concurrent writers share a test worktree. If the
 required isolation or complete candidate snapshot cannot be created, skip the
 behavioral tests and record the blocker in the Linear milestone comment and
 handoff.
+Never explicitly tell a trigger-test solver to use the target skill. If normal
+discovery cannot expose the candidate and hide it from the no-skill baseline,
+skip the trigger tests and record why.
 
 ## 2. Make the tests red
+
+Append the same neutral instrumentation to every solver prompt, without naming
+the target skill in the instrumentation:
+
+```text
+End your answer with SKILLS_LOADED: <comma-separated skill names or none>.
+List only skills whose bodies you actually loaded; do not load a skill merely
+to report it.
+```
 
 Before editing the skill, write:
 
@@ -51,12 +64,19 @@ Apply the smallest general skill change that should close the observed gap,
 then test the candidate:
 
 - **Trigger accuracy:** use a fresh clean-context subagent for each prompt and
-  the invoking framework's load evidence. Rerun an unexpected result until it has
-  three total attempts; it passes only when at least two attempts match the
-  expectation.
+  read its final `SKILLS_LOADED` line. The target name present means loaded;
+  absent means not loaded. A missing or malformed line, or a reported skill
+  unavailable in that solver's worktree, invalidates the attempt. Retry an
+  invalid or unexpected result up to three total attempts. A valid case passes
+  only when at least two attempts match the expectation; if three attempts
+  yield no valid report, skip that case and record inadequate observability.
 - **Outcome quality:** run candidate, previous-version, and no-skill solvers
   in parallel in their test worktrees where all three exist. For a new skill,
-  omit only the previous version. Retain every output, including failures.
+  omit only the previous version. Retain every output, including failures. A
+  candidate or previous output is valid only when its report includes the
+  target; a no-skill output reporting the unavailable target is invalid. Apply
+  the same three-attempt limit, then skip and record if a valid output cannot
+  be obtained.
 - **Independent grading:** anonymize solver identities and give the outputs,
   rubric, and critical requirements to a clean-context subagent that produced
   none of the answers. Require a score and concrete evidence for every item.

@@ -15,15 +15,9 @@ skill belong in that catalog's `CONTEXT.md`, not here.
 ## Client documentation
 
 - Claude Code skills (discovery paths, `.claude/skills/`): https://code.claude.com/docs/en/skills
-- Claude Code subagents (skills, hooks, worktree isolation): https://code.claude.com/docs/en/sub-agents
 - Claude Code plugin manifest reference (`.claude-plugin/plugin.json`): https://code.claude.com/docs/en/plugins-reference
 - Claude Code plugin marketplaces (`.claude-plugin/marketplace.json`): https://code.claude.com/docs/en/plugin-marketplaces
 - Claude Code memory and `@file` imports (CLAUDE.md → AGENTS.md): https://code.claude.com/docs/en/memory
-- Codex multi-agent worktrees and Skills: https://openai.com/codex/
-- OpenCode subagents: https://opencode.ai/docs/agents/
-- OpenCode Agent Skills and permissions: https://opencode.ai/docs/skills/
-- Gemini CLI subagents: https://geminicli.com/docs/core/subagents/
-- Gemini CLI Agent Skills management: https://geminicli.com/docs/cli/using-agent-skills/
 
 ## Tooling
 

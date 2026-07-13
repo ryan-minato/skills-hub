@@ -1,8 +1,8 @@
 # Test-driven skill authoring
 
 Load this only after the subagent gate in SKILL.md passes. It tests
-the skill's invocation and effect before static validation; a clean lint result
-alone does not prove the skill adds value.
+the skill's invocation and effect; a clean lint result alone does not prove the
+skill adds value.
 
 ## 1. Create test worktrees when possible
 

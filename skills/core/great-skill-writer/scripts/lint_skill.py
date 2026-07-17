@@ -36,7 +36,7 @@ KNOWN_FIELDS = frozenset(
 REQUIRED_FIELDS = frozenset({"name", "description"})
 ALLOWED_ROOT = frozenset({"SKILL.md", "references", "assets", "scripts"})
 BUNDLE_DIRS = ("scripts", "references", "assets")
-ALLOWED_SCRIPT_EXTS = frozenset({".py", ".rb", ".ts"})
+ALLOWED_SCRIPT_EXTS = frozenset({".py", ".ts"})
 
 NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 MD_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
@@ -368,7 +368,7 @@ def check_structure(skill_dir: Path) -> list[dict]:
                     loc,
                     "warning",
                     f"Unexpected file type '{ext}' in scripts/.",
-                    "Use .py (uv), .ts (Deno/Bun), or .rb; remove or convert other files.",
+                    "Use .py (uv) or .ts (Deno/Bun); remove or convert other files.",
                 ))
     return issues
 

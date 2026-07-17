@@ -81,8 +81,8 @@ Read [references/gh-cli.md](references/gh-cli.md) when gh is missing or
   run it themselves; never start it in a non-interactive session.
 - When gh has no token but git operations against a github.com HTTPS
   remote succeed, git's credential helper already holds a token gh can
-  borrow — the reference covers the bridge and its mandatory user
-  disclosure.
+  borrow — the reference covers the bridge and the user consent and
+  disclosure it requires.
 
 ## Tokens
 

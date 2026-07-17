@@ -74,11 +74,15 @@ reference.
 ## Install and authenticate gh
 
 Read [references/gh-cli.md](references/gh-cli.md) when gh is missing or
-`gh auth status` fails. Two facts govern authentication:
+`gh auth status` fails. Three facts govern authentication:
 
 - Agents authenticate through the `GH_TOKEN` environment variable.
 - `gh auth login` is an interactive flow for humans — direct the user to
   run it themselves; never start it in a non-interactive session.
+- When gh has no token but git operations against a github.com HTTPS
+  remote succeed, git's credential helper already holds a token gh can
+  borrow — the reference covers the bridge and the user consent and
+  disclosure it requires.
 
 ## Tokens
 

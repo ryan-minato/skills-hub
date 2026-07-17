@@ -54,4 +54,37 @@ the install survives rebuilds.
 - Exit code 0: authenticated. The output shows the active account and
   the token's scopes.
 - Non-zero exit: not authenticated — no token was found, or the token
-  was rejected. Set `GH_TOKEN`, or ask the user to run `gh auth login`.
+  was rejected. Set `GH_TOKEN`, bridge git's stored credential (below),
+  or ask the user to run `gh auth login`.
+
+## Bridge git's stored credential
+
+When `gh auth status` fails but `git push` or `git fetch` against a
+github.com HTTPS remote succeeds, git's credential helper already holds
+a token. It can be borrowed for gh without creating or storing anything
+new:
+
+```bash
+GH_TOKEN="$(printf 'protocol=https\nhost=github.com\n' | git credential fill | sed -n 's/^password=//p')" gh <command>  # gitleaks:allow
+```
+
+- Get the user's explicit consent before the first use, and do not run
+  the bridge until they give it. Reusing a credential the user handed
+  git for a different tool is theirs to authorize: ask with the agent's
+  user-question tool if it has one, otherwise stop and wait for the
+  user — never assume approval. One explicit yes covers the rest of the
+  session unless the user narrows or withdraws it.
+- The command-scoped `GH_TOKEN=… gh` form above holds the token only for
+  that one call; never assign it to a persistent shell variable, export
+  it, echo it, write it to a file or config, or feed it to `gh auth
+  login`. (`sed` takes the whole password, including any `=`, where
+  `cut -d= -f2` would truncate it.)
+- The bridge grants exactly the credential the user already gave git —
+  no new scopes. Scope-gated calls (for example Projects v2 needing
+  `project`) may still fail; fall back to a real token setup when they
+  do.
+- After using the bridge, tell the user git's stored credential was
+  reused to authenticate gh; never include the token value.
+
+Done when: the user consented, the gh call succeeded, and the reuse was
+disclosed.

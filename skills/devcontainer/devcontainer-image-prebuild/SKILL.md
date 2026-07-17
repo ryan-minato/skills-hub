@@ -1,17 +1,16 @@
 ---
 name: devcontainer-image-prebuild
 description: >
-  Prebuilds and publishes dev container images so containers start fast
-  and identically everywhere instead of re-running Dockerfiles and
-  Features on every machine. Covers devcontainer build --push, the
-  devcontainer.metadata image label and its merge semantics with consumer
-  configs, thin image-only consumer configurations, CI automation with
-  the devcontainers/ci action, cacheFrom layer reuse, and tagging
-  strategy. Use when prebuilding or publishing a dev container image —
-  "prebuild our devcontainer", "publish a shared dev image for the team",
-  "cache the devcontainer build in CI", "speed up Codespaces startup",
-  "why is our dev container slow to build", or "why does my devcontainer
-  rebuild everything every time".
+  Dev container image prebuilding — build and publish shared dev images so containers
+  start fast and identically everywhere. Use when prebuilding or publishing a dev
+  container image; when a team wants one shared dev environment; when a devcontainer
+  or Codespaces is slow to start or rebuilds everything on every machine; when a
+  consumer config behaves differently than its text says — baked settings persist
+  after deletion or appear unbidden; when adding caching or a devcontainers/ci
+  workflow for the container build; or when deciding what to bake into the image
+  versus leave to consumer configs. Not for authoring a project's devcontainer.json
+  (devcontainer-setup), packaging install units (devcontainer-feature-authoring), or
+  application Docker images.
 license: Apache-2.0
 compatibility: >
   Requires the Dev Container CLI (pinned via npx -y

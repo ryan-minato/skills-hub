@@ -1,18 +1,16 @@
 ---
 name: devcontainer-feature-authoring
 description: >
-  Develops, tests, and publishes Dev Container Features — reusable,
-  versioned install units distributed via OCI registries. Covers the
-  devcontainer-feature.json schema, the install.sh contract, feature
-  quality (idempotency, base-image tolerance, non-root correctness,
-  option design, deterministic installs), the feature-independence rule
-  for dependsOn/installsAfter, CLI testing, publishing to ghcr.io, and a
-  modern repository scaffold with shared-action CI. Use when creating or
-  modifying a devcontainer Feature — "package this tool for dev
-  containers", "make this install script reusable across projects", "add
-  an option to our feature", "why does our feature break on another base
-  image", "publish/release our features" — or when editing
-  src/*/devcontainer-feature.json or test/*/scenarios.json.
+  Dev Container Feature authoring — develop, test, and publish reusable install units.
+  Use when creating, modifying, or releasing a devcontainer Feature or its options;
+  when a tool install or setup script should be reusable across projects' dev
+  containers; when a feature misbehaves — breaks on another base image, fails when
+  applied twice, or a release publishes nothing; when questions arise about Feature
+  mechanics — dependsOn vs installsAfter, option variables, versioning; or when
+  src/*/devcontainer-feature.json, its install.sh, or test/*/scenarios.json is the
+  material at hand. Not for consuming features in a project's devcontainer.json
+  (devcontainer-setup), project starters (devcontainer-template-authoring), or
+  prebuilt images (devcontainer-image-prebuild).
 license: Apache-2.0
 compatibility: >
   Testing and publishing require the Dev Container CLI (pinned via

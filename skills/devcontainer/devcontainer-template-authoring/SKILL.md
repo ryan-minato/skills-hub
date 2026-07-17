@@ -1,16 +1,15 @@
 ---
 name: devcontainer-template-authoring
 description: >
-  Creates, tests, and publishes Dev Container Templates — parameterized
-  .devcontainer starting points that users apply once into a project via
-  templateOption substitution. Covers repository layout, the
-  devcontainer-template.json schema, payload and option design, the
-  substitute-defaults smoke-test loop, publishing to an OCI registry, and
-  a modern repo scaffold. Use when building or changing a devcontainer
-  Template — "turn this .devcontainer into a reusable starter", "make a
-  project scaffold for our stack", "stop teams copy-pasting devcontainer
-  configs", "let users pick options when they scaffold", "publish our
-  templates" — or when editing src/*/devcontainer-template.json.
+  Dev Container Template authoring — create, test, and publish parameterized
+  .devcontainer starters applied once into a project. Use when building, changing, or
+  publishing a devcontainer Template; when an existing .devcontainer should become a
+  reusable starter or teams keep copy-pasting devcontainer configs; when designing
+  options users pick at apply time; when an applied template misbehaves — option
+  substitution mangles files, applying fails, or pickers don't surface it; or when
+  src/*/devcontainer-template.json is the material at hand. Not for setting up a
+  devcontainer in one project (devcontainer-setup), tool installers
+  (devcontainer-feature-authoring), or prebuilt images (devcontainer-image-prebuild).
 license: Apache-2.0
 compatibility: >
   Smoke-testing and publishing require the Dev Container CLI (pinned via

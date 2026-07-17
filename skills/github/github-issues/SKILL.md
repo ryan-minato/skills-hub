@@ -1,16 +1,16 @@
 ---
 name: github-issues
 description: >
-  Operates GitHub issues through one recommended path — the connected GitHub
-  MCP server's issue tools when available, exact gh commands otherwise:
-  create, comment, close and reopen, edit labels, assignees and milestone,
-  read details and comments, list issues and labels — always discovering the
-  repository's issue templates, labels, and milestones before creating
-  anything, with a mandatory pre-publish review gate. Use when working with
-  GitHub issues — "file an issue", "open an issue", "create an issue",
-  "comment on issue #N", "close this issue", "reopen the issue", "what does
-  issue #N say", "list open bugs", "label this issue", "assign this issue",
-  or "add the issue to the milestone".
+  GitHub issue operations — file, read, comment on, triage, and close issues. Use when
+  the request names a GitHub issue or its number — "file an issue", "comment on #N",
+  "close this issue", "what does issue #N say"; when reporting a bug or requesting a
+  feature in a repository's tracker without saying issue; when labeling, assigning, or
+  setting the milestone of one specific issue; when listing or searching a
+  repository's issues ("list open bugs"); or when a GitHub issue URL is the material
+  at hand. Milestone, label, and project-board lifecycle belongs to github-planning;
+  authoring issue templates or a label taxonomy to github-issue-conventions; purely
+  investigative reads on a repository you are not acting in to github-repo-research;
+  GitLab issues to gitlab-issues.
 license: Apache-2.0
 ---
 

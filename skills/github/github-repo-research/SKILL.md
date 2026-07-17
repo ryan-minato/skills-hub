@@ -1,17 +1,17 @@
 ---
 name: github-repo-research
 description: >
-  Read-only research over any GitHub repository, including repositories
-  you cannot write to: reads issues, pull requests, CI check results,
-  Actions runs and failed-job logs, Discussions, releases, and tags
-  through one recommended path — the connected GitHub MCP server's tools,
-  gh commands, or a bundled REST script that works without authentication
-  on public repositories. Use when investigating a repository — "what
-  issues are open on that repo", "read the comments on that PR",
-  "summarize issue #N of owner/repo", "what was decided in that
-  discussion", "show recent workflow runs", "why did the nightly build
-  fail", "get the logs from that Actions run", or "what changed in the
-  latest release of owner/repo".
+  Read-only research over any GitHub repository, including ones you cannot write to —
+  issues, PRs, CI runs and logs, Discussions, releases, and tags. Use when
+  investigating a repository — "what issues are open on that repo", "summarize issue
+  #N of owner/repo", "what was decided in that discussion"; when asking whether a bug
+  was already reported or fixed upstream; when evaluating a dependency or third-party
+  project before adopting or upgrading it; when diagnosing a CI failure from run
+  history or failed-job logs ("why did the nightly build fail"); when checking what
+  changed in a release of a repository you only observe; or when a GitHub URL is
+  pasted to read or summarize. Any write — commenting, filing, merging, releasing —
+  belongs to github-issues, github-pull-requests, or github-releases, which also own
+  the reads immediately preceding it; GitLab projects to gitlab-repo-research.
 license: Apache-2.0
 compatibility: >
   scripts/run_log_digest.py requires Python 3.9+ (stdlib only) and an

@@ -1,18 +1,16 @@
 ---
 name: github-planning
 description: >
-  Operates GitHub planning structures: milestone lifecycle (create, edit,
-  close, delete, list — via the REST API, since gh has no milestone
-  command), label lifecycle (create, rename, recolor, delete, clone), and
-  Projects v2 through gh project — create and edit projects, link
-  repositories, add issues and PRs as items, set Status and other fields —
-  with the required project token scope handled up front and a bundled ID
-  resolver for item edits. Use when managing planning structures — "create
-  a milestone", "close the milestone", "rename this label", "create a
-  project board", "add this issue to the project", "move it to In
-  Progress", "set the iteration", "what's on the board", or "archive the
-  project item". Assigning a milestone or labels to one issue or PR belongs
-  to github-issues / github-pull-requests.
+  GitHub planning structures — milestones, labels, and Projects v2 boards. Use when
+  creating, editing, closing, or deleting a milestone; when creating, renaming,
+  recoloring, deleting, or cloning labels; when creating a project board, linking
+  repositories, or adding issues and PRs as items; when moving items between columns,
+  setting Status, iteration, or other fields, or archiving items; when asked what is
+  on a board or in a milestone; or when setting up sprint, iteration, or kanban-style
+  tracking on GitHub without naming these structures. Assigning a milestone or labels
+  to one issue or PR belongs to github-issues / github-pull-requests; designing a
+  label taxonomy to github-issue-conventions; GitLab milestones, boards, and epics to
+  gitlab-planning.
 license: Apache-2.0
 compatibility: >
   scripts/project_fields.py requires Python 3.9+ (stdlib only) and an

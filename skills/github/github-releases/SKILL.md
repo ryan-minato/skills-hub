@@ -1,17 +1,16 @@
 ---
 name: github-releases
 description: >
-  Operates GitHub releases and their tags through a draft-first flow:
-  create the release as a draft, generate or author the notes, upload
-  assets, run the review gate, then publish — plus edit, prerelease and
-  latest handling, tag creation and cleanup, and reading existing
-  releases. Use when cutting or managing a release — "create a release",
-  "tag v1.2.0 and release it", "draft the release notes", "generate a
-  changelog for the release", "upload this binary to the release",
-  "publish the draft", "mark it as a prerelease", or "delete the
-  release". Reading releases of a repository you are only researching
-  belongs to github-repo-research; versioning and tag-naming policy to
-  github-release-conventions.
+  GitHub release operations — cut, edit, and delete releases and their tags. Use when
+  cutting or publishing a release — "create a release", "tag v1.2.0 and release it",
+  "publish the draft"; when shipping a new version of a repository without saying
+  release; when drafting or generating release notes or a changelog for a version
+  being released; when picking the next version number to tag; when uploading assets
+  to a release; or when marking a release as prerelease or latest, or deleting a
+  release or its tag. Reading releases of a repository you are only researching
+  belongs to github-repo-research; versioning and tag-naming policy and
+  .github/release.yml authoring to github-release-conventions; GitLab releases to
+  gitlab-releases.
 license: Apache-2.0
 compatibility: >
   scripts/next_version.py requires Python 3.9+ (stdlib only); reading

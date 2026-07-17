@@ -1,17 +1,16 @@
 ---
 name: github-pull-requests
 description: >
-  Operates GitHub pull requests through one recommended path — the connected
-  GitHub MCP server's PR tools when available, exact gh commands otherwise:
-  create, comment, close/reopen, draft/ready, merge, edit labels and
-  milestone, read PR state and diff, read CI check results and failed-job
-  logs, and read or reply to review threads including Copilot code review —
-  always discovering the repository's PR template and contributing rules
-  before opening anything, with a mandatory pre-publish review gate. Use
-  when operating on a pull request — "open/create a PR", "comment on the
-  PR", "did the checks pass", "why is CI red on my PR", "what did Copilot's
-  review say", "reply to the review comments", "merge PR #N", or "mark the
-  PR ready".
+  GitHub pull request operations — open, comment on, monitor, and merge PRs. Use when
+  the request names a PR — "open a PR", "comment on the PR", "merge #N", "mark it
+  ready" — or a GitHub PR URL is the material at hand; when submitting a finished
+  branch for review or getting changes merged without saying PR; when checking a PR's
+  CI ("did the checks pass", "why is CI red") or reading its failed-job logs; when
+  reading or replying to review threads, including Copilot code review; or when
+  editing one PR's labels or milestone. Authoring PR templates and review automation
+  belongs to github-pr-conventions; investigating PRs of a repository you are not
+  contributing to belongs to github-repo-research; GitLab merge requests to
+  gitlab-merge-requests.
 license: Apache-2.0
 ---
 

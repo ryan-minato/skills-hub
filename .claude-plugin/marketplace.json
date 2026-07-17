@@ -38,6 +38,7 @@
       "source": "./",
       "strict": false,
       "skills": [
+        "./skills/engineering/code-refactoring",
         "./skills/engineering/gitmoji"
       ],
       "description": "General programming methodology skills, not tied to a language or framework."

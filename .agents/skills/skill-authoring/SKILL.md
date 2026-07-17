@@ -1,6 +1,6 @@
 ---
 name: skill-authoring
-description: End-to-end workflow for creating or modifying a skill in this repository — subagent-assisted behavioral evaluation, isolated script tests, scaffolding, symlinks, marketplace manifest, catalog READMEs, validation, and commit. Use when asked to "create a skill", "add a skill to a catalog", "move a skill", "remove a skill", or when modifying any skill under skills/ or .agents/skills/.
+description: Skill lifecycle for this repository — layers repo-specific scaffolding, testing, and validation on top of generic skill authoring. Use when creating a skill here or adding one to a catalog; when modifying, moving, or removing anything under skills/ or .agents/skills/; when deciding which catalog or directory a new skill belongs in; or when this repo's agents should learn a new reusable workflow. Generic Agent-Skill questions and skills outside this repository belong to great-skill-writer.
 metadata:
   internal: true
 ---

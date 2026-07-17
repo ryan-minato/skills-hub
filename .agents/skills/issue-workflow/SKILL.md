@@ -1,6 +1,6 @@
 ---
 name: issue-workflow
-description: Issue-driven development workflow for this repository — create the Linear issue before any proactive change, work on the issue's branch, comment at milestones, keep every commit atomic and hook-clean, open a draft PR, and mark it ready after final validation. Use when starting any proactive creation or modification of tracked files, when picking up an existing Linear issue, when creating a work branch, or when preparing a push or pull request in this repo.
+description: Issue-driven change workflow for this repository, tracked in Linear. Use when tracked files are about to be created, modified, or removed and no Linear issue covers the work yet; when picking up an existing Linear issue; when creating a work branch; when pushing, opening, or readying a pull request here; when ending a session with work still in flight; or when asked how work is tracked or handed off in this repo. Read-only analysis and scratchpad-only files need no issue; GitHub issues in other repositories belong to github-issues.
 metadata:
   internal: true
 ---

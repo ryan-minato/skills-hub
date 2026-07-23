@@ -26,7 +26,7 @@ editing — do not work from this skill alone. This skill leads: its rules overr
 the baseline where they conflict. If `human-writing` is not installed, install it
 from https://github.com/ryan-minato/skills.git:
 
-    npx skills add ryan-minato/skills --skill human-writing -g
+    npx skills add ryan-minato/skills --skill human-writing
 
 ## Roles
 

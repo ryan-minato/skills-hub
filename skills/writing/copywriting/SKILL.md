@@ -24,7 +24,7 @@ where a fragment, repetition, or a broken rhythm spreads better. If
 `human-writing` is not installed, install it from
 https://github.com/ryan-minato/skills.git:
 
-    npx skills add ryan-minato/skills --skill human-writing -g
+    npx skills add ryan-minato/skills --skill human-writing
 
 ## Roles
 

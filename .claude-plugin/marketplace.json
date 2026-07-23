@@ -96,6 +96,15 @@
         "./skills/meta-gitlab/gitlab-tooling-setup"
       ],
       "description": "GitLab harness authoring: agent tooling setup and project conventions (description templates, scoped labels, MR, commit, and release rules, CI validation)."
+    },
+    {
+      "name": "writing",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/writing/academic-writing"
+      ],
+      "description": "Human-audience writing: genre skills (academic, blog/opinion, promotional copy) and medium skills (LaTeX, Typst, Markdown source)."
     }
   ]
 }

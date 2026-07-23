@@ -15,4 +15,4 @@ npx skills add ryan-minato/skills --skill <skill-name>
 
 | Skill | 说明 |
 |---|---|
-| _（暂无）_ | |
+| [academic-writing](academic-writing/) | 以英文、中文或日文撰写和修改学术文本（论文、学位论文、报告）：在编辑/研究者/审稿人角色间切换，围绕论证主线规划结构，按可信度层级取用来源并用脚本核验引用，执行严格的语体规则，克制地修改。 |

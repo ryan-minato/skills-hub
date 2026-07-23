@@ -107,9 +107,10 @@ After drafting or editing, review from outside the author's seat:
   same questions. Did the piece achieve the intended effect? Does the structure
   carry it?
 - **AI-writing detection**: if clean-context subagents are available, send the text
-  (with no authorship context) using [assets/ai-detection-prompt.md](assets/ai-detection-prompt.md);
-  otherwise skip this pass — the failure-mode digest above already served as your
-  self-check.
+  (with no authorship context) using [assets/ai-detection-prompt.md](assets/ai-detection-prompt.md),
+  filled in from the failure-mode digest and the matching language reference per
+  the template's own instructions; otherwise skip this pass — the failure-mode
+  digest above already served as your self-check.
 
 Fix what the reviews surface, then re-review. Stop when a pass reports no
 substantive findings.

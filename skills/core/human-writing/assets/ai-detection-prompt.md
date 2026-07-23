@@ -1,9 +1,19 @@
 # AI-writing detection prompt template
 
-Send to a subagent with a separate, clean context. Provide only the text —
-no authorship information, no drafting history, no hint of what answer is
-expected. Without clean-context subagents, skip this pass; the taxonomy
-below still serves as a drafting and self-review checklist.
+Structure-only template: build the specifics fresh each time you use it —
+never send it unfilled and never reuse a previously filled copy.
+
+1. Read the "Failure modes to avoid" digest in this skill's SKILL.md and the
+   `references/` file matching the language the text is written in
+   (`english.md`, `chinese.md`, or `japanese.md`).
+2. Fill every {{slot}} below with concrete patterns and example phrases for
+   that language only — the detector should not wade through other
+   languages' tells.
+3. Send to a subagent with a separate, clean context. Provide only the
+   text — no authorship information, no drafting history, no hint of what
+   answer is expected. Without clean-context subagents, skip this pass; the
+   digest and the language reference already serve as the self-review
+   checklist.
 
 ---
 
@@ -17,53 +27,40 @@ The text:
 
 {{full text}}
 
-Check against these pattern families (drawn from Wikipedia's community
-catalog "Signs of AI writing" and general experience), plus anything else
-you notice:
+Check against these pattern families, plus anything else you notice:
 
 **Content patterns**
-- Inflated significance: "stands as a testament", "pivotal moment",
-  "underscores its importance", "reflects broader trends", "evolving
-  landscape", subjects framed as historically important without evidence.
-- Superficial analysis bolted on with "-ing" clauses: "..., highlighting
-  the need for...", "..., emphasizing the role of...".
-- Promotional gloss on neutral subjects: "boasts", "vibrant", "rich
-  heritage", "seamless experience".
-- Views attributed to no one: "experts say", "many consider", "is widely
-  regarded", with no named source.
-- Formulaic closings about challenges and future prospects: "Despite these
-  challenges, ... continues to ...", "The future of ... remains ...".
+
+{{content-level failure modes from the digest: inflated significance,
+analysis bolted on with participle clauses, promotional gloss, opinions
+attributed to no one, formulaic closings — each with the concrete stock
+phrases, rendered in the text's language}}
 
 **Language patterns**
-- AI-flavored vocabulary density: delve, underscore, pivotal, crucial,
-  robust, landscape, tapestry, realm, testament, meticulous, intricate,
-  showcase, foster, leverage, garner (English); 赋能, 抓手, 闭环, 里程碑式,
-  值得注意的是 (Chinese); ソリューション/インサイト density, 「〜と言える
-  でしょう」 endings (Japanese).
-- Copula avoidance: "serves as / functions as / represents" where "is"
-  would do.
-- Negative parallelism as a habit: "not just X, but Y"; "it's not about X,
-  it's about Y"; 「XだけでなくYも」; “不仅...更...”.
-- Rule-of-three chains in every paragraph.
-- Synonym rotation for one recurring term; uniform sentence length; every
-  claim hedged ("arguably", "can potentially", 「〜かもしれません」).
+
+{{language-level tells for the text's language, from the matching reference
+file: characteristic vocabulary clusters, copula avoidance, negative
+parallelisms, list-rhythm habits, synonym rotation, hedging — each with
+concrete words and constructions}}
 
 **Style patterns**
-- Mechanical bold emphasis; bolded lead-in bullet lists replacing prose;
-  emoji as section markers; em-dash overuse; title-case headings in
-  English; uniform paragraph shape and length throughout.
-- Mixed punctuation width in Chinese/Japanese; です・ます / だ・である
-  mixing in Japanese.
+
+{{formatting and punctuation tells for the text's language, from the digest
+and the reference file: emphasis habits, lists standing in for prose, dash
+and emoji habits, paragraph-shape uniformity, punctuation and register
+consistency issues}}
 
 **Citation patterns**
-- References that do not exist or do not support the claim; dead or
-  tracking-parameter URLs; book citations with no page numbers; a polished
-  reference list with nothing actually cited in the body.
 
-Signals of human writing (weigh these against the above): varied rhythm,
-concrete first-hand detail, a stance the author commits to, tolerated
-repetition of the right word, small idiosyncrasies that a style-averaging
-process would smooth away.
+{{citation failure modes from the digest: references that do not exist or
+do not support the claim, dead or tracking-parameter links, incomplete or
+decorative citations}}
+
+Signals of human writing (weigh these against the above):
+
+{{counter-signals from the digest and the reference file: varied rhythm,
+concrete first-hand detail, a committed stance, tolerated repetition,
+idiosyncrasies a style-averaging process would smooth away}}
 
 Report:
 

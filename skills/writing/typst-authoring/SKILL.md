@@ -74,10 +74,13 @@ exists.
 ## Source-line discipline
 
 A single newline is only a soft break — a blank line starts a new paragraph.
-Break long source lines at logical points: after sentence-ending punctuation
-(ideally one sentence per line), after commas or clause boundaries, at minimum
-at a word boundary — never at a raw character count. Never add a blank line
-just to wrap; it changes the output.
+Target lines of roughly 120 characters, counting CJK characters (汉字, kana) as
+two: the length decides when to break, semantics decide where. As a line
+approaches the target, break after the sentence-ending punctuation; when one
+sentence alone would overrun it, break inside at a comma or another semantic
+pause. Consecutive short sentences stay on one line — do not force one
+sentence per line, and never break mid-word or mid-phrase at the raw count.
+Never add a blank line just to wrap; it changes the output.
 
 ## Gotchas
 

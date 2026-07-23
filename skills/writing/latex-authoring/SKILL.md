@@ -37,10 +37,14 @@ LaTeX ignores a single newline: only a blank line starts a new paragraph. So
 long source lines are broken with plain newlines without changing the output —
 and must be.
 
-- Break at logical points: ideally one sentence per line (period, question
-  mark), otherwise after commas or clause boundaries — at minimum at a word
-  boundary. Never break at a raw character count or mid-phrase. Logical breaks
-  keep `git diff` aligned with meaning: editing one sentence touches one line.
+- Target lines of roughly 120 characters, counting CJK characters (汉字, kana)
+  as two. The length decides *when* to break; semantics decide *where*: as a
+  line approaches the target, break at the end of the current sentence, and
+  when a single sentence alone would overrun it, break inside at a comma or
+  another semantic pause. Consecutive short sentences stay on one line — do
+  not force one sentence per line. Never break mid-word or mid-phrase at the
+  raw count. Semantic breaks keep `git diff` aligned with meaning: editing
+  one sentence touches one line or a few adjacent ones.
 - Never insert a blank line just to wrap — a blank line is a paragraph break.
   Inside math and other display environments a blank line is an error.
 - To break a line where a newline would insert an unwanted space (inside macro

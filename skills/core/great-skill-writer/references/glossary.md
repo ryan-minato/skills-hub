@@ -191,6 +191,21 @@ the agent and so neither can fire the other.
 
 _Avoid_: doc, resource, knowledge base
 
+### Asset
+
+Static material the skill copies or emits verbatim — a template, a boilerplate
+file, a fixed-format prompt handed to the user, another file, or a subagent.
+Reached by copying, not by reading: unlike **reference**, the agent never
+consults an asset to inform its own reasoning, so it sits off the
+**information hierarchy**'s reading ladder entirely. An asset may carry inline
+fill-guidance — placeholders or embedded comments marking what to replace — but
+not the surrounding how-to-use prose that frames when and how to use it: that
+framing is **reference**, and belongs in SKILL.md or a `references/` file. Wrap
+the copied payload in it and the file stops being the thing to copy and becomes
+a document about it.
+
+_Avoid_: resource, output, sample
+
 ### Progressive Disclosure
 
 Moving **reference** down the ladder — out of SKILL.md and behind a **context

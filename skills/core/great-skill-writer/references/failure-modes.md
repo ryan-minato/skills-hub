@@ -167,8 +167,11 @@ Apply every item; report each as pass or fail with the offending line.
       disclosed.
 - [ ] Each concept's definition, rules, and caveats are co-located under one
       heading.
-- [ ] Every asset is intentionally fixed or stable-pattern material; none
-      holds content that should be generated flexibly.
+- [ ] Every asset is intentionally fixed or stable-pattern material the agent
+      copies or emits; none holds content that should be generated flexibly.
+- [ ] No asset wraps its copied material in surrounding how-to-use
+      documentation; inline placeholders and fill-comments are fine, but prose
+      framing when and how to use the asset lives in SKILL.md or a reference.
 - [ ] No meaning has two homes; no sentence fails the no-op test; no stale
       lines.
 - [ ] Spec-mechanical checks pass (run the bundled linter; consult the spec

@@ -121,3 +121,9 @@ skill-name/            ← must equal the `name` field (error)
 Every reference file needs a load condition stated in SKILL.md ("Read X when
 Y"). Instructing the agent to load files unconditionally collapses stage 3
 into stage 2 and defeats the mechanism.
+
+That "Read X when Y" condition is a *reference* mechanism: a reference is read
+to inform the agent's work. An asset is *copied or emitted* rather than read,
+so it is linked where it is used and takes no read condition — the shared
+"Resources" row above says when a resource loads, not that an asset is read
+like a reference.

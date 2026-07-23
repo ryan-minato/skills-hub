@@ -71,7 +71,11 @@ The restriction toolkit — use each where it applies, none by obligation:
   material the agent copies or lightly edits. Templates constrain output
   diversity: content needing task-specific judgment, broad rewriting, or
   flexible organization becomes instructions on the hierarchy instead, never
-  an asset.
+  an asset. An asset may carry inline fill-guidance — placeholders or embedded
+  comments marking what to replace — but its surrounding how-to-use
+  documentation (when and how to use it) belongs in SKILL.md or a reference;
+  wrap the copied material in that framing and the file stops being the thing
+  to copy and becomes a document about it.
 
 ### Descriptions
 

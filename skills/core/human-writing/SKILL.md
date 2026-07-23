@@ -99,10 +99,18 @@ did not verify as suspect.
 
 ## 6. Review loop
 
-After drafting or editing, review from outside the author's seat:
+After drafting or editing, review from outside the author's seat with three
+checks:
 
-- **Reader review**: if the environment can run subagents with a separate, clean
-  context, send the piece with [assets/reader-review-prompt.md](assets/reader-review-prompt.md)
+- **Language and wording review**: if the environment can run subagents with a
+  separate, clean context, send the piece with
+  [assets/language-review-prompt.md](assets/language-review-prompt.md) filled in
+  per its instructions; otherwise review it yourself against the same questions.
+  Is the text fluent in this language, is the grammar right, and is every word
+  one the target readers actually use — common words over obscure or literary
+  picks, unless the register truly demands otherwise?
+- **Reader review**: if clean-context subagents are available, send the piece
+  with [assets/reader-review-prompt.md](assets/reader-review-prompt.md)
   filled in; otherwise re-read the piece yourself in the reader role, against the
   same questions. Did the piece achieve the intended effect? Does the structure
   carry it?
@@ -112,8 +120,11 @@ After drafting or editing, review from outside the author's seat:
   the template's own instructions; otherwise skip this pass — the failure-mode
   digest above already served as your self-check.
 
-Fix what the reviews surface, then re-review. Stop when a pass reports no
-substantive findings.
+When the environment can run subagents in parallel, dispatch all three checks at
+once and collect their findings together before changing anything. When running
+sequentially — no parallel support, or the self-review fallbacks — do the
+language and wording check first, in the order listed. Fix what the reviews
+surface, then re-review. Stop when a pass reports no substantive findings.
 
 ## 7. Restraint
 
